@@ -65,8 +65,11 @@ package org.gimmick.utils
 		public final function get(key:int):Object
 		{
 			//TODO crete performance test for this method
-			var index:int = _keys[key];
-			if(index >= 0)return _values[index];
+			if(_keys.length > key)
+			{
+				var index:int = _keys[key];
+				if(index >= 0)return _values[index];
+			}
 			return null;
 		}
 

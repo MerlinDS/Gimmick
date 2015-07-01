@@ -16,6 +16,11 @@
 package org.gimmick.utils
 {
 
+	import flexunit.framework.Assert;
+
+	/**
+	 * Test case for Key List
+	 */
 	public class KeyListTest
 	{
 
@@ -26,15 +31,6 @@ package org.gimmick.utils
 		{
 		}
 
-//} endregion PUBLIC METHODS ===========================================================================================
-//======================================================================================================================
-//{region										PRIVATE\PROTECTED METHODS
-
-//} endregion PRIVATE\PROTECTED METHODS ================================================================================
-//======================================================================================================================
-//{region											GETTERS/SETTERS
-
-//} endregion GETTERS/SETTERS ==========================================================================================
 		[Test]
 		public function testRemove():void
 		{
@@ -44,7 +40,16 @@ package org.gimmick.utils
 		[Test]
 		public function testAdd():void
 		{
-
+			var list:KeyList = new KeyList();
+			var obj:Object = {test:0};
+			list.add(0, obj);
+			list.add(1, {test:1});
+			list.add(2, {test:2});
+			var result:* = list.get(0);
+			Assert.assertNotNull(result);
+			Assert.assertEquals(obj, result);
+			list.remove(1);
+			Assert.assertNull(list.get(1));
 		}
 
 		[Test]
@@ -70,5 +75,14 @@ package org.gimmick.utils
 		{
 
 		}
+//} endregion PUBLIC METHODS ===========================================================================================
+//======================================================================================================================
+//{region										PRIVATE\PROTECTED METHODS
+
+//} endregion PRIVATE\PROTECTED METHODS ================================================================================
+//======================================================================================================================
+//{region											GETTERS/SETTERS
+
+//} endregion GETTERS/SETTERS ==========================================================================================
 	}
 }
