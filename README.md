@@ -1,7 +1,7 @@
 # Gimmick - Entity Component System framework for ActionScript
 
 
-##EXAMPLE
+##Example
 VelocityComponent and PositionComponent.
 
     public class VelocityComponent
