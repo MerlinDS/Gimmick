@@ -1,0 +1,1 @@
+This folder contains all unit test of Gimmick frameworks.

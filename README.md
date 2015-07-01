@@ -109,7 +109,7 @@ Usage (Main class of the application):
 
 The MIT License (MIT)
 
-Copyright (c) 2015 Andrew
+Copyright (c) 2015 Andrew Salomatin (MerlinDS)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
