@@ -15,6 +15,10 @@ package org.gimmick.core
 
 	import flexunit.framework.Assert;
 
+	/**
+	 * Test case for basic methods of the Entity class
+	 * For deep tests find in ComponentsManagerTest and FiltersManagerTest
+	 */
 	public class EntityTest
 	{
 
