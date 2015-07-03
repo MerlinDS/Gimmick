@@ -16,15 +16,19 @@ package org.gimmick.core
 	internal class EntitiesManager
 	{
 
+		private var _entities:Vector.<Entity>;
 //======================================================================================================================
 //{region											PUBLIC METHODS
 		public function EntitiesManager()
 		{
+			_entities = new <Entity>[];
 		}
 
 		public function createEntity(name:String):Entity
 		{
-			var entity:Entity = new Entity(name, 0);
+			var index:int = _entities.length;
+			var entity:Entity = new Entity(name, index);
+			_entities[index] = entity;
 			return entity;
 		}
 

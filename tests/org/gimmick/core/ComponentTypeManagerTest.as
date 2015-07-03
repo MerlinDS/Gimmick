@@ -21,7 +21,7 @@ package org.gimmick.core
 	public class ComponentTypeManagerTest
 	{
 
-		private var _componentTypeManager:ComponentTypeManager
+		private var _componentTypeManager:ComponentTypeManager;
 		//======================================================================================================================
 //{region											PUBLIC METHODS
 		public function ComponentTypeManagerTest()
