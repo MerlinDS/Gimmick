@@ -67,6 +67,8 @@ package org.gimmick.core
 			var componentType:ComponentType = _componentTypeManager.getType(component);
 			_componentsManager.addComponent(this, componentType, component);
 			_filtersManager.addToFilter(this, componentType);
+			//add bit to bitwise mask if component was adding first time
+			if(_bits & componentType.bit == false)_bits |= componentType.bit;
 			return component;
 		}
 
@@ -77,7 +79,7 @@ package org.gimmick.core
 		public final function has(component:Class):Boolean
 		{
 			var componentType:ComponentType = _componentTypeManager.getType(component);
-			return false;
+			return _bits & componentType.bit;
 		}
 
 		/**
@@ -87,7 +89,10 @@ package org.gimmick.core
 		public final function get(component:Class):*
 		{
 			var componentType:ComponentType = _componentTypeManager.getType(component);
-			return _componentsManager.getComponent(this, componentType);
+			//for faster works copy code from has method
+			if(_bits & componentType.bit)
+				return _componentsManager.getComponent(this, componentType);
+			return null;
 		}
 
 		/**
@@ -99,6 +104,8 @@ package org.gimmick.core
 			var componentType:ComponentType = _componentTypeManager.getType(component);
 			_componentsManager.removeComponent(this, componentType);
 			_filtersManager.removeFromFilter(this, componentType);
+			//remove bit from bitwise mask
+			_bits = _bits &~ componentType.bit;
 		}
 
 		/**
@@ -160,7 +167,6 @@ package org.gimmick.core
 		}
 
 		//Implementation of public interface
-
 		/**
 		 * @inheritDoc
 		 */
@@ -185,7 +191,9 @@ package org.gimmick.core
 		[Inline]
 		public final function get components():Array
 		{
-			return _componentsManager.getComponents(this);
+			if(_componentsManager != null)
+				return _componentsManager.getComponents(this);
+			return [];
 		}
 
 //} endregion GETTERS/SETTERS ==========================================================================================
