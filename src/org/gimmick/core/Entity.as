@@ -17,12 +17,26 @@ package org.gimmick.core
 
 	/**
 	 * Internal class of entity.
-	 * User can create entity only by using createEntity method of GimmickEngine
+	 * User can create entity only by using <code>createEntity</code> method of Gimmick
 	 *
 	 * @internal In fact this class is only a proxy for access to entity components and parameters.
 	 *
 	 * @see org.gimmick.core.GimmickEngine.createEntity() Use Gimmick.createEntity() method for creating new Entity
 	 * @see org.gimmick.core.GimmickEngine.disposeEntity() Use Gimmick.disposeEntity() method for disposing exist Entity
+	 *
+	 * @example
+	 * <listing version="3.0">
+	 *     var entity:IEntity = Gimmick.createEntity('Entity name');
+	 *     entity.add(new SomeComponent());//create and link component to entity
+	 *     //...
+	 *     if(entity.has(SomeComponent))//has method faster that get, use has method for check linkage of the component
+	 *     {
+	 *     		var component:SomeComponent = entity.get(SomeComponent);//Get instance of the component
+	 *     		entity.remove(SomeComponent);//Component doesn't linked to entity an more.
+	 *     }
+	 *     //...
+	 *     Gimmick.disposeEntity(entity);//remove entity from Gimmick (entity will be prepared for GC automatically)
+	 * </listing>
 	 */
 	internal final class Entity implements IEntity
 	{
