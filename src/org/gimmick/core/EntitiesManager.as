@@ -13,22 +13,23 @@
 package org.gimmick.core
 {
 
+	import org.gimmick.utils.SetList;
+
 	internal class EntitiesManager
 	{
 
-		private var _entities:Vector.<Entity>;
+		private var _entities:SetList;
 //======================================================================================================================
 //{region											PUBLIC METHODS
 		public function EntitiesManager()
 		{
-			_entities = new <Entity>[];
+			_entities = new SetList();
 		}
 
 		public function createEntity(name:String):Entity
 		{
-			var index:int = _entities.length;
-			var entity:Entity = new Entity(name, index);
-			_entities[index] = entity;
+			var entity:Entity = new Entity(name);
+			_entities.addValue(entity.id, entity);
 			return entity;
 		}
 

@@ -35,7 +35,7 @@ package org.gimmick.core
 		public function setUp():void
 		{
 			_entityName = "Test entity";
-			_entity = new Entity(_entityName, 0);
+			_entity = new Entity(_entityName);
 			_testComponent = new TestComponent();
 			_entity.componentTypeManager = new ComponentTypeManager();
 			_entity.componentsManager = new ComponentsManager();
@@ -57,10 +57,11 @@ package org.gimmick.core
 			//More tests in ComponentsManagerTest and FiltersManagerTest
 		}
 
-		[Test]
+		[Test(description='will works correctly only after ComponentsManager code implementation')]
 		public function testGet():void
 		{
-			Assert.assertNotNull(_entity.get(NotAddedTestComponent));
+			this.testAdd();
+			Assert.assertNull(_entity.get(NotAddedTestComponent));
 			Assert.assertNotNull(_entity.get(TestComponent));
 			Assert.assertEquals(_testComponent, _entity.get(TestComponent));
 			//More tests in ComponentsManagerTest and FiltersManagerTest
@@ -73,7 +74,7 @@ package org.gimmick.core
 			Assert.assertNotNull(_entity.id);
 		}
 
-		[Test]
+		[Test(description='will works correctly only after ComponentsManager code implementation')]
 		public function testComponents():void
 		{
 			Assert.assertNotNull(_entity.components);
@@ -98,7 +99,7 @@ package org.gimmick.core
 			Assert.assertEquals(0x0, _entity.bits);
 		}
 
-		[Test]
+		[Test(description='will works correctly only after ComponentsManager code implementation')]
 		public function testRemove():void
 		{
 			this.testAdd();

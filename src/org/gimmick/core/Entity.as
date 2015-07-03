@@ -41,7 +41,6 @@ package org.gimmick.core
 	internal final class Entity implements IEntity
 	{
 
-		private var _index:int;
 		private var _name:String;
 		/**
 		 * Unique ID of the component
@@ -63,12 +62,11 @@ package org.gimmick.core
 		 * @param index Index of the component in Gimmick scope
 		 *
 		 */
-		public function Entity(name:String, index:int)
+		public function Entity(name:String)
 		{
 			_id = getUniqueId();
 			if(name == null)name = "entity_" + _id;
 			_name = name;
-			_index = index;
 			_bits = 0x0;
 		}
 
@@ -82,7 +80,7 @@ package org.gimmick.core
 			_componentsManager.addComponent(this, componentType, component);
 			_filtersManager.addToFilter(this, componentType);
 			//add bit to bitwise mask if component was adding first time
-			if(_bits & componentType.bit == false)_bits |= componentType.bit;
+			if(!(_bits & componentType.bit))_bits |= componentType.bit;
 			return component;
 		}
 
@@ -130,7 +128,6 @@ package org.gimmick.core
 		internal final function dispose():void
 		{
 			_bits = 0x0;
-			_index = -1;
 			_id = null;
 			_filtersManager = null;
 			_componentsManager = null;
@@ -148,10 +145,10 @@ package org.gimmick.core
 		 * @private
 		 */
 		[Inline]
-		internal final function set componentTypeManager(componentTypeManager:ComponentTypeManager):void
+		internal final function set componentTypeManager(value:ComponentTypeManager):void
 		{
-			if(_componentTypeManager != null)//only dispose method can set _componentTypeManager to null
-				_componentTypeManager = componentTypeManager;
+			if(value != null)//only dispose method can set _componentTypeManager to null
+				_componentTypeManager = value;
 		}
 		/**
 		 * @private
@@ -159,7 +156,7 @@ package org.gimmick.core
 		[Inline]
 		internal final function set componentsManager(value:ComponentsManager):void
 		{
-			if(_componentsManager != null)//only dispose method can set _componentsManager to null
+			if(value != null)//only dispose method can set _componentsManager to null
 				_componentsManager = value;
 		}
 		/**
@@ -168,18 +165,8 @@ package org.gimmick.core
 		[Inline]
 		internal final function set filtersManager(value:FiltersManager):void
 		{
-			if(_filtersManager != null)//only dispose method can set _filtersManager to null
+			if(value != null)//only dispose method can set _filtersManager to null
 				_filtersManager = value;
-		}
-
-
-		/**
-		 * Index of the component in Gimmick scope
-		 */
-		[Inline]
-		internal final function get index():int
-		{
-			return _index;
 		}
 
 		/**
