@@ -15,6 +15,8 @@ package org.gimmick.core
 
 	import flash.utils.Dictionary;
 
+	import org.gimmick.utils.getInstanceClass;
+
 	/**
 	 * Manager for components types.
 	 */
@@ -32,9 +34,37 @@ package org.gimmick.core
 			_componentTypes = new Dictionary(true);
 		}
 
+		/**
+		 * Get component Type by it's instance or class
+		 * @param component Instance of the components or it's class
+		 * @return Component type of the component
+		 */
+		[Inline]
 		public final function getType(component:Object):ComponentType
 		{
+			//get component class if it does not provided
+			if(!(component is Class))component = getInstanceClass(component);
+			var componentType:ComponentType = _componentTypes[component];
+			if(componentType == null)//Create component type in it does not exist
+			{
+				componentType = new ComponentType(_nextBit, _nextIndex);
+				_componentTypes[component] = componentType;
+				_nextBit = _nextBit << 1;
+				_nextIndex++;
+			}
+			return componentType;
+		}
 
+		/**
+		 * Get component type by it bitwise mask
+		 * @param bit Bitwise mask
+		 * @return Component type if it exist or null in other case
+		 */
+		public final function getTypeByBit(bit:uint):ComponentType
+		{
+			for each(var componentType:ComponentType in _componentTypes)
+				if(componentType.bit == bit)return componentType;
+			return null;
 		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
@@ -43,7 +73,14 @@ package org.gimmick.core
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS
-
+		/**
+		 * Last used bitwise mask
+		 */
+		[Inline]
+		public final function get lastBit():uint
+		{
+			return _nextBit >> 1;
+		}
 //} endregion GETTERS/SETTERS ==========================================================================================        
 	}
 }
