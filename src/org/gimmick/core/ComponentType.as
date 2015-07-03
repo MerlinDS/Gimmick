@@ -13,29 +13,28 @@
 package org.gimmick.core
 {
 
-	import flash.utils.Dictionary;
-
 	/**
-	 * Manager for components types.
-	 */
-	internal class ComponentTypeManager
+	 * Class that constance component type fields
+	 **/
+	internal class ComponentType
 	{
 
-		private var _nextBit:uint;
-		private var _nextIndex:int;
-		private var _componentTypes:Dictionary;
+		private var _bit:uint;
+
+		private var _index:int;
 //======================================================================================================================
 //{region											PUBLIC METHODS
-		public function ComponentTypeManager()
+		/**
+		 * Constructor of the component type
+		 * @param bit Bitwise mask of the component type
+		 * @param index Index of the component type
+		 */
+		public function ComponentType(bit:uint, index:int)
 		{
-			_nextBit = 0x1;
-			_componentTypes = new Dictionary(true);
+			_bit = bit;
+			_index = index;
 		}
 
-		public final function getType(component:Object):ComponentType
-		{
-
-		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
@@ -43,7 +42,22 @@ package org.gimmick.core
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS
-
+		/**
+		 * Bitwise mask of the component type
+		 */
+		[Inline]
+		public final function get bit():uint
+		{
+			return _bit;
+		}
+		/**
+		 * Index of the component type
+		 */
+		[Inline]
+		public final function get index():int
+		{
+			return _index;
+		}
 //} endregion GETTERS/SETTERS ==========================================================================================        
 	}
 }
