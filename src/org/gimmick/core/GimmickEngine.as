@@ -93,9 +93,9 @@ package org.gimmick.core
 		public function createEntity(name:String = null):IEntity
 		{
 			var entity:Entity = _entitiesManager.createEntity(name);
+			entity.componentTypeManager = _componentTypeManagers;
 			entity.componentsManager = _componentsManager;
 			entity.filtersManager = _filtersManager;
-			//TODO add entity to filters
 			return entity;
 		}
 
@@ -117,8 +117,7 @@ package org.gimmick.core
 		 */
 		public function addSystem(system:EntitySystem):EntitySystem
 		{
-
-			return _systemsManager.addSystem(system);;
+			return _systemsManager.addSystem(system);
 		}
 
 		/**
@@ -182,8 +181,8 @@ package org.gimmick.core
 			_componentTypeManagers = new ComponentTypeManager();
 			_systemsManager = new SystemManager();
 			_entitiesManager = new EntitiesManager();
-			_filtersManager = new FiltersManager(_componentTypeManagers);
-			_componentsManager = new ComponentsManager(_componentTypeManagers);
+			_filtersManager = new FiltersManager();
+			_componentsManager = new ComponentsManager();
 			//
 			_lastTimestamp = 0;
 			this.resume(true);

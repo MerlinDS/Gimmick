@@ -32,25 +32,25 @@ package org.gimmick.core
 		function add(component:Object):*;
 
 		/**
-		 * Check i
-		 * @param componentType
-		 * @return
+		 * Check if component was linked to Entity
+		 * @param component Component Class
+		 * @return True if component was linked to Entity, and false in other case
 		 */
-		function has(componentType:Class):Boolean;
+		function has(component:Class):Boolean;
 
 		/**
 		 * Get instance of the component for Entity. If component was not added to Entity or was removed
 		 * this method will return null.
-		 * @param componentType Type of the component
+		 * @param component Component Class
 		 * @return Instance of the component.
 		 */
-		function get(componentType:Class):*;
+		function get(component:Class):*;
 
 		/**
 		 * Remove component from Entity.
-		 * @param componentType Type of the component
+		 * @param component Component Class
 		 */
-		function remove(componentType:Class):void;
+		function remove(component:Class):void;
 
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================

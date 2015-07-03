@@ -19,12 +19,10 @@ package org.gimmick.core
 	internal class FiltersManager
 	{
 
-		private var _componentTypeManager:ComponentTypeManager;
 //======================================================================================================================
 //{region											PUBLIC METHODS
-		public function FiltersManager(componentTypeManager:ComponentTypeManager)
+		public function FiltersManager()
 		{
-			_componentTypeManager = componentTypeManager;
 		}
 
 		public function getEntities(components:Array):void
@@ -41,12 +39,12 @@ package org.gimmick.core
 
 		}
 
-		public function addToFilter(entity:Entity, component:Object):void
+		public function addToFilter(entity:Entity, componentType:ComponentType):void
 		{
 
 		}
 
-		public function removeFromFilter(entity:Entity, component:Object):void
+		public function removeFromFilter(entity:Entity, componentType:ComponentType):void
 		{
 
 		}

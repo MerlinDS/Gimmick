@@ -13,9 +13,13 @@
 package org.gimmick.core
 {
 
+	import org.gimmick.utils.getUniqueId;
+
 	/**
 	 * Internal class of entity.
 	 * User can create entity only by using createEntity method of GimmickEngine
+	 *
+	 * @internal In fact this class is only a proxy for access to entity components and parameters.
 	 *
 	 * @see org.gimmick.core.GimmickEngine.createEntity() Use Gimmick.createEntity() method for creating new Entity
 	 * @see org.gimmick.core.GimmickEngine.disposeEntity() Use Gimmick.disposeEntity() method for disposing exist Entity
@@ -33,6 +37,7 @@ package org.gimmick.core
 		 * Bitwise mask of all components that linked to entity
 		 */
 		private var _bits:uint;
+		private var _componentTypeManager:ComponentTypeManager;
 		private var _componentsManager:ComponentsManager;
 		private var _filtersManager:FiltersManager;
 //======================================================================================================================
@@ -46,9 +51,11 @@ package org.gimmick.core
 		 */
 		public function Entity(name:String, index:int)
 		{
+			_id = getUniqueId();
+			if(name == null)name = "entity_" + _id;
 			_name = name;
 			_index = index;
-			_bits = 0;
+			_bits = 0x0;
 		}
 
 		/**
@@ -57,8 +64,9 @@ package org.gimmick.core
 		[Inline]
 		public final function add(component:Object):*
 		{
-			_componentsManager.addComponent(this, component);
-			_filtersManager.addToFilter(this, component);
+			var componentType:ComponentType = _componentTypeManager.getType(component);
+			_componentsManager.addComponent(this, componentType, component);
+			_filtersManager.addToFilter(this, componentType);
 			return component;
 		}
 
@@ -66,8 +74,9 @@ package org.gimmick.core
 		 * @inheritDoc
 		 */
 		[Inline]
-		public final function has(componentType:Class):Boolean
+		public final function has(component:Class):Boolean
 		{
+			var componentType:ComponentType = _componentTypeManager.getType(component);
 			return false;
 		}
 
@@ -75,8 +84,9 @@ package org.gimmick.core
 		 * @inheritDoc
 		 */
 		[Inline]
-		public final function get(componentType:Class):*
+		public final function get(component:Class):*
 		{
+			var componentType:ComponentType = _componentTypeManager.getType(component);
 			return _componentsManager.getComponent(this, componentType);
 		}
 
@@ -84,8 +94,9 @@ package org.gimmick.core
 		 * @inheritDoc
 		 */
 		[Inline]
-		public final function remove(componentType:Class):void
+		public final function remove(component:Class):void
 		{
+			var componentType:ComponentType = _componentTypeManager.getType(component);
 			_componentsManager.removeComponent(this, componentType);
 			_filtersManager.removeFromFilter(this, componentType);
 		}
@@ -93,15 +104,18 @@ package org.gimmick.core
 		/**
 		 * Dispose entity.
 		 * Prepare entity instance for removing from memory
+		 * Only Gimmick Engine could execute this method!
 		 */
 		internal final function dispose():void
 		{
 			_bits = 0x0;
 			_index = -1;
 			_id = null;
-			_componentsManager = null;
 			_filtersManager = null;
+			_componentsManager = null;
+			_componentTypeManager = null;
 		}
+
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
@@ -110,19 +124,32 @@ package org.gimmick.core
 //======================================================================================================================
 //{region											GETTERS/SETTERS
 		/**
-		 * Entity needs link to componentsManager for working with components
-		 * @param value Link to ComponentsManager instance
+		 * @private
 		 */
-		internal function set componentsManager(value:ComponentsManager):void
+		[Inline]
+		internal final function set componentTypeManager(componentTypeManager:ComponentTypeManager):void
 		{
-			_componentsManager = value;
+			if(_componentTypeManager != null)//only dispose method can set _componentTypeManager to null
+				_componentTypeManager = componentTypeManager;
 		}
-
-		internal function set filtersManager(value:FiltersManager):void
+		/**
+		 * @private
+		 */
+		[Inline]
+		internal final function set componentsManager(value:ComponentsManager):void
 		{
-			_filtersManager = value;
+			if(_componentsManager != null)//only dispose method can set _componentsManager to null
+				_componentsManager = value;
 		}
-
+		/**
+		 * @private
+		 */
+		[Inline]
+		internal final function set filtersManager(value:FiltersManager):void
+		{
+			if(_filtersManager != null)//only dispose method can set _filtersManager to null
+				_filtersManager = value;
+		}
 		/**
 		 * Index of the component in Gimmick scope
 		 */
@@ -131,6 +158,7 @@ package org.gimmick.core
 		{
 			return _index;
 		}
+
 		//Implementation of public interface
 
 		/**
@@ -161,5 +189,6 @@ package org.gimmick.core
 		}
 
 //} endregion GETTERS/SETTERS ==========================================================================================
+
 	}
 }
