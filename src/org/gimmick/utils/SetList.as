@@ -12,9 +12,6 @@
 
 package org.gimmick.utils
 {
-
-	import flash.utils.Dictionary;
-
 	/**
 	 * List with set of unique keys and values
 	 */
@@ -27,7 +24,7 @@ package org.gimmick.utils
 		 */
 		private var _freeIndexes:Vector.<int>;
 		private var _values:Vector.<Object>;
-		private var _map:Dictionary;
+		private var _map:Object;
 //======================================================================================================================
 //{region											PUBLIC METHODS
 		/**
@@ -39,7 +36,7 @@ package org.gimmick.utils
 			_freeIndexes = new <int>[0];
 			//initialize list with empty space
 			_values = new <Object>[null];
-			_map = new Dictionary(true);
+			_map = {};
 		}
 
 		/**
@@ -48,7 +45,7 @@ package org.gimmick.utils
 		 * @param value Instance of item
 		 */
 		[Inline]
-		public final function addValue(key:int, value:Object):void
+		public final function addValue(key:String, value:Object):void
 		{
 			var index:int = _map[key] != null ? _map[key] : -1;
 			if(index < 0)//was not added previously
@@ -69,7 +66,7 @@ package org.gimmick.utils
 		 * @return Instance of item
 		 */
 		[Inline]
-		public final function getValue(key:int):*
+		public final function getValue(key:String):*
 		{
 			var value:Object = null;
 			var index:int = _map[key] != null ? _map[key] : -1;
@@ -82,7 +79,7 @@ package org.gimmick.utils
 		 * @param key Key linked to item
 		 */
 		[Inline]
-		public final function removeValue(key:int):void
+		public final function removeValue(key:String):void
 		{
 			var index:int = _map[key] != null ? _map[key] : -1;
 			if(index >= 0 && index < _values.length)

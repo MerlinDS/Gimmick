@@ -61,14 +61,14 @@ package org.gimmick.utils
 			Assert.assertEquals("Length not equals", _length, _setList.length);
 			for(var key:String in _values)
 			{
-				_setList.addValue(int(key), _values[key]);
+				_setList.addValue(key, _values[key]);
 				_length++;
 			}
 			Assert.assertEquals("Length not equals after adding", _length, _setList.length);
 			//set adding to same key
-			_setList.addValue(1, {value:_length});
+			_setList.addValue("1", {value:_length});
 			Assert.assertEquals("Length not equals after replacing", _length, _setList.length);
-			_setList.addValue(1, _values[1]);//return ald value for else tests
+			_setList.addValue("1", _values[1]);//return ald value for else tests
 		}
 
 		[Test(order=2)]
@@ -77,12 +77,11 @@ package org.gimmick.utils
 			this.testAdd();
 			for(var key:String in _values)
 			{
-				var result:Object = _setList.getValue(int(key));
+				var result:Object = _setList.getValue(key);
 				Assert.assertNotNull("Value is null for key" + key, result);
 				Assert.assertEquals("Value not equals for key" + key, _values[key], result);
 			}
-			Assert.assertNull("Value must be a null for -1", _setList.getValue(-1));
-			Assert.assertNull("Value must be a null for int.MAX_VALUE", _setList.getValue(int.MAX_VALUE));
+			Assert.assertNull("Value must be a null for int.MAX_VALUE", _setList.getValue("EMPTY"));
 		}
 
 		[Test(order=3)]
@@ -92,9 +91,9 @@ package org.gimmick.utils
 			Assert.assertEquals("Length not equals before removing", _length, _setList.length);
 			for(var key:String in _values)
 			{
-				_setList.removeValue(int(key));
+				_setList.removeValue(key);
 				_length--;
-				var result:Object = _setList.getValue(int(key));
+				var result:Object = _setList.getValue(key);
 				Assert.assertNull("Value must be a null for key" + key, result);
 				Assert.assertEquals("Length not equals", _length, _setList.length);
 			}
@@ -108,7 +107,7 @@ package org.gimmick.utils
 			this.testRemove();
 			for(var key:String in _values)
 			{
-				_setList.addValue(int(key), _values[key]);
+				_setList.addValue(key, _values[key]);
 				_length++;
 			}
 			Assert.assertEquals("Length not equals after adding", _length, _setList.length);
