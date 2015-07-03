@@ -3,12 +3,12 @@
 Gimmick is the fast and simple CES framework for ActionScript3 (and js in future)
 
 Main goals of "Gimmick" development:
-* Fast and ease ECS framework
+* Fast and ease CES framework
 * Smart and rapid filtration of entities by their components `getEntities(ComponentType1, ..., ComponentTypeN)`
 * Consistency and homogeneity of components in memory
 * Operations with parallel systems( [ActionScript Workers support](http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/system/Worker.html) )
 
-For more documentation see [Wiki](https://github.com/MerlinDS/Gimmick/wiki)
+For more documentation see *[Wiki](https://github.com/MerlinDS/Gimmick/wiki)*
 
 If you are interested feel free to ask questions:
 * [Twitter - MerlinDS](https://twitter.com/MerlinDs)
