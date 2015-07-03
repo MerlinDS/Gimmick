@@ -16,7 +16,7 @@ package org.gimmick.utils
 	import flash.utils.Dictionary;
 
 	/**
-	 *
+	 * List with set of unique keys and values
 	 */
 	public class SetList
 	{
@@ -39,7 +39,7 @@ package org.gimmick.utils
 			_freeIndexes = new <int>[0];
 			//initialize list with empty space
 			_values = new <Object>[null];
-			_map = new Dictionary();
+			_map = new Dictionary(true);
 		}
 
 		/**
@@ -120,6 +120,9 @@ package org.gimmick.utils
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
+//} endregion PRIVATE\PROTECTED METHODS ================================================================================
+//======================================================================================================================
+//{region											GETTERS/SETTERS
 
 		/**
 		 * Length of list
@@ -129,10 +132,6 @@ package org.gimmick.utils
 		{
 			return _values.length - _freeIndexes.length;
 		}
-//} endregion PRIVATE\PROTECTED METHODS ================================================================================
-//======================================================================================================================
-//{region											GETTERS/SETTERS
-
 //} endregion GETTERS/SETTERS ==========================================================================================        
 	}
 }
