@@ -73,12 +73,6 @@ package org.gimmick.core
 		 * WARNING: It is a slow method. Use it in great need
 		 */
 		function get components():Array;
-
-		/**
-		 * List of all components types that constance current Entity
-		 * WARNING: It is a slow method. Use it in great need
-		 */
-		function get componentsTypes():Array;
 //} endregion GETTERS/SETTERS ==========================================================================================
 	}
 }

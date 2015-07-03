@@ -49,16 +49,16 @@ package org.gimmick.core
 		 * @inheritDoc
 		 */
 		[Inline]
-		public function add(component:Object):*
+		public final function add(component:Object):*
 		{
-			return null;
+			return _componentsManager.addComponent(this, component);
 		}
 
 		/**
 		 * @inheritDoc
 		 */
 		[Inline]
-		public function has(componentType:Class):Boolean
+		public final function has(componentType:Class):Boolean
 		{
 			return false;
 		}
@@ -67,17 +67,18 @@ package org.gimmick.core
 		 * @inheritDoc
 		 */
 		[Inline]
-		public function get(componentType:Class):*
+		public final function get(componentType:Class):*
 		{
-			return null;
+			return _componentsManager.getComponent(this, componentType);
 		}
 
 		/**
 		 * @inheritDoc
 		 */
 		[Inline]
-		public function remove(componentType:Class):void
+		public final function remove(componentType:Class):void
 		{
+			_componentsManager.removeComponent(this, componentType);
 		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
@@ -90,7 +91,6 @@ package org.gimmick.core
 		 * Entity needs link to componentsManager for working with components
 		 * @param value Link to ComponentsManager instance
 		 */
-		[Inline]
 		internal function set componentsManager(value:ComponentsManager):void
 		{
 			_componentsManager = value;
@@ -100,7 +100,7 @@ package org.gimmick.core
 		 * Index of the component in Gimmick scope
 		 */
 		[Inline]
-		internal function get index():int
+		internal final function get index():int
 		{
 			return _index;
 		}
@@ -110,7 +110,7 @@ package org.gimmick.core
 		 * @inheritDoc
 		 */
 		[Inline]
-		public function get name():String
+		public final function get name():String
 		{
 			return _name;
 		}
@@ -119,7 +119,7 @@ package org.gimmick.core
 		 * @inheritDoc
 		 */
 		[Inline]
-		public function get id():String
+		public final function get id():String
 		{
 			return _id;
 		}
@@ -127,17 +127,10 @@ package org.gimmick.core
 		/**
 		 * @inheritDoc
 		 */
-		public function get components():Array
+		[Inline]
+		public final function get components():Array
 		{
-			return null;
-		}
-
-		/**
-		 * @inheritDoc
-		 */
-		public function get componentsTypes():Array
-		{
-			return null;
+			return _componentsManager.getComponents(this);
 		}
 
 //} endregion GETTERS/SETTERS ==========================================================================================

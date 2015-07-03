@@ -24,6 +24,48 @@ package org.gimmick.core
 			_componentTypeManager = new ComponentTypeManager();
 		}
 
+		/**
+		 * Link component instance to entity
+		 * @param entity Instance of the entity
+		 * @param component Instance of the component
+		 */
+		public function addComponent(entity:Entity, component:Object):void
+		{
+
+		}
+
+		/**
+		 * Remove link of component from entity
+		 * @param entity Instance of the entity
+		 * @param componentType Type of the component
+		 */
+		public function removeComponent(entity:Entity, componentType:Class):void
+		{
+
+		}
+
+		/**
+		 * Get component linked to Entity
+		 * @param entity Instance of the entity
+		 * @param componentType Type of the component
+		 * @return Component instance if it was linked to Entity. In other case will return null
+		 *
+		 * @see org.gimmick.core.ComponentManager.addComponent() Before getting linked component you need to add component link to entity
+		 */
+		public function getComponent(entity:Entity, componentType:Class):*
+		{
+			return null;
+		}
+
+		/**
+		 * Gather all components of the entity to list and return it
+		 * @param entity Instance of the entity
+		 * @return List of all components of the entity
+		 */
+		public function getComponents(entity:Entity):Array
+		{
+			return null;
+		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
