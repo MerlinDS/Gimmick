@@ -49,7 +49,7 @@ package org.gimmick.core
 		 * Dispose existing entity. Remove entity from scope and free memory from it data.
 		 * @param entity Instance of existing Entity.
 		 *
-		 * @throw ArgumentError If entity was not in scope or was disposed previously
+		 * @throws ArgumentError If entity was not in scope or was disposed previously
 		 */
 		public function disposeEntity(entity:IEntity):void
 		{

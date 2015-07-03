@@ -17,7 +17,8 @@ package org.gimmick.core
 	 * Internal class of entity.
 	 * User can create entity only by using createEntity method of GimmickEngine
 	 *
-	 * @see Gimmick.createEntity()
+	 * @see org.gimmick.core.GimmickEngine.createEntity() Use Gimmick.createEntity() method for creating new Entity
+	 * @see org.gimmick.core.GimmickEngine.disposeEntity() Use Gimmick.disposeEntity() method for disposing exist Entity
 	 */
 	internal final class Entity implements IEntity
 	{
