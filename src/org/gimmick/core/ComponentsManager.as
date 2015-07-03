@@ -19,9 +19,9 @@ package org.gimmick.core
 		private var _componentTypeManager:ComponentTypeManager;
 //======================================================================================================================
 //{region											PUBLIC METHODS
-		public function ComponentsManager()
+		public function ComponentsManager(componentTypeManager:ComponentTypeManager)
 		{
-			_componentTypeManager = new ComponentTypeManager();
+			_componentTypeManager = componentTypeManager;
 		}
 
 		/**
@@ -66,6 +66,20 @@ package org.gimmick.core
 		{
 			return null;
 		}
+
+		/**
+		 * Remove all components linked to <code>Entity</code>
+		 * @param entity Instance of the entity
+		 */
+		public function removeComponents(entity:Entity):void
+		{
+
+		}
+
+		public function dispose():void
+		{
+
+		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
@@ -74,6 +88,7 @@ package org.gimmick.core
 //======================================================================================================================
 //{region											GETTERS/SETTERS
 
-//} endregion GETTERS/SETTERS ==========================================================================================        
+//} endregion GETTERS/SETTERS ==========================================================================================
+
 	}
 }

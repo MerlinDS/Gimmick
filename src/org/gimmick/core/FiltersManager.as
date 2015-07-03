@@ -16,13 +16,15 @@ package org.gimmick.core
 	/**
 	 * Manager for controlling filters of entities
 	 */
-	internal class FilterManager
+	internal class FiltersManager
 	{
 
+		private var _componentTypeManager:ComponentTypeManager;
 //======================================================================================================================
 //{region											PUBLIC METHODS
-		public function FilterManager()
+		public function FiltersManager(componentTypeManager:ComponentTypeManager)
 		{
+			_componentTypeManager = componentTypeManager;
 		}
 
 		public function getEntities(components:Array):void
@@ -30,6 +32,29 @@ package org.gimmick.core
 
 		}
 
+		/**
+		 * Remove entity from filters
+		 * @param entity Instance of the entity
+		 */
+		public function removeEntity(entity:Entity):void
+		{
+
+		}
+
+		public function addToFilter(entity:Entity, component:Object):void
+		{
+
+		}
+
+		public function removeFromFilter(entity:Entity, component:Object):void
+		{
+
+		}
+
+		public function dispose():void
+		{
+
+		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
@@ -38,6 +63,6 @@ package org.gimmick.core
 //======================================================================================================================
 //{region											GETTERS/SETTERS
 
-//} endregion GETTERS/SETTERS ==========================================================================================        
+//} endregion GETTERS/SETTERS ==========================================================================================
 	}
 }

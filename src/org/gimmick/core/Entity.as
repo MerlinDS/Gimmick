@@ -34,6 +34,7 @@ package org.gimmick.core
 		 */
 		private var _bits:uint;
 		private var _componentsManager:ComponentsManager;
+		private var _filtersManager:FiltersManager;
 //======================================================================================================================
 //{region											PUBLIC METHODS
 
@@ -56,7 +57,9 @@ package org.gimmick.core
 		[Inline]
 		public final function add(component:Object):*
 		{
-			return _componentsManager.addComponent(this, component);
+			_componentsManager.addComponent(this, component);
+			_filtersManager.addToFilter(this, component);
+			return component;
 		}
 
 		/**
@@ -84,6 +87,20 @@ package org.gimmick.core
 		public final function remove(componentType:Class):void
 		{
 			_componentsManager.removeComponent(this, componentType);
+			_filtersManager.removeFromFilter(this, componentType);
+		}
+
+		/**
+		 * Dispose entity.
+		 * Prepare entity instance for removing from memory
+		 */
+		internal final function dispose():void
+		{
+			_bits = 0x0;
+			_index = -1;
+			_id = null;
+			_componentsManager = null;
+			_filtersManager = null;
 		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
@@ -99,6 +116,11 @@ package org.gimmick.core
 		internal function set componentsManager(value:ComponentsManager):void
 		{
 			_componentsManager = value;
+		}
+
+		internal function set filtersManager(value:FiltersManager):void
+		{
+			_filtersManager = value;
 		}
 
 		/**

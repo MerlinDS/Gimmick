@@ -27,6 +27,16 @@ package org.gimmick.core
 			var entity:Entity = new Entity(name, 0);
 			return entity;
 		}
+
+		public function disposeEntity(entity:Entity):void
+		{
+
+		}
+
+		public function dispose():void
+		{
+
+		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS

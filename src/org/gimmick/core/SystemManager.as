@@ -81,6 +81,20 @@ package org.gimmick.core
 		{
 
 		}
+
+		/**
+		 * Loop method
+		 * @param time Time passed from previous tick
+		 */
+		public function tick(time:Number):void
+		{
+
+		}
+
+		public function dispose():void
+		{
+
+		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
@@ -89,6 +103,6 @@ package org.gimmick.core
 //======================================================================================================================
 //{region											GETTERS/SETTERS
 
-//} endregion GETTERS/SETTERS ==========================================================================================        
+//} endregion GETTERS/SETTERS ==========================================================================================
 	}
 }

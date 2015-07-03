@@ -66,6 +66,11 @@ package org.gimmick.core
 				if(componentType.bit == bit)return componentType;
 			return null;
 		}
+
+		public final function dispose():void
+		{
+
+		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
@@ -82,5 +87,6 @@ package org.gimmick.core
 			return _nextBit >> 1;
 		}
 //} endregion GETTERS/SETTERS ==========================================================================================        
+
 	}
 }

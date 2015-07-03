@@ -16,7 +16,7 @@ package org.gimmick.core
 	public class EntitySystem
 	{
 
-		private var _entities:FilterManager;
+		private var _entities:FiltersManager;
 //======================================================================================================================
 //{region											PUBLIC METHODS
 		public function EntitySystem()

@@ -12,6 +12,8 @@
 package org.gimmick.core
 {
 
+	import flash.utils.getTimer;
+
 	/**
 	 * This class contains public interface of Gimmick framework.
 	 */
@@ -19,14 +21,60 @@ package org.gimmick.core
 	{
 		//managers
 		private var _systemsManager:SystemManager;
-		private var _filtersManager:FilterManager;
+		private var _filtersManager:FiltersManager;
 		private var _entitiesManager:EntitiesManager;
 		private var _componentsManager:ComponentsManager;
+		private var _componentTypeManagers:ComponentTypeManager;
+		//
+		private var _lastTimestamp:Number;
+		private var _onPause:Boolean;
 //======================================================================================================================
 //{region											PUBLIC METHODS
 		public function GimmickEngine()
 		{
 			this.initialize();
+		}
+
+		/**
+		 * Set Gimmick to pause.
+		 * Entity systems will not updated (EntitySystem.tick() will not be executed event EntitySystems are in scope)
+		 */
+		public function pause():void
+		{
+			if(!_onPause)
+				_onPause = true;
+		}
+
+		/**
+		 * Resume Gimmick
+		 * @param cleanTimer Clean internal Gimmick timestamp from previous tick time
+		 */
+		public function resume(cleanTimer:Boolean = false):void
+		{
+			if(_onPause)
+			{
+				if(cleanTimer)
+					_lastTimestamp = getTimer();
+				_onPause = false;
+			}
+		}
+
+		/**
+		 * Free memory from Gimmick framework
+		 */
+		public function dispose():void
+		{
+			_systemsManager.dispose();
+			_entitiesManager.dispose();
+			_filtersManager.dispose();
+			_componentsManager.dispose();
+			_componentTypeManagers.dispose();
+
+			_systemsManager = null;
+			_entitiesManager = null;
+			_filtersManager = null;
+			_componentsManager = null;
+			_componentTypeManagers = null;
 		}
 		//delegates from entitiesManager
 		/**
@@ -46,6 +94,7 @@ package org.gimmick.core
 		{
 			var entity:Entity = _entitiesManager.createEntity(name);
 			entity.componentsManager = _componentsManager;
+			entity.filtersManager = _filtersManager;
 			//TODO add entity to filters
 			return entity;
 		}
@@ -58,7 +107,9 @@ package org.gimmick.core
 		 */
 		public function disposeEntity(entity:IEntity):void
 		{
-
+			_componentsManager.removeComponents(entity as Entity);
+			_filtersManager.removeEntity(entity as Entity);
+			_entitiesManager.disposeEntity(entity as Entity);
 		}
 		//delegates from systemsManager
 		/**
@@ -66,8 +117,8 @@ package org.gimmick.core
 		 */
 		public function addSystem(system:EntitySystem):EntitySystem
 		{
-			_systemsManager.addSystem(system);
-			return system;
+
+			return _systemsManager.addSystem(system);;
 		}
 
 		/**
@@ -108,7 +159,16 @@ package org.gimmick.core
 		 */
 		public function tick():void
 		{
-
+			if(_onPause)
+			{
+				//do not update systems if Gimmick on pause
+				return;
+			}
+			var now:Number = getTimer();
+			var passedTime:Number = now - _lastTimestamp;
+			_lastTimestamp = now;
+			//update systems
+			_systemsManager.tick(passedTime);
 		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
@@ -118,10 +178,15 @@ package org.gimmick.core
 		 */
 		private function initialize():void
 		{
+			//initialize managers
+			_componentTypeManagers = new ComponentTypeManager();
 			_systemsManager = new SystemManager();
-			_componentsManager = new ComponentsManager();
 			_entitiesManager = new EntitiesManager();
-			_filtersManager = new FilterManager();
+			_filtersManager = new FiltersManager(_componentTypeManagers);
+			_componentsManager = new ComponentsManager(_componentTypeManagers);
+			//
+			_lastTimestamp = 0;
+			this.resume(true);
 		}
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
