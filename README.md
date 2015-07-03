@@ -9,7 +9,7 @@ Main goals of "Gimmick" development:
 More documentation (API, best practices, etc) will be available after ending of development of first library prototype.
 
 If you are interested feel free to ask questions:
-* [Twitter - MerlinDS]()
+* [Twitter - MerlinDS](https://twitter.com/MerlinDs)
 * Email - merlinkolv@gmail.com
 * [Blog](http://merlinds.com)
 
