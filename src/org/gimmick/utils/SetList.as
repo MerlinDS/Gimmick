@@ -13,64 +13,68 @@
 package org.gimmick.utils
 {
 
+	import flash.utils.Dictionary;
+
 	/**
 	 *
 	 */
-	public class KeyList//TODO: May be need other name for this class?
+	public class SetList
 	{
 
+		/**
+		 * Contains free indexes of the values list.
+		 * Will be filled when value removed from values list.
+		 */
+		private var _freeIndexes:Vector.<int>;
 		private var _values:Vector.<Object>;
-		private var _keys:Vector.<int>;
-
-		private var _length:int;
+		private var _map:Dictionary;
 //======================================================================================================================
 //{region											PUBLIC METHODS
 		/**
 		 * Constructor.
 		 */
-		public function KeyList()
+		public function SetList()
 		{
-			_length = 0;
-			_values = new <Object>[];
-			_keys = new <int>[];
+			//initialize free indexes with first free index
+			_freeIndexes = new <int>[0];
+			//initialize list with empty space
+			_values = new <Object>[null];
+			_map = new Dictionary();
 		}
 
 		/**
-		 * Add item to list
+		 * Add value to list
 		 * @param key Key linked to item
 		 * @param value Instance of item
 		 */
 		[Inline]
-		public final function add(key:int, value:Object):void
+		public final function addValue(key:int, value:Object):void
 		{
-			//TODO slow method
-			var index:int = _keys.indexOf(key);
-			if(index < 0)
+			var index:int = _map[key] != null ? _map[key] : -1;
+			if(index < 0)//was not added previously
+				index = _freeIndexes.pop();
+			_values[index] = value;
+			_map[key] = index;
+			if(_freeIndexes.length == 0)
 			{
-				_keys[_length] = key;
-				_values[_length] = value;
-				_length++;
-			}else
-			{
-				_values[index] = value;
+				//expand freeIndexes for next adding
+				_freeIndexes[0] = _values.length;
+				_values[_values.length] = null;
 			}
 		}
 
 		/**
-		 * Get item by key
+		 * Get value by key
 		 * @param key Key linked to item
 		 * @return Instance of item
 		 */
 		[Inline]
-		public final function get(key:int):Object
+		public final function getValue(key:int):*
 		{
-			//TODO crete performance test for this method
-			if(_keys.length > key)
-			{
-				var index:int = _keys[key];
-				if(index >= 0)return _values[index];
-			}
-			return null;
+			var value:Object = null;
+			var index:int = _map[key] != null ? _map[key] : -1;
+			if(index >= 0 && index < _values.length)value = _values[index];
+			return value;
 		}
 
 		/**
@@ -78,38 +82,44 @@ package org.gimmick.utils
 		 * @param key Key linked to item
 		 */
 		[Inline]
-		public final function remove(key:int):void
+		public final function removeValue(key:int):void
 		{
-			//TODO very slow method
-			var index:int = _keys[key];
-			_keys.splice(index, 1);
-			_values.splice(index, 1);
-			_length--;
+			var index:int = _map[key] != null ? _map[key] : -1;
+			if(index >= 0 && index < _values.length)
+			{
+				_values[index] = null;
+				_freeIndexes.push(index);
+				_map[key] = null;
+			}
 		}
 
 		/**
-		 * Free memory from list content
+		 * Clear list from content
+		 */
+		[Inline]
+		public function clear():void
+		{
+			if(_freeIndexes != null
+					&& _values != null)
+			{
+				_freeIndexes.length = 0;
+				_values.length = 0;
+			}
+		}
+		/**
+		 * Free memory from list
 		 */
 		[Inline]
 		public final function dispose():void
 		{
-			_keys.length = 0;
-			_values.length = 0;
-			_length = 0;
-			_keys = null;
+
+			_freeIndexes = null;
+			_map = null;
 			_values = null;
 		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
-		/**
-		 * Get keys list
-		 */
-		[Inline]
-		public final function get keys():Vector.<int>
-		{
-			return _keys;
-		}
 
 		/**
 		 * Length of list
@@ -117,7 +127,7 @@ package org.gimmick.utils
 		[Inline]
 		public final function get length():int
 		{
-			return _length;
+			return _values.length - _freeIndexes.length;
 		}
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
