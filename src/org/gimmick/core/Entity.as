@@ -171,6 +171,8 @@ package org.gimmick.core
 			if(_filtersManager != null)//only dispose method can set _filtersManager to null
 				_filtersManager = value;
 		}
+
+
 		/**
 		 * Index of the component in Gimmick scope
 		 */
@@ -180,7 +182,16 @@ package org.gimmick.core
 			return _index;
 		}
 
-		//Implementation of public interface
+		/**
+		 * Bitwise mask of all components linked to entity
+		 */
+		[Inline]
+		internal function get bits():uint
+		{
+			return _bits;
+		}
+
+//Implementation of public interface
 		/**
 		 * @inheritDoc
 		 */
