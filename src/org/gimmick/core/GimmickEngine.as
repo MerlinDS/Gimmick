@@ -28,14 +28,14 @@ package org.gimmick.core
 		{
 			this.initialize();
 		}
-		//entities
+		//delegates from entitiesManager
 		/**
 		 * Create new entity and add it to main loop
 		 * @param name Name of the new Entity. Can be generated automatically
 		 * @return Instance of new Entity. New entity will be empty (without components).
 		 * To add a component to Entity use Entity.add() method.
 		 *
-		 * @see IEntity
+		 * @see org.gimmick.core.IEntity Entity public interface
 		 * @example
 		 * <listing version="3.0">
 		 * var entity:IEntity = Gimmick.createEntity("entityName");
@@ -60,41 +60,37 @@ package org.gimmick.core
 		{
 
 		}
-		//systems
+		//delegates from systemsManager
 		/**
-		 * Add System Type to framework
-		 * @param system System type
+		 * @copy org.gimmick.core.SystemManager#addSystem()
 		 */
-		public function addSystem(system:Class):void
+		public function addSystem(system:EntitySystem):EntitySystem
 		{
-
+			_systemsManager.addSystem(system);
+			return system;
 		}
 
 		/**
-		 * Remove System Type from framework
-		 * @param system System type
+		 * @copy org.gimmick.core.SystemManager#removeSystem()
 		 */
-		public function removeSystem(system:Class):void
+		public function removeSystem(systemType:Class):void
 		{
-
+			_systemsManager.removeSystem(systemType);
 		}
-		//scope
 		/**
-		 * Add system to scope
-		 * @param system System type
+		 * @copy org.gimmick.core.SystemManager#addToScope()
 		 */
-		public function addToScope(system:Class):void
+		public function addToScope(systemType:Class):void
 		{
-
+			_systemsManager.addToScope(systemType)
 		}
 
 		/**
-		 * Remove system from scope. But not from framework
-		 * @param system System type
+		 * @copy org.gimmick.core.SystemManager#removeFromScope()
 		 */
 		public function removeFromScope(system:Class):void
 		{
-
+			_systemsManager.removeFromScope(system);
 		}
 
 		//updates

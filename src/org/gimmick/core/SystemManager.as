@@ -25,6 +25,62 @@ package org.gimmick.core
 		{
 		}
 
+		/**
+		 * Add instance of the <code>EntitySystem</code> to Gimmick engine.
+		 * @param system Instance of the system
+		 * @return Instance of the system (for chaining)
+		 */
+		public function addSystem(system:EntitySystem):EntitySystem
+		{
+			return system;
+		}
+
+		/**
+		 * Remove system from Gimmick engine.
+		 * @param systemType Type of the system that was added to Gimmick previously
+		 */
+		public function removeSystem(systemType:Class):void
+		{
+
+		}
+
+		/**
+		 * Add <code>EntitySystem</code> to Gimmick scope. <br />
+		 * After adding <code>EntitySystem</code> to scope <code>EntitySystem.tick()</code> method will be executed
+		 * for each tick (enter frame, or else loop).
+		 *
+		 * @param systemType Type of the <code>EntitySystem</code> that was added to Gimmick previously
+		 *
+		 * @throws ArgumentError EntitySystem was not added to Gimmick previously
+		 *
+		 * @see org.gimmick.core.EntitySystem#tick() EntitySystem.tick() loop method of the <code>EntitySystem</code>
+		 * @see org.gimmick.core.SystemManager#addSystem() Adding <code>EntitySystem</code> instance to Gimmick framework
+		 * @see org.gimmick.core.Gimmick#tick() Main looping method of Gimmick framework
+		 */
+		public function addToScope(systemType:Class):void
+		{
+
+		}
+
+		/**
+		 * Remove <code>EntitySystem</code> from scope, but not from Gimmick.
+		 * After removing EntitySystem from scope method <code>EntitySystem.tick()</code> will not be executed any more.
+		 * <br />
+		 * For totally removing <code>EntitySystem</code> from Gimmick use <code>removeSystem()</code> method instead.
+		 *
+		 * @param systemType Type of the <code>EntitySystem</code> that was added to Gimmick previously
+		 *
+		 * @throws ArgumentError EntitySystem was not added to Gimmick previously
+		 *
+		 * @see removeSystem()
+		 * @see addSystem
+		 * @see Gimmick.tick
+		 * @see EntitySystem.tick
+		 */
+		public function removeFromScope(systemType:Class):void
+		{
+
+		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
