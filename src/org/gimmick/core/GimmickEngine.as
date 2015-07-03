@@ -17,12 +17,16 @@ package org.gimmick.core
 	 */
 	internal class GimmickEngine
 	{
-
-		private var _manualTick:Boolean;
+		//managers
+		private var _systemsManager:SystemManager;
+		private var _filtersManager:FilterManager;
+		private var _entitiesManager:EntitiesManager;
+		private var _componentsManager:ComponentsManager;
 //======================================================================================================================
 //{region											PUBLIC METHODS
 		public function GimmickEngine()
 		{
+			this.initialize();
 		}
 		//entities
 		/**
@@ -31,11 +35,14 @@ package org.gimmick.core
 		 * @return Instance of new Entity. New entity will be empty (without components).
 		 * To add a component to Entity use Entity.add() method.
 		 *
-		 * @see Entity
+		 * @see IEntity
 		 */
-		public function createEntity(name:String = null):Object
+		public function createEntity(name:String = null):IEntity
 		{
-
+			var entity:Entity = _entitiesManager.createEntity(name);
+			entity.componentsManager = _componentsManager;
+			//TODO add entity to filters
+			return entity;
 		}
 
 		/**
@@ -44,7 +51,7 @@ package org.gimmick.core
 		 *
 		 * @throw ArgumentError If entity was not in scope or was disposed previously
 		 */
-		public function disposeEntity(entity:Object):void
+		public function disposeEntity(entity:IEntity):void
 		{
 
 		}
@@ -88,9 +95,6 @@ package org.gimmick.core
 		//updates
 		/**
 		 * Loop method of framework.
-		 * Executed each frame aromatically. Or can be executed manually if manualTick flag was set to true.
-		 *
-		 *	@see Gimmick.manualTick
 		 */
 		public function tick():void
 		{
@@ -99,32 +103,19 @@ package org.gimmick.core
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
-
+		/**
+		 * Initialize GimmickEngine. Create all managers and startup preparations.
+		 */
+		private function initialize():void
+		{
+			_systemsManager = new SystemManager();
+			_componentsManager = new ComponentsManager();
+			_entitiesManager = new EntitiesManager();
+			_filtersManager = new FilterManager();
+		}
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS
-
-		/**
-		 * Flag for manual looping.
-		 * If this flag set to false Gimmick will be looped automatically.
-		 *
-		 * @see Gimmick.tick
-		 */
-		public function get manualTick():Boolean
-		{
-			return _manualTick;
-		}
-
-		/**
-		 * Flag for manual looping.
-		 * If this flag set to false Gimmick will be looped automatically.
-		 *
-		 * @see Gimmick.tick
-		 */
-		public function set manualTick(value:Boolean):void
-		{
-			_manualTick = value;
-		}
 
 //} endregion GETTERS/SETTERS ==========================================================================================
 	}
