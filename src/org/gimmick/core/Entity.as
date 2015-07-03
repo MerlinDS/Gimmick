@@ -19,22 +19,65 @@ package org.gimmick.core
 	 *
 	 * @see Gimmick.createEntity()
 	 */
-	internal class Entity implements IEntity
+	internal final class Entity implements IEntity
 	{
 
 		private var _index:int;
 		private var _name:String;
-
+		/**
+		 * Unique ID of the component
+		 */
+		private var _id:String;
 		private var _componentsManager:ComponentsManager;
 //======================================================================================================================
 //{region											PUBLIC METHODS
 
+		/**
+		 * Constructor
+		 * @param name Name of the component
+		 * @param index Index of the component in Gimmick scope
+		 *
+		 */
 		public function Entity(name:String, index:int)
 		{
 			_name = name;
 			_index = index;
 		}
 
+		/**
+		 * @inheritDoc
+		 */
+		[Inline]
+		public function add(component:Object):*
+		{
+			return null;
+		}
+
+		/**
+		 * @inheritDoc
+		 */
+		[Inline]
+		public function has(componentType:Class):Boolean
+		{
+			return false;
+		}
+
+		/**
+		 * @inheritDoc
+		 */
+		[Inline]
+		public function get(componentType:Class):*
+		{
+			return null;
+		}
+
+		/**
+		 * @inheritDoc
+		 */
+		[Inline]
+		public function remove(componentType:Class):void
+		{
+		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
@@ -43,13 +86,59 @@ package org.gimmick.core
 //======================================================================================================================
 //{region											GETTERS/SETTERS
 		/**
-		 * For working with components Entity needs link to componentsManager
+		 * Entity needs link to componentsManager for working with components
 		 * @param value Link to ComponentsManager instance
 		 */
+		[Inline]
 		internal function set componentsManager(value:ComponentsManager):void
 		{
 			_componentsManager = value;
 		}
-//} endregion GETTERS/SETTERS ==========================================================================================        
+
+		/**
+		 * Index of the component in Gimmick scope
+		 */
+		[Inline]
+		internal function get index():int
+		{
+			return _index;
+		}
+		//Implementation of public interface
+
+		/**
+		 * @inheritDoc
+		 */
+		[Inline]
+		public function get name():String
+		{
+			return _name;
+		}
+
+		/**
+		 * @inheritDoc
+		 */
+		[Inline]
+		public function get id():String
+		{
+			return _id;
+		}
+
+		/**
+		 * @inheritDoc
+		 */
+		public function get components():Array
+		{
+			return null;
+		}
+
+		/**
+		 * @inheritDoc
+		 */
+		public function get componentsTypes():Array
+		{
+			return null;
+		}
+
+//} endregion GETTERS/SETTERS ==========================================================================================
 	}
 }

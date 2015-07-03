@@ -25,6 +25,11 @@ package org.gimmick.core
 		{
 		}
 
+		public function getEntities(components:Array):void
+		{
+
+		}
+
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS

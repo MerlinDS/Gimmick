@@ -49,11 +49,6 @@ package org.gimmick.core
 		 */
 		function remove(componentType:Class):void;
 
-		/**
-		 * Get list of all components for Entity
-		 * @return List of all components for Entity
-		 */
-		function getComponents():Array;
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
@@ -69,6 +64,18 @@ package org.gimmick.core
 		 * Unique id of the Entity
 		 */
 		function get id():String;
+
+		/**
+		 * List of all components that constance current Entity
+		 * WARNING: It is a slow method. Use it in great need
+		 */
+		function get components():Array;
+
+		/**
+		 * List of all components types that constance current Entity
+		 * WARNING: It is a slow method. Use it in great need
+		 */
+		function get componentsTypes():Array;
 //} endregion GETTERS/SETTERS ==========================================================================================
 	}
 }
