@@ -1,7 +1,14 @@
 # Gimmick - Entity Component System framework for ActionScript
 
+Main goals of "Gimmick" development:
+* Fast and ease ECS framework
+* Smart and rapid filtration of entities by their components `getEntities(ComponentType1, ..., ComponentTypeN)`
+* Consistency and homogeneity of components in memory
+* Operations with parallel systems( [ActionScript Workers support](http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/system/Worker.html) )
 
-##Example
+More documentation (API, best practices, etc) will be available after ending of development of first library prototype.
+
+##Simple Example
 VelocityComponent and PositionComponent.
 
     public class VelocityComponent
@@ -32,19 +39,15 @@ Update entity position by velocity with MovementSystem
 
     public class MovementSystem extends EntitySystem 
     {
-        private var _entities:IEntityIterator;
-        
-        override protected function initialize():void
-        {
-            _entities = this.getEntities(VelocityComponent, PositionComponent);
-        }
-        
+    
         override public function tick(time:Number):void
         {
-            for(_entities.begin(); !_entities.end(); _entities.next())
+            var entities:IEntities = this.getEntities(VelocityComponent, PositionComponent);
+            for(entities.begin(); !entities.end(); entities.next())
             {
-                _entities.current.get(PositionComponent).x += _entities.current.get(VelocityComponent).x * time;
-                _entities.current.get(PositionComponent).y += _entities.current.get(VelocityComponent).y * time;
+                var entity:IEntity = entities.current;
+                entity.get(PositionComponent).x += entity.get(VelocityComponent).x * time;
+                entity.get(PositionComponent).y += entity.get(VelocityComponent).y * time;
             }
         }
     }
@@ -83,22 +86,21 @@ Usage (Main class of the application):
         {
             this.removeEventListener(Event.ADD_TO_STAGE, this.addToStageHandler);
             //Initialize Gimmick
-            Gimmick.initialize(this.stage, null, this.tick);
             Gimmick.addSystem(MovementSystem);
-            //Add new entity
+            Gimmick.addToScope(MovementSystem);
+            //Create new entity
             _entity = Gimmick.createEntity("Some entity");
             _entity.add(new VelocityComponent(2, 4));
             _entity.add(new PositionComponent(0, 0));
-            //Start Gimmick
-            Gimmick.setSystemToScope(MovementSystem);
-            Gimmick.start();
+            //start game loop
+            this.stage.addEventListener(Event.ENTER_FRAME, this.enterFrameHandler);
         }
         
-        /**
-        * Will be executed every frame
-        */
-        private function tick(time:Number):void
-        {
+        private function enterFrameHandler(event:Event):void
+        { 
+            //Update Gimmick, update all in scope systems
+            Gimmick.tick();
+            //Will trace new position of entity 
             trace(_entity.get(PositionComponent).x, _entity.get(PositionComponent).y);
         }
         
