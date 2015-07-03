@@ -16,10 +16,12 @@ package org.gimmick.core
 	internal class ComponentsManager
 	{
 
+		private var _componentTypeManager:ComponentTypeManager;
 //======================================================================================================================
 //{region											PUBLIC METHODS
 		public function ComponentsManager()
 		{
+			_componentTypeManager = new ComponentTypeManager();
 		}
 
 //} endregion PUBLIC METHODS ===========================================================================================

@@ -36,6 +36,11 @@ package org.gimmick.core
 		 * To add a component to Entity use Entity.add() method.
 		 *
 		 * @see IEntity
+		 * @example
+		 * <listing version="3.0">
+		 * var entity:IEntity = Gimmick.createEntity("entityName");
+		 * entity.add(new Component());
+		 * </listing>
 		 */
 		public function createEntity(name:String = null):IEntity
 		{
@@ -95,6 +100,15 @@ package org.gimmick.core
 		//updates
 		/**
 		 * Loop method of framework.
+		 * @example
+		 * <listing version="3.0">
+		 *     this.stage.addEventListener(Event.ENTER_FRAME, enterFrameHandler);
+		 *
+		 *     enterFrameHandler(event:Event):void
+		 *     {
+		 *     		Gimmick.tick();
+		 *     }
+		 * </listing>
 		 */
 		public function tick():void
 		{

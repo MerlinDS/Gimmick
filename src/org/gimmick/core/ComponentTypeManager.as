@@ -20,7 +20,7 @@ package org.gimmick.core
 	/**
 	 * Manager for components types.
 	 */
-	internal class ComponentTypeManager
+	internal final class ComponentTypeManager
 	{
 
 		private var _nextBit:uint;
