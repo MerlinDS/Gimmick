@@ -29,6 +29,10 @@ package org.gimmick.core
 		 * Unique ID of the component
 		 */
 		private var _id:String;
+		/**
+		 * Bitwise mask of all components that linked to entity
+		 */
+		private var _bits:uint;
 		private var _componentsManager:ComponentsManager;
 //======================================================================================================================
 //{region											PUBLIC METHODS
@@ -43,6 +47,7 @@ package org.gimmick.core
 		{
 			_name = name;
 			_index = index;
+			_bits = 0;
 		}
 
 		/**
