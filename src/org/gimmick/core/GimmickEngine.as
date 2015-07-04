@@ -16,6 +16,7 @@ package org.gimmick.core
 
 	import org.gimmick.managers.ComponentsManager;
 	import org.gimmick.managers.FiltersManager;
+	import org.gimmick.managers.SystemManager;
 
 	/**
 	 * This class contains public interface of Gimmick framework.
@@ -112,7 +113,7 @@ package org.gimmick.core
 		}
 		//delegates from systemsManager
 		/**
-		 * @copy org.gimmick.core.SystemManager#addSystem()
+		 * @copy org.gimmick.managers.SystemManager#addSystem()
 		 */
 		public function addSystem(system:EntitySystem):EntitySystem
 		{
@@ -120,14 +121,14 @@ package org.gimmick.core
 		}
 
 		/**
-		 * @copy org.gimmick.core.SystemManager#removeSystem()
+		 * @copy org.gimmick.managers.SystemManager#removeSystem()
 		 */
 		public function removeSystem(systemType:Class):void
 		{
 			_systemsManager.removeSystem(systemType);
 		}
 		/**
-		 * @copy org.gimmick.core.SystemManager#addToScope()
+		 * @copy org.gimmick.managers.SystemManager#addToScope()
 		 */
 		public function addToScope(systemType:Class):void
 		{
@@ -135,7 +136,7 @@ package org.gimmick.core
 		}
 
 		/**
-		 * @copy org.gimmick.core.SystemManager#removeFromScope()
+		 * @copy org.gimmick.managers.SystemManager#removeFromScope()
 		 */
 		public function removeFromScope(system:Class):void
 		{
@@ -178,6 +179,7 @@ package org.gimmick.core
 		{
 			//initialize managers
 			_componentTypeManagers = new ComponentTypeManager();
+			//TODO need initialization with external managers
 			_systemsManager = new SystemManager();
 			_filtersManager = new FiltersManager();
 			_componentsManager = new ComponentsManager();

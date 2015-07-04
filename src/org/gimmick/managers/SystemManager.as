@@ -10,13 +10,15 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.gimmick.core
+package org.gimmick.managers
 {
+
+	import org.gimmick.core.*;
 
 	/**
 	 * Managing of all systems in Gimmick engine
 	 */
-	internal class SystemManager
+	public class SystemManager
 	{
 
 //======================================================================================================================
@@ -54,7 +56,7 @@ package org.gimmick.core
 		 * @throws ArgumentError EntitySystem was not added to Gimmick previously
 		 *
 		 * @see org.gimmick.core.EntitySystem#tick() EntitySystem.tick() loop method of the <code>EntitySystem</code>
-		 * @see org.gimmick.core.SystemManager#addSystem() Adding <code>EntitySystem</code> instance to Gimmick framework
+		 * @see org.gimmick.managers.SystemManager#addSystem() Adding <code>EntitySystem</code> instance to Gimmick framework
 		 * @see org.gimmick.core.Gimmick#tick() Main looping method of Gimmick framework
 		 */
 		public function addToScope(systemType:Class):void
