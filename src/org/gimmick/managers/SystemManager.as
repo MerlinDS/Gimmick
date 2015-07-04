@@ -18,7 +18,7 @@ package org.gimmick.managers
 	/**
 	 * Managing of all systems in Gimmick engine
 	 */
-	public class SystemManager
+	public class SystemManager extends GimmickManager
 	{
 
 //======================================================================================================================
@@ -93,7 +93,7 @@ package org.gimmick.managers
 
 		}
 
-		public function dispose():void
+		override public function dispose():void
 		{
 
 		}

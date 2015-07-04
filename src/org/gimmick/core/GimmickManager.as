@@ -10,82 +10,47 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.gimmick.managers
+package org.gimmick.core
 {
 
-	import org.gimmick.core.*;
-	import org.gimmick.utils.SetList;
-
 	/**
-	 * Manager for controlling of entities
+	 * Base abstract class for all Gimmick managers
 	 */
-	public class EntitiesManager extends GimmickManager
+	public class GimmickManager
 	{
 
-		private var _activeEntities:SetList;
-		private var _passiveEntities:SetList;
 //======================================================================================================================
 //{region											PUBLIC METHODS
-		public function EntitiesManager()
+		public function GimmickManager()
 		{
 		}
 
-		/**
-		 * Initialize entities manager
-		 */
-		override public function initialize():void
-		{
-			_passiveEntities = new SetList();
-			_activeEntities = new SetList();
-		}
-
-		public function addEntity(entity:IEntity):void
-		{
-			_passiveEntities.addValue(entity.id, entity);
-		}
-		/**
-		 * Remove entity
-		 * @param entity Instance of the entity
-		 */
-		public function removeEntity(entity:IEntity):void
-		{
-
-		}
-
-		public function changeEntityActivity(entity:IEntity):void
-		{
-
-		}
-
-
-		public function addToFilter(entity:IEntity, componentType:ComponentType):void
-		{
-
-		}
-
-		public function removeFromFilter(entity:IEntity, componentType:ComponentType):void
-		{
-
-		}
-
-		public function getEntities(components:Array):void
-		{
-
-		}
-
-		override public function dispose():void
-		{
-
-		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
 
+		/**
+		 * Initialize abstract method.
+		 * Will be executed after manager linked to GimmickEngine.
+		 */
+		public function initialize():void
+		{
+
+		}
+
+		/**
+		 * Dispose method prepare manager for GC.
+		 *
+		 * @throws UninitializedError Dispose method must be overridden and prepare manager to GC.
+		 */
+		public function dispose():void
+		{
+			throw new UninitializedError('Dispose method must be overridden!');
+		}
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS
 
-//} endregion GETTERS/SETTERS ==========================================================================================
-
+//} endregion GETTERS/SETTERS ==========================================================================================        
 	}
 }

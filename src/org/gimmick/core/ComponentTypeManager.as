@@ -20,7 +20,7 @@ package org.gimmick.core
 	/**
 	 * Manager for components types.
 	 */
-	internal final class ComponentTypeManager
+	internal final class ComponentTypeManager extends GimmickManager
 	{
 
 		private var _nextBit:uint;
@@ -67,7 +67,7 @@ package org.gimmick.core
 			return null;
 		}
 
-		public final function dispose():void
+		override public final function dispose():void
 		{
 
 		}

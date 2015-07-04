@@ -15,7 +15,7 @@ package org.gimmick.managers
 
 	import org.gimmick.core.*;
 
-	public class ComponentsManager
+	public class ComponentsManager extends GimmickManager
 	{
 
 //======================================================================================================================
@@ -77,7 +77,7 @@ package org.gimmick.managers
 
 		}
 
-		public function dispose():void
+		override public function dispose():void
 		{
 
 		}

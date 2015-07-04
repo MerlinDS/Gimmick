@@ -15,9 +15,6 @@ package org.gimmick.core
 
 	import flexunit.framework.Assert;
 
-	import org.gimmick.managers.ComponentsManager;
-	import org.gimmick.managers.EntitiesManager;
-
 	/**
 	 * Test case for basic methods of the Entity class
 	 * For deep tests find in ComponentsManagerTest and FiltersManagerTest
@@ -40,9 +37,11 @@ package org.gimmick.core
 			_entityName = "Test entity";
 			_entity = new Entity(_entityName);
 			_testComponent = new TestComponent();
+			//create managers
 			_entity.componentTypeManager = new ComponentTypeManager();
-			_entity.componentsManager = new ComponentsManager();
-			_entity.entitiesManager = new EntitiesManager();
+			_entity.componentsManager = new TestComponentsManager(_testComponent);
+			_entity.entitiesManager = new TestEntitiesManager();
+
 		}
 
 		[After]
@@ -60,7 +59,7 @@ package org.gimmick.core
 			//More tests in ComponentsManagerTest and FiltersManagerTest
 		}
 
-		[Test(description='will works correctly only after ComponentsManager code implementation')]
+		[Test]
 		public function testGet():void
 		{
 			this.testAdd();
@@ -136,5 +135,52 @@ package org.gimmick.core
 //} endregion GETTERS/SETTERS ==========================================================================================
 	}
 }
+
+import flexunit.framework.Assert;
+
+import org.gimmick.core.ComponentType;
+import org.gimmick.core.IEntity;
+import org.gimmick.managers.ComponentsManager;
+import org.gimmick.managers.EntitiesManager;
+
 class TestComponent{}
 class NotAddedTestComponent{}
+//Fake managers
+class TestComponentsManager extends ComponentsManager
+{
+	private var _testComponent:Object;
+
+	public function TestComponentsManager(testComponent:Object)
+	{
+		_testComponent = testComponent;
+		this.initialize();
+	}
+
+	override public function getComponent(entity:IEntity, componentType:ComponentType):*
+	{
+		return _testComponent;
+	}
+
+	override public function addComponent(entity:IEntity, componentType:ComponentType, component:Object):void
+	{
+		Assert.assertEquals(_testComponent, component);
+	}
+
+	override public function getComponents(entity:IEntity):Array
+	{
+		return [];
+	}
+
+	override public function removeComponent(entity:IEntity, componentType:ComponentType):void
+	{
+		//
+	}
+}
+class TestEntitiesManager extends EntitiesManager
+{
+
+	public function TestEntitiesManager()
+	{
+		this.initialize();
+	}
+}
