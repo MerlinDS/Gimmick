@@ -13,12 +13,12 @@
 package org.gimmick.core
 {
 
-	import org.gimmick.managers.FiltersManager;
+	import org.gimmick.managers.EntitiesManager;
 
 	public class EntitySystem
 	{
 
-		private var _entities:FiltersManager;
+		private var _entities:EntitiesManager;
 //======================================================================================================================
 //{region											PUBLIC METHODS
 		public function EntitySystem()

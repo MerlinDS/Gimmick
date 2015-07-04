@@ -14,26 +14,28 @@ package org.gimmick.managers
 {
 
 	import org.gimmick.core.*;
+	import org.gimmick.utils.SetList;
 
 	/**
-	 * Manager for controlling filters of entities
+	 * Manager for controlling of entities
 	 */
-	public class FiltersManager
+	public class EntitiesManager
 	{
 
+		private var _entities:SetList;
 //======================================================================================================================
 //{region											PUBLIC METHODS
-		public function FiltersManager()
+		public function EntitiesManager()
 		{
+			_entities = new SetList();
 		}
 
-		public function getEntities(components:Array):void
+		public function addEntity(entity:IEntity):void
 		{
-
+			_entities.addValue(entity.id, entity);
 		}
-
 		/**
-		 * Remove entity from filters
+		 * Remove entity
 		 * @param entity Instance of the entity
 		 */
 		public function removeEntity(entity:IEntity):void
@@ -41,12 +43,18 @@ package org.gimmick.managers
 
 		}
 
+
 		public function addToFilter(entity:IEntity, componentType:ComponentType):void
 		{
 
 		}
 
 		public function removeFromFilter(entity:IEntity, componentType:ComponentType):void
+		{
+
+		}
+
+		public function getEntities(components:Array):void
 		{
 
 		}

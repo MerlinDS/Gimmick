@@ -14,7 +14,7 @@ package org.gimmick.core
 {
 
 	import org.gimmick.managers.ComponentsManager;
-	import org.gimmick.managers.FiltersManager;
+	import org.gimmick.managers.EntitiesManager;
 	import org.gimmick.utils.getUniqueId;
 
 	/**
@@ -54,7 +54,7 @@ package org.gimmick.core
 		private var _bits:uint;
 		private var _componentTypeManager:ComponentTypeManager;
 		private var _componentsManager:ComponentsManager;
-		private var _filtersManager:FiltersManager;
+		private var _entitiesManager:EntitiesManager;
 //======================================================================================================================
 //{region											PUBLIC METHODS
 
@@ -80,7 +80,7 @@ package org.gimmick.core
 		{
 			var componentType:ComponentType = _componentTypeManager.getType(component);
 			_componentsManager.addComponent(this, componentType, component);
-			_filtersManager.addToFilter(this, componentType);
+			_entitiesManager.addToFilter(this, componentType);
 			//add bit to bitwise mask if component was adding first time
 			if(!(_bits & componentType.bit))_bits |= componentType.bit;
 			return component;
@@ -117,7 +117,7 @@ package org.gimmick.core
 		{
 			var componentType:ComponentType = _componentTypeManager.getType(component);
 			_componentsManager.removeComponent(this, componentType);
-			_filtersManager.removeFromFilter(this, componentType);
+			_entitiesManager.removeFromFilter(this, componentType);
 			//remove bit from bitwise mask
 			_bits = _bits &~ componentType.bit;
 		}
@@ -131,7 +131,7 @@ package org.gimmick.core
 		{
 			_bits = 0x0;
 			_id = null;
-			_filtersManager = null;
+			_entitiesManager = null;
 			_componentsManager = null;
 			_componentTypeManager = null;
 		}
@@ -165,10 +165,13 @@ package org.gimmick.core
 		 * @private
 		 */
 		[Inline]
-		internal final function set filtersManager(value:FiltersManager):void
+		internal final function set entitiesManager(value:EntitiesManager):void
 		{
-			if(value != null)//only dispose method can set _filtersManager to null
-				_filtersManager = value;
+			if(value != null)//only dispose method can set _entitiesManager to null
+			{
+				_entitiesManager = value;
+				_entitiesManager.addEntity(this);
+			}
 		}
 
 		/**
