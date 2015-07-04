@@ -43,6 +43,11 @@ package org.gimmick.managers
 
 		}
 
+		public function changeEntityActivity(entity:IEntity):void
+		{
+
+		}
+
 
 		public function addToFilter(entity:IEntity, componentType:ComponentType):void
 		{
@@ -72,5 +77,6 @@ package org.gimmick.managers
 //{region											GETTERS/SETTERS
 
 //} endregion GETTERS/SETTERS ==========================================================================================
+
 	}
 }

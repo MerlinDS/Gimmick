@@ -87,6 +87,18 @@ package org.gimmick.core
 		 * WARNING: It is a slow method. Use it in great need
 		 */
 		function get components():Array;
+
+		/**
+		 * Flag that indicates activity of the entity.
+		 * Entity will not participating in game's loop if it does not active, but will not be destroyed too.
+		 * (This flag exists for optimisation of space partition algorithm, ect)
+		 */
+		function set active(value:Boolean):void;
+		/**
+		 * @private
+		 */
+		function get active():Boolean;;
+
 //} endregion GETTERS/SETTERS ==========================================================================================
 	}
 }

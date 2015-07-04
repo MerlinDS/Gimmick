@@ -45,6 +45,10 @@ package org.gimmick.core
 
 		private var _name:String;
 		/**
+		 * Entity activity
+		 */
+		private var _active:Boolean;
+		/**
 		 * Unique ID of the component
 		 */
 		private var _id:String;
@@ -52,6 +56,7 @@ package org.gimmick.core
 		 * Bitwise mask of all components that linked to entity
 		 */
 		private var _bits:uint;
+		//links to managers
 		private var _componentTypeManager:ComponentTypeManager;
 		private var _componentsManager:ComponentsManager;
 		private var _entitiesManager:EntitiesManager;
@@ -61,8 +66,6 @@ package org.gimmick.core
 		/**
 		 * Constructor
 		 * @param name Name of the component
-		 * @param index Index of the component in Gimmick scope
-		 *
 		 */
 		public function Entity(name:String)
 		{
@@ -211,6 +214,25 @@ package org.gimmick.core
 			if(_componentsManager != null)
 				return _componentsManager.getComponents(this);
 			return [];
+		}
+
+		/**
+		 * @inheritDoc
+		 */
+		[Inline]
+		public final function get active():Boolean
+		{
+			return _active;
+		}
+
+		/**
+		 * @inheritDoc
+		 */
+		[Inline]
+		public final function set active(value:Boolean):void
+		{
+			_active = value;
+			_entitiesManager.changeEntityActivity(this);
 		}
 
 //} endregion GETTERS/SETTERS ==========================================================================================
