@@ -10,30 +10,43 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.gimmick.core
+package org.gimmick.managers
 {
 
-	import org.gimmick.utils.SetList;
+	import org.gimmick.core.*;
 
-	internal class EntitiesManager
+	/**
+	 * Manager for controlling filters of entities
+	 */
+	public class FiltersManager
 	{
 
-		private var _entities:SetList;
 //======================================================================================================================
 //{region											PUBLIC METHODS
-		public function EntitiesManager()
+		public function FiltersManager()
 		{
-			_entities = new SetList();
 		}
 
-		public function createEntity(name:String):Entity
+		public function getEntities(components:Array):void
 		{
-			var entity:Entity = new Entity(name);
-			_entities.addValue(entity.id, entity);
-			return entity;
+
 		}
 
-		public function disposeEntity(entity:Entity):void
+		/**
+		 * Remove entity from filters
+		 * @param entity Instance of the entity
+		 */
+		public function removeEntity(entity:IEntity):void
+		{
+
+		}
+
+		public function addToFilter(entity:IEntity, componentType:ComponentType):void
+		{
+
+		}
+
+		public function removeFromFilter(entity:IEntity, componentType:ComponentType):void
 		{
 
 		}

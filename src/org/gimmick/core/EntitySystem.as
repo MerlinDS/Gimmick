@@ -13,6 +13,8 @@
 package org.gimmick.core
 {
 
+	import org.gimmick.managers.FiltersManager;
+
 	public class EntitySystem
 	{
 

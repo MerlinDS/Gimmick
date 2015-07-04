@@ -10,41 +10,69 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.gimmick.core
+package org.gimmick.managers
 {
 
-	/**
-	 * Manager for controlling filters of entities
-	 */
-	internal class FiltersManager
+	import org.gimmick.core.*;
+
+	public class ComponentsManager
 	{
 
 //======================================================================================================================
 //{region											PUBLIC METHODS
-		public function FiltersManager()
+		public function ComponentsManager()
 		{
 		}
 
-		public function getEntities(components:Array):void
+		/**
+		 * Link component instance to entity
+		 * @param entity Instance of the entity
+		 * @param componentType ComponentType of component
+		 * @param component Instance of the component
+		 */
+		public function addComponent(entity:IEntity, componentType:ComponentType, component:Object):void
 		{
 
 		}
 
 		/**
-		 * Remove entity from filters
+		 * Remove link of component from entity
+		 * @param entity Instance of the entity
+		 * @param componentType Type of the component
+		 */
+		public function removeComponent(entity:IEntity, componentType:ComponentType):void
+		{
+
+		}
+
+		/**
+		 * Get component linked to Entity
+		 * @param entity Instance of the entity
+		 * @param componentType Type of the component
+		 * @return Component instance if it was linked to Entity. In other case will return null
+		 *
+		 * @see org.gimmick.core.ComponentManager.addComponent() Before getting linked component you need to add component link to entity
+		 */
+		public function getComponent(entity:IEntity, componentType:ComponentType):*
+		{
+			return null;
+		}
+
+		/**
+		 * Gather all components of the entity to list and return it
+		 * @param entity Instance of the entity
+		 * @return List of all components of the entity
+		 */
+		public function getComponents(entity:IEntity):Array
+		{
+			return null;
+		}
+
+		/**
+		 * Remove all components linked to <code>Entity</code>
 		 * @param entity Instance of the entity
 		 */
-		public function removeEntity(entity:Entity):void
-		{
-
-		}
-
-		public function addToFilter(entity:Entity, componentType:ComponentType):void
-		{
-
-		}
-
-		public function removeFromFilter(entity:Entity, componentType:ComponentType):void
+		public function removeComponents(entity:IEntity):void
 		{
 
 		}
@@ -62,5 +90,6 @@ package org.gimmick.core
 //{region											GETTERS/SETTERS
 
 //} endregion GETTERS/SETTERS ==========================================================================================
+
 	}
 }

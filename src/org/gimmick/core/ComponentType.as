@@ -16,7 +16,7 @@ package org.gimmick.core
 	/**
 	 * Class that constance component type fields
 	 **/
-	internal class ComponentType
+	public class ComponentType
 	{
 
 		private var _bit:uint;
@@ -29,7 +29,7 @@ package org.gimmick.core
 		 * @param bit Bitwise mask of the component type
 		 * @param index Index of the component type
 		 */
-		public function ComponentType(bit:uint, index:int)
+		public final function ComponentType(bit:uint, index:int)
 		{
 			_bit = bit;
 			_index = index;

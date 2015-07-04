@@ -14,6 +14,9 @@ package org.gimmick.core
 
 	import flash.utils.getTimer;
 
+	import org.gimmick.managers.ComponentsManager;
+	import org.gimmick.managers.FiltersManager;
+
 	/**
 	 * This class contains public interface of Gimmick framework.
 	 */
@@ -22,7 +25,6 @@ package org.gimmick.core
 		//managers
 		private var _systemsManager:SystemManager;
 		private var _filtersManager:FiltersManager;
-		private var _entitiesManager:EntitiesManager;
 		private var _componentsManager:ComponentsManager;
 		private var _componentTypeManagers:ComponentTypeManager;
 		//
@@ -65,13 +67,11 @@ package org.gimmick.core
 		public function dispose():void
 		{
 			_systemsManager.dispose();
-			_entitiesManager.dispose();
 			_filtersManager.dispose();
 			_componentsManager.dispose();
 			_componentTypeManagers.dispose();
 
 			_systemsManager = null;
-			_entitiesManager = null;
 			_filtersManager = null;
 			_componentsManager = null;
 			_componentTypeManagers = null;
@@ -92,7 +92,7 @@ package org.gimmick.core
 		 */
 		public function createEntity(name:String = null):IEntity
 		{
-			var entity:Entity = _entitiesManager.createEntity(name);
+			var entity:Entity = new Entity(name);
 			entity.componentTypeManager = _componentTypeManagers;
 			entity.componentsManager = _componentsManager;
 			entity.filtersManager = _filtersManager;
@@ -109,7 +109,6 @@ package org.gimmick.core
 		{
 			_componentsManager.removeComponents(entity as Entity);
 			_filtersManager.removeEntity(entity as Entity);
-			_entitiesManager.disposeEntity(entity as Entity);
 		}
 		//delegates from systemsManager
 		/**
@@ -180,7 +179,6 @@ package org.gimmick.core
 			//initialize managers
 			_componentTypeManagers = new ComponentTypeManager();
 			_systemsManager = new SystemManager();
-			_entitiesManager = new EntitiesManager();
 			_filtersManager = new FiltersManager();
 			_componentsManager = new ComponentsManager();
 			//
