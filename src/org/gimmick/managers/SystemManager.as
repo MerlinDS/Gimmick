@@ -47,7 +47,7 @@ package org.gimmick.managers
 		}
 
 		/**
-		 * Add <code>EntitySystem</code> to Gimmick scope. <br />
+		 * Activate and add <code>EntitySystem</code> to Gimmick scope. <br />
 		 * After adding <code>EntitySystem</code> to scope <code>EntitySystem.tick()</code> method will be executed
 		 * for each tick (enter frame, or else loop).
 		 *
@@ -59,13 +59,13 @@ package org.gimmick.managers
 		 * @see org.gimmick.managers.SystemManager#addSystem() Adding <code>EntitySystem</code> instance to Gimmick framework
 		 * @see org.gimmick.core.Gimmick#tick() Main looping method of Gimmick framework
 		 */
-		public function addToScope(systemType:Class):void
+		public function activateSystem(systemType:Class):void
 		{
 
 		}
 
 		/**
-		 * Remove <code>EntitySystem</code> from scope, but not from Gimmick.
+		 * Deactivate and remove <code>EntitySystem</code> from scope, but not from Gimmick.
 		 * After removing EntitySystem from scope method <code>EntitySystem.tick()</code> will not be executed any more.
 		 * <br />
 		 * For totally removing <code>EntitySystem</code> from Gimmick use <code>removeSystem()</code> method instead.
@@ -79,7 +79,7 @@ package org.gimmick.managers
 		 * @see Gimmick.tick
 		 * @see EntitySystem.tick
 		 */
-		public function removeFromScope(systemType:Class):void
+		public function deactivateSystem(systemType:Class):void
 		{
 
 		}

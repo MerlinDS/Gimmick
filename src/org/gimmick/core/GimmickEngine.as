@@ -128,17 +128,17 @@ package org.gimmick.core
 			_systemsManager.removeSystem(systemType);
 		}
 		/**
-		 * @copy org.gimmick.managers.SystemManager#addToScope()
+		 * @copy org.gimmick.managers.SystemManager#activateSystem()
 		 */
-		public function addToScope(systemType:Class):void
+		public function activateSystem(systemType:Class):void
 		{
 			_systemsManager.addToScope(systemType)
 		}
 
 		/**
-		 * @copy org.gimmick.managers.SystemManager#removeFromScope()
+		 * @copy org.gimmick.managers.SystemManager#deactivateSystem()
 		 */
-		public function removeFromScope(system:Class):void
+		public function deactivateSystem(system:Class):void
 		{
 			_systemsManager.removeFromScope(system);
 		}

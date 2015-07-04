@@ -18,6 +18,7 @@ package org.gimmick.core
 	public class EntitySystem
 	{
 
+		private var _active:Boolean;
 		private var _entities:EntitiesManager;
 //======================================================================================================================
 //{region											PUBLIC METHODS
@@ -57,7 +58,6 @@ package org.gimmick.core
 		{
 
 		}
-
 		/**
 		 * Initialize system.
 		 * Method for override
@@ -74,6 +74,24 @@ package org.gimmick.core
 		protected function dispose():void
 		{
 			//override this
+		}
+		//Activate|Deactivate
+		/**
+		 * This method executed after system activated.
+		 * Active systems fall into main loop
+		 */
+		protected function activate():void
+		{
+
+		}
+
+		/**
+		 * This method executed after system deactivated
+		 * Deactivated systems does not fall into main loop. But not disposed.
+		 */
+		protected function deactivate():void
+		{
+
 		}
 
 		//else methods
@@ -95,18 +113,26 @@ package org.gimmick.core
 
 		}
 
-		/**
-		 * Remove current system from Gimmick scope.
-		 * @see org.gimmick.core.GimmickEngine.removeFromScope() Works same way as Gimmick.removeFromScope()
-		 */
-		protected final function removeMyself():void
-		{
-
-		}
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS
 
-//} endregion GETTERS/SETTERS ==========================================================================================        
+		/**
+		 * Activate or deactivate system.
+		 * Active systems fall in main loop and take part in Gimmick tick processing
+		 */
+		public final function set active(value:Boolean):void
+		{
+			_active = value;
+		}
+		/**
+		 * @private
+		 */
+		public final function get active():Boolean
+		{
+			return _active;
+		}
+
+//} endregion GETTERS/SETTERS ==========================================================================================
 	}
 }
