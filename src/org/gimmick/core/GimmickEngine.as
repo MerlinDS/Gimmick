@@ -183,6 +183,9 @@ package org.gimmick.core
 			_systemsManager = new SystemManager();
 			_entitiesManager = new EntitiesManager();
 			_componentsManager = new ComponentsManager();
+			_entitiesManager.initialize();
+			_systemsManager.initialize();
+			_componentsManager.initialize();
 			//
 			_lastTimestamp = 0;
 			this.resume(true);
