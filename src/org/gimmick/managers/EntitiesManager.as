@@ -22,17 +22,19 @@ package org.gimmick.managers
 	public class EntitiesManager
 	{
 
-		private var _entities:SetList;
+		private var _activeEntities:SetList;
+		private var _passiveEntities:SetList;
 //======================================================================================================================
 //{region											PUBLIC METHODS
 		public function EntitiesManager()
 		{
-			_entities = new SetList();
+			_passiveEntities = new SetList();
+			_activeEntities = new SetList();
 		}
 
 		public function addEntity(entity:IEntity):void
 		{
-			_entities.addValue(entity.id, entity);
+			_passiveEntities.addValue(entity.id, entity);
 		}
 		/**
 		 * Remove entity
