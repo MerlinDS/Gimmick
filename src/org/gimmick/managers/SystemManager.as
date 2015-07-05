@@ -61,7 +61,8 @@ package org.gimmick.managers
 		 */
 		public function activateSystem(systemType:Class):void
 		{
-
+			var system:EntitySystem;
+			system.active = true;
 		}
 
 		/**
@@ -81,7 +82,8 @@ package org.gimmick.managers
 		 */
 		public function deactivateSystem(systemType:Class):void
 		{
-
+			var system:EntitySystem;
+			system.active = true;
 		}
 
 		/**

@@ -42,23 +42,6 @@ package org.gimmick.core
 
 		//Initializing|Disposing
 		/**
-		 * This method will be executed before system initialization
-		 * @see org.gimmick.core.EntitySystem.initialize() write code in initialize method
-		 */
-		private function preInitialize():void
-		{
-
-		}
-
-		/**
-		 * This method will be executed after system disposing
-		 * @see org.gimmick.core.EntitySystem.dispose() write code in dispose method
-		 */
-		private function postDispose():void
-		{
-
-		}
-		/**
 		 * Initialize system.
 		 * Method for override
 		 */
@@ -116,6 +99,16 @@ package org.gimmick.core
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS
+		/**
+		 * @private
+		 * @param value
+		 */
+		internal function set entitiesManager(value:EntitiesManager):void
+		{
+			if(value != null)this.initialize();
+			else this.dispose();
+			_entities = value;
+		}
 
 		/**
 		 * Activate or deactivate system.
@@ -123,6 +116,10 @@ package org.gimmick.core
 		 */
 		public final function set active(value:Boolean):void
 		{
+			if(value == _active)return;
+			//only in state of system will be changed
+			if(value)this.activate();
+			else this.deactivate();
 			_active = value;
 		}
 		/**
@@ -133,6 +130,10 @@ package org.gimmick.core
 			return _active;
 		}
 
+		protected function get entities():EntitiesManager
+		{
+			return _entities;
+		}
 //} endregion GETTERS/SETTERS ==========================================================================================
 	}
 }

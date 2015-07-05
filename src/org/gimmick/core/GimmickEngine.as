@@ -117,6 +117,7 @@ package org.gimmick.core
 		 */
 		public function addSystem(system:EntitySystem):EntitySystem
 		{
+			system.entitiesManager = _entitiesManager;
 			return _systemsManager.addSystem(system);
 		}
 
@@ -132,7 +133,7 @@ package org.gimmick.core
 		 */
 		public function activateSystem(systemType:Class):void
 		{
-			_systemsManager.addToScope(systemType)
+			_systemsManager.activateSystem(systemType)
 		}
 
 		/**
@@ -140,7 +141,7 @@ package org.gimmick.core
 		 */
 		public function deactivateSystem(system:Class):void
 		{
-			_systemsManager.removeFromScope(system);
+			_systemsManager.deactivateSystem(system);
 		}
 
 		//updates
