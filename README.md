@@ -93,6 +93,7 @@ Usage (Main class of the application):
         {
             this.removeEventListener(Event.ADD_TO_STAGE, this.addToStageHandler);
             //Initialize Gimmick
+            Gimmick.initialize();//Can be initialized with external managers
             Gimmick.addSystem(MovementSystem);
             Gimmick.addToScope(MovementSystem);
             //Create new entity
