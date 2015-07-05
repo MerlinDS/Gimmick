@@ -16,6 +16,7 @@ package org.gimmick.core
 	import flexunit.framework.Assert;
 
 	import org.gimmick.managers.GimmickConfig;
+	import org.gimmick.utils.TestComfig;
 
 	/**
 	 * Test case for basic methods of the Entity class
@@ -40,11 +41,11 @@ package org.gimmick.core
 			_entity = new Entity(_entityName);
 			_testComponent = new TestComponent();
 			//create managers
-			var config:GimmickConfig = new GimmickConfig();
+			var config:TestComfig = new TestComfig();
 			config.componentTypeManager.initialize();
 			_entity.componentTypeManager = config.componentTypeManager;
 			_entity.componentsManager = new TestComponentsManager(_testComponent);
-			_entity.entitiesManager = new TestEntitiesManager();
+			_entity.entitiesManager = config.entitiesManager;
 		}
 
 		[After]
@@ -144,7 +145,6 @@ import flexunit.framework.Assert;
 import org.gimmick.core.ComponentType;
 import org.gimmick.core.IEntity;
 import org.gimmick.managers.IComponentsManager;
-import org.gimmick.managers.IEntitiesManager;
 
 class TestComponent{}
 class NotAddedTestComponent{}
@@ -175,20 +175,6 @@ class TestComponentsManager implements IComponentsManager
 
 	public function removeComponent(entity:IEntity, componentType:ComponentType):void{}
 	public function removeComponents(entity:IEntity):void{}
-	public function dispose():void{}
-	public function initialize():void{}
-}
-class TestEntitiesManager implements IEntitiesManager
-{
-
-	public function TestEntitiesManager(){}
-
-	public function addEntity(entity:IEntity):void{}
-	public function removeEntity(entity:IEntity):void{}
-	public function changeEntityActivity(entity:IEntity):void{}
-	public function addToFilter(entity:IEntity, componentType:ComponentType):void{}
-	public function removeFromFilter(entity:IEntity, componentType:ComponentType):void{}
-	public function getEntities(components:Array):void{}
 	public function dispose():void{}
 	public function initialize():void{}
 }

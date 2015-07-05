@@ -20,11 +20,11 @@ package org.gimmick.collections
 
 		private var _cursor:int;
 		private var _collectionTypes:Array;
-		private var _entities:Vector.<IEntity>;
+		private var _entities:Vector.<Object>;
 		private var _parent:EntitiesCollection;
 		//======================================================================================================================
 //{region											PUBLIC METHODS
-		public function EntitiesCollection(entities:Vector.<IEntity>)
+		public function EntitiesCollection(entities:Vector.<Object>)
 		{
 			_entities = entities;
 		}
@@ -74,7 +74,7 @@ package org.gimmick.collections
 
 		public function get current():IEntity
 		{
-			return _entities[ _cursor ];
+			return _entities[ _cursor ] as IEntity;
 		}
 //} endregion GETTERS/SETTERS ==========================================================================================
 	}

@@ -129,6 +129,12 @@ package org.gimmick.utils
 		{
 			return _values.length - _freeIndexes.length;
 		}
-//} endregion GETTERS/SETTERS ==========================================================================================        
+
+		public function get values():Vector.<Object>
+		{
+			return _values;
+		}
+
+//} endregion GETTERS/SETTERS ==========================================================================================
 	}
 }

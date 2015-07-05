@@ -14,6 +14,8 @@ package org.gimmick.managers
 
 	import flexunit.framework.Assert;
 
+	import org.gimmick.utils.TestComfig;
+
 	public class GimmickConfigTest
 	{
 
@@ -26,28 +28,28 @@ package org.gimmick.managers
 		[Test]
 		public function testEntityManager():void
 		{
+			var testConfig:TestComfig = new TestComfig();
 			var config:GimmickConfig = new GimmickConfig();
 			Assert.assertNotNull("Empty manager", config.entitiesManager);
-			config = new GimmickConfig(null, null, new TestEntityManager());
-			Assert.assertNotNull("External manager", config.entitiesManager);
+			Assert.assertNotNull("External manager", testConfig.entitiesManager);
 		}
 
 		[Test]
 		public function testSystemManager():void
 		{
+			var testConfig:TestComfig = new TestComfig();
 			var config:GimmickConfig = new GimmickConfig();
 			Assert.assertNotNull("Empty manager", config.systemManager);
-			config = new GimmickConfig(new TestSystemManager());
-			Assert.assertNotNull("External manager", config.systemManager);
+			Assert.assertNotNull("External manager", testConfig.systemManager);
 		}
 
 		[Test]
 		public function testComponentsManager():void
 		{
 			var config:GimmickConfig = new GimmickConfig();
+			var testConfig:TestComfig = new TestComfig();
 			Assert.assertNotNull("Empty manager", config.componentsManager);
-			config = new GimmickConfig(null, new TestComponentManager());
-			Assert.assertNotNull("External manager", config.componentsManager);
+			Assert.assertNotNull("External manager", testConfig.systemManager);
 		}
 
 		[Test]
@@ -67,47 +69,4 @@ package org.gimmick.managers
 //} endregion GETTERS/SETTERS ==========================================================================================
 
 	}
-}
-
-import org.gimmick.core.ComponentType;
-import org.gimmick.core.EntitySystem;
-import org.gimmick.core.IEntity;
-import org.gimmick.managers.IComponentsManager;
-import org.gimmick.managers.IEntitiesManager;
-import org.gimmick.managers.ISystemManager;
-
-class TestSystemManager implements ISystemManager
-{
-
-	public function addSystem(system:EntitySystem):EntitySystem{return null;}
-	public function removeSystem(systemType:Class):EntitySystem{return null;}
-	public function activateSystem(systemType:Class):void{}
-	public function deactivateSystem(systemType:Class):void{}
-	public function tick(time:Number):void{}
-	public function dispose():void{}
-	public function initialize():void{}
-}
-
-class TestComponentManager implements IComponentsManager
-{
-
-	public function addComponent(entity:IEntity, componentType:ComponentType, component:Object):void{}
-	public function removeComponent(entity:IEntity, componentType:ComponentType):void{}
-	public function getComponent(entity:IEntity, componentType:ComponentType):*{}
-	public function getComponents(entity:IEntity):Array{return null;}
-	public function removeComponents(entity:IEntity):void{}
-	public function dispose():void{}
-	public function initialize():void{}
-}
-
-class TestEntityManager implements IEntitiesManager
-{
-	public function addEntity(entity:IEntity):void{}
-	public function removeEntity(entity:IEntity):void{}
-	public function changeEntityActivity(entity:IEntity):void{}
-	public function addToFilter(entity:IEntity, componentType:ComponentType):void{}
-	public function removeFromFilter(entity:IEntity, componentType:ComponentType):void{}
-	public function getEntities(components:Array):void{}
-	public function dispose():void{}
-	public function initialize():void{}
 }

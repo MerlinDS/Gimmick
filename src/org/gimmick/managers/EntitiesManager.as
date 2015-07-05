@@ -13,21 +13,27 @@
 package org.gimmick.managers
 {
 
+	import org.gimmick.collections.EntitiesCollection;
+	import org.gimmick.collections.IEntitiesCollection;
 	import org.gimmick.core.*;
 	import org.gimmick.utils.SetList;
 
 	/**
 	 * Manager for controlling of entities
 	 */
-	internal class EntitiesManager implements IEntitiesManager
+	internal class EntitiesManager extends EntitiesCollection implements IEntitiesManager
 	{
 
 		private var _activeEntities:SetList;
 		private var _passiveEntities:SetList;
+
+		private var _collectionPool:Vector.<EntitiesCollection>;
+		private var _existCollections:Vector.<EntitiesCollection>;
 //======================================================================================================================
 //{region											PUBLIC METHODS
 		public function EntitiesManager()
 		{
+			super (null);
 		}
 
 		/**
@@ -37,6 +43,7 @@ package org.gimmick.managers
 		{
 			_passiveEntities = new SetList();
 			_activeEntities = new SetList();
+
 		}
 
 		/**
@@ -71,18 +78,11 @@ package org.gimmick.managers
 
 		}
 
-		public function getEntities(components:Array):void
+		public function get collection():IEntitiesCollection
 		{
-
+			return this;
 		}
 
-		/**
-		 * @inheritDoc
-		 */
-		public function dispose():void
-		{
-
-		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS

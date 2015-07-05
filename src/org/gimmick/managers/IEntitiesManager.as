@@ -13,6 +13,7 @@
 package org.gimmick.managers
 {
 
+	import org.gimmick.collections.IEntitiesCollection;
 	import org.gimmick.core.ComponentType;
 	import org.gimmick.core.IEntity;
 	import org.gimmick.managers.IGimmickManager;
@@ -48,11 +49,8 @@ package org.gimmick.managers
 		 * @param componentType
 		 */
 		function removeFromFilter(entity:IEntity, componentType:ComponentType):void;
-		/**
-		 *
-		 * @param components
-		 */
-		function getEntities(components:Array):void;
+
+		function get collection():IEntitiesCollection;
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
