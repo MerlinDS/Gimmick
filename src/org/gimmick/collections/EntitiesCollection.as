@@ -19,7 +19,9 @@ package org.gimmick.collections
 	{
 
 		private var _cursor:int;
+		private var _collectionTypes:Array;
 		private var _entities:Vector.<IEntity>;
+		private var _parent:EntitiesCollection;
 		//======================================================================================================================
 //{region											PUBLIC METHODS
 		public function EntitiesCollection(entities:Vector.<IEntity>)
@@ -29,41 +31,50 @@ package org.gimmick.collections
 
 		public function begin():void
 		{
+			_cursor = 0;
 		}
 
 		public function end():Boolean
 		{
-			return false;
+			return _cursor >= _entities.length;
 		}
 
 		public function next():void
 		{
+			_cursor++;
 		}
 
 		public function getCollection(...types):IEntitiesCollection
 		{
-			return null;
+			var collection:EntitiesCollection;
+			if(_parent == null)
+				throw new Error("Parent of this collection is null! Something goes wrong!");
+			return _parent.getCollection.apply(this, types);
 		}
 
 		public function dispose():void
 		{
+			_cursor = 0;
+			_entities.length = 0;
+			_collectionTypes = null;
+			_entities = null;
+			_parent = null;
 		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
-
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS
 
 		public function get collectionTypes():Array
 		{
-			return null;
+			return _collectionTypes;
 		}
 
 		public function get current():IEntity
 		{
-			return null;
+			return _entities[ _cursor ];
 		}
 //} endregion GETTERS/SETTERS ==========================================================================================
 	}
