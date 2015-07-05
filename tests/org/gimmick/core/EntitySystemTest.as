@@ -40,6 +40,7 @@ package org.gimmick.core
 		{
 			this.entitiesManager = new EntitiesManager();
 			Assert.assertTrue(_initialized);
+			Assert.assertNotNull(this.entities);
 		}
 
 
@@ -48,6 +49,7 @@ package org.gimmick.core
 		{
 			this.entitiesManager = null;
 			Assert.assertTrue(_disposed);
+			Assert.assertNull(this.entities);
 		}
 
 		[Test]
