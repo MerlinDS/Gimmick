@@ -80,17 +80,21 @@ package org.gimmick.core
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS
-		/**
-		 * @private
-		 * @param value
-		 */
-		internal function set entitiesManager(value:EntitiesManager):void
+		public function set entities(value:EntitiesManager):void
 		{
 			if(value != null)this.initialize();
-			else this.dispose();
+			else
+			{
+				this.active = false;
+				this.dispose();
+			}
 			_entities = value;
 		}
 
+		public function get entities():EntitiesManager
+		{
+			return _entities;
+		}
 		/**
 		 * Activate or deactivate system.
 		 * Active systems fall in main loop and take part in Gimmick tick processing
@@ -111,10 +115,7 @@ package org.gimmick.core
 			return _active;
 		}
 
-		protected function get entities():EntitiesManager
-		{
-			return _entities;
-		}
+
 //} endregion GETTERS/SETTERS ==========================================================================================
 	}
 }

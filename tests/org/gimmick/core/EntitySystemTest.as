@@ -38,7 +38,7 @@ package org.gimmick.core
 		[Test]
 		public function testInitialization():void
 		{
-			this.entitiesManager = new EntitiesManager();
+			this.entities = new EntitiesManager();
 			Assert.assertTrue(_initialized);
 			Assert.assertNotNull(this.entities);
 		}
@@ -47,7 +47,7 @@ package org.gimmick.core
 		[Test]
 		public function testDisposing():void
 		{
-			this.entitiesManager = null;
+			this.entities = null;
 			Assert.assertTrue(_disposed);
 			Assert.assertNull(this.entities);
 		}

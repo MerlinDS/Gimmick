@@ -117,7 +117,7 @@ package org.gimmick.core
 		 */
 		public function addSystem(system:EntitySystem):EntitySystem
 		{
-			system.entitiesManager = _entitiesManager;
+			system.entities = _entitiesManager;
 			return _systemsManager.addSystem(system);
 		}
 
