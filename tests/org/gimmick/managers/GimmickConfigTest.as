@@ -49,6 +49,13 @@ package org.gimmick.managers
 			config = new GimmickConfig(null, new TestComponentManager());
 			Assert.assertNotNull("External manager", config.componentsManager);
 		}
+
+		[Test]
+		public function testComponentTypeManager():void
+		{
+			var config:GimmickConfig = new GimmickConfig();
+			Assert.assertNotNull("Empty manager", config.componentTypeManager);
+		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
@@ -72,8 +79,8 @@ import org.gimmick.managers.ISystemManager;
 class TestSystemManager implements ISystemManager
 {
 
-	public function addSystem(system:EntitySystem):EntitySystem{}
-	public function removeSystem(systemType:Class):EntitySystem{}
+	public function addSystem(system:EntitySystem):EntitySystem{return null;}
+	public function removeSystem(systemType:Class):EntitySystem{return null;}
 	public function activateSystem(systemType:Class):void{}
 	public function deactivateSystem(systemType:Class):void{}
 	public function tick(time:Number):void{}

@@ -16,7 +16,7 @@ package org.gimmick.core
 	import flash.utils.getTimer;
 
 	import org.gimmick.managers.GimmickConfig;
-
+	import org.gimmick.managers.IComponentTypeManager;
 	import org.gimmick.managers.IComponentsManager;
 	import org.gimmick.managers.IEntitiesManager;
 	import org.gimmick.managers.ISystemManager;
@@ -30,7 +30,7 @@ package org.gimmick.core
 		private var _systemsManager:ISystemManager;
 		private var _entitiesManager:IEntitiesManager;
 		private var _componentsManager:IComponentsManager;
-		private var _componentTypeManagers:ComponentTypeManager;
+		private var _componentTypeManagers:IComponentTypeManager;
 		//
 		private var _lastTimestamp:Number;
 		private var _initialized:Boolean;
@@ -57,14 +57,15 @@ package org.gimmick.core
 			if(config == null)
 				config = new GimmickConfig();//create default configuration object
 			//set managers to engine
-			_componentTypeManagers = new ComponentTypeManager();
 			_systemsManager = config.systemManager;
 			_entitiesManager = config.entitiesManager;
 			_componentsManager = config.componentsManager;
+			_componentTypeManagers = config.componentTypeManager;
 			//initializeManagers managers
 			_entitiesManager.initialize();
 			_systemsManager.initialize();
 			_componentsManager.initialize();
+			_componentTypeManagers.initialize();
 			_lastTimestamp = 0;
 			_initialized = true;
 			if(autoStart)

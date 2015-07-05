@@ -14,49 +14,24 @@ package org.gimmick.managers
 {
 
 	import org.gimmick.core.ComponentType;
-	import org.gimmick.core.IEntity;
-	import org.gimmick.managers.IGimmickManager;
 
-	/**
-	 * Interface for component managers
-	 */
-	public interface IComponentsManager extends IGimmickManager
+	public interface IComponentTypeManager extends IGimmickManager
 	{
 		//======================================================================================================================
 //{region											PUBLIC METHODS
 		/**
-		 * Link component instance to entity
-		 * @param entity Instance of the entity
-		 * @param componentType ComponentType of component
-		 * @param component Instance of the component
+		 * Get component Type by it's instance or class
+		 * @param component Instance of the components or it's class
+		 * @return Component type of the component
 		 */
-		function addComponent(entity:IEntity, componentType:ComponentType, component:Object):void;
+		function getType(component:Object):ComponentType;
+
 		/**
-		 * Remove link of component from entity
-		 * @param entity Instance of the entity
-		 * @param componentType Type of the component
+		 * Get component type by it bitwise mask
+		 * @param bit Bitwise mask
+		 * @return Component type if it exist or null in other case
 		 */
-		function removeComponent(entity:IEntity, componentType:ComponentType):void;
-		/**
-		 * Get component linked to Entity
-		 * @param entity Instance of the entity
-		 * @param componentType Type of the component
-		 * @return Component instance if it was linked to Entity. In other case will return null
-		 *
-		 * @see org.gimmick.core.ComponentManager.addComponent() Before getting linked component you need to add component link to entity
-		 */
-		function getComponent(entity:IEntity, componentType:ComponentType):*;
-		/**
-		 * Gather all components of the entity to list and return it
-		 * @param entity Instance of the entity
-		 * @return List of all components of the entity
-		 */
-		function getComponents(entity:IEntity):Array;
-		/**
-		 * Remove all components linked to <code>Entity</code>
-		 * @param entity Instance of the entity
-		 */
-		function removeComponents(entity:IEntity):void;
+		function getTypeByBit(bit:uint):ComponentType;
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
@@ -64,7 +39,10 @@ package org.gimmick.managers
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS
-
+		/**
+		 * Last used bitwise mask
+		 */
+		function get lastBit():uint;
 //} endregion GETTERS/SETTERS ==========================================================================================
 	}
 }

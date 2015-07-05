@@ -15,6 +15,7 @@ package org.gimmick.managers
 
 	import org.gimmick.core.ComponentType;
 	import org.gimmick.core.IEntity;
+	import org.gimmick.managers.IGimmickManager;
 
 	public interface IEntitiesManager extends IGimmickManager
 	{

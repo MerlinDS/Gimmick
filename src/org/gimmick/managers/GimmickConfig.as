@@ -22,6 +22,7 @@ package org.gimmick.managers
 		private var _systemManager:ISystemManager;
 		private var _componentsManager:IComponentsManager;
 		private var _entitiesManager:IEntitiesManager;
+		private var _componentTypeManager:ComponentTypeManager;
 //======================================================================================================================
 //{region											PUBLIC METHODS
 		/**
@@ -37,6 +38,7 @@ package org.gimmick.managers
 			_systemManager = systemManager == null ? new SystemManager() : systemManager;
 			_componentsManager = componentsManager == null ? new ComponentsManager() : componentsManager;
 			_entitiesManager = entityManager == null ? new EntitiesManager() : entityManager;
+			_componentTypeManager = new ComponentTypeManager();
 		}
 
 //} endregion PUBLIC METHODS ===========================================================================================
@@ -63,6 +65,12 @@ package org.gimmick.managers
 		public final function get entitiesManager():IEntitiesManager
 		{
 			return _entitiesManager;
+		}
+
+		[Inline]
+		public final function get componentTypeManager():ComponentTypeManager
+		{
+			return _componentTypeManager;
 		}
 
 //} endregion GETTERS/SETTERS ==========================================================================================

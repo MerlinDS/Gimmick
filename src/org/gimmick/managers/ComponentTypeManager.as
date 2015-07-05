@@ -10,19 +10,18 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.gimmick.core
+package org.gimmick.managers
 {
 
 	import flash.utils.Dictionary;
 
-	import org.gimmick.managers.IGimmickManager;
-
+	import org.gimmick.core.*;
 	import org.gimmick.utils.getInstanceClass;
 
 	/**
 	 * Manager for components types.
 	 */
-	internal final class ComponentTypeManager implements IGimmickManager
+	internal final class ComponentTypeManager implements IComponentTypeManager
 	{
 
 		private var _nextBit:uint;
@@ -44,9 +43,7 @@ package org.gimmick.core
 		}
 
 		/**
-		 * Get component Type by it's instance or class
-		 * @param component Instance of the components or it's class
-		 * @return Component type of the component
+		 * @inheritDoc
 		 */
 		[Inline]
 		public final function getType(component:Object):ComponentType
@@ -65,9 +62,7 @@ package org.gimmick.core
 		}
 
 		/**
-		 * Get component type by it bitwise mask
-		 * @param bit Bitwise mask
-		 * @return Component type if it exist or null in other case
+		 * @inheritDoc
 		 */
 		public final function getTypeByBit(bit:uint):ComponentType
 		{
@@ -89,7 +84,7 @@ package org.gimmick.core
 //======================================================================================================================
 //{region											GETTERS/SETTERS
 		/**
-		 * Last used bitwise mask
+		 * @inheritDoc
 		 */
 		[Inline]
 		public final function get lastBit():uint

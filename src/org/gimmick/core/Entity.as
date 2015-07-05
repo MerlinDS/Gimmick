@@ -13,6 +13,7 @@
 package org.gimmick.core
 {
 
+	import org.gimmick.managers.IComponentTypeManager;
 	import org.gimmick.managers.IComponentsManager;
 	import org.gimmick.managers.IEntitiesManager;
 	import org.gimmick.utils.getUniqueId;
@@ -57,7 +58,7 @@ package org.gimmick.core
 		 */
 		private var _bits:uint;
 		//links to managers
-		private var _componentTypeManager:ComponentTypeManager;
+		private var _componentTypeManager:IComponentTypeManager;
 		private var _componentsManager:IComponentsManager;
 		private var _entitiesManager:IEntitiesManager;
 //======================================================================================================================
@@ -150,7 +151,7 @@ package org.gimmick.core
 		 * @private
 		 */
 		[Inline]
-		internal final function set componentTypeManager(value:ComponentTypeManager):void
+		internal final function set componentTypeManager(value:IComponentTypeManager):void
 		{
 			if(value != null)//only dispose method can set _componentTypeManager to null
 				_componentTypeManager = value;

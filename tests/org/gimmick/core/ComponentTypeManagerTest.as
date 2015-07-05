@@ -15,13 +15,17 @@ package org.gimmick.core
 
 	import flexunit.framework.Assert;
 
+	import org.gimmick.managers.GimmickConfig;
+
+	import org.gimmick.managers.IComponentTypeManager;
+
 	/**
 	 * Test case for ComponentTypeManager
 	 */
 	public class ComponentTypeManagerTest
 	{
 
-		private var _componentTypeManager:ComponentTypeManager;
+		private var _componentTypeManager:IComponentTypeManager;
 		//======================================================================================================================
 //{region											PUBLIC METHODS
 		public function ComponentTypeManagerTest()
@@ -31,12 +35,14 @@ package org.gimmick.core
 		[Before]
 		public function setUp():void
 		{
-			_componentTypeManager = new ComponentTypeManager();
+			_componentTypeManager = new GimmickConfig().componentTypeManager;
+			_componentTypeManager.initialize();
 		}
 
 		[After]
 		public function tearDown():void
 		{
+			_componentTypeManager.dispose();
 			_componentTypeManager = null;
 		}
 

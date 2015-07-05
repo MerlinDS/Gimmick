@@ -14,6 +14,7 @@ package org.gimmick.managers
 {
 
 	import org.gimmick.core.EntitySystem;
+	import org.gimmick.managers.IGimmickManager;
 
 	public interface ISystemManager extends IGimmickManager
 	{
