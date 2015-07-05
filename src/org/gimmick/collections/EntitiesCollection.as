@@ -32,19 +32,27 @@ package org.gimmick.collections
 			_bits = bits;
 		}
 
-		public function begin():void
+		[Inline]
+		public final function begin():void
 		{
 			_cursor = 0;
+			if((_entities[_cursor].bits & _bits) == false)
+				this.next();
 		}
 
-		public function end():Boolean
+		[Inline]
+		public final function end():Boolean
 		{
 			return _cursor >= _entities.length;
 		}
 
-		public function next():void
+		[Inline]
+		public final function next():void
 		{
 			_cursor++;
+			while(_cursor < _entities.length &&
+				(_entities[_cursor].bits & _bits) == false
+			)_cursor++;
 		}
 
 		public function getCollection(...types):IEntitiesCollection
@@ -70,7 +78,8 @@ package org.gimmick.collections
 //======================================================================================================================
 //{region											GETTERS/SETTERS
 
-		public function get current():IEntity
+		[Inline]
+		public final function get current():IEntity
 		{
 			return _entities[ _cursor ] as IEntity;
 		}

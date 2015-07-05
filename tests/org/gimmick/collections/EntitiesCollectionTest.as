@@ -35,10 +35,12 @@ package org.gimmick.collections
 		{
 			_bits = 0x1;
 			_entities = new <IEntity>[
+				new TestEntity(0x0),
 				new TestEntity(_bits),
 				new TestEntity(_bits | (_bits << 1)),
 				new TestEntity(_bits << 1),
-				new TestEntity(_bits)
+				new TestEntity(_bits),
+				new TestEntity(_bits << 1)
 			];
 			_collection = new EntitiesCollection(_entities, _bits, this);
 		}
@@ -78,6 +80,7 @@ package org.gimmick.collections
 			{
 				Assert.assertEquals("Bad bits "+_collection.current.bits, entities[i++], _collection.current);
 			}
+			Assert.assertEquals("Not all entities was iterate", entities.length, i);
 		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
