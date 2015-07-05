@@ -38,7 +38,7 @@ package org.gimmick.core
 		[Test]
 		public function testInitialization():void
 		{
-			this.entities = new GimmickConfig().entityManager;
+			this.entities = new GimmickConfig().entitiesManager;
 			Assert.assertTrue(_initialized);
 			Assert.assertNotNull(this.entities);
 		}

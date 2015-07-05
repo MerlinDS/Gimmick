@@ -59,7 +59,7 @@ package org.gimmick.core
 			//set managers to engine
 			_componentTypeManagers = new ComponentTypeManager();
 			_systemsManager = config.systemManager;
-			_entitiesManager = config.entityManager;
+			_entitiesManager = config.entitiesManager;
 			_componentsManager = config.componentsManager;
 			//initializeManagers managers
 			_entitiesManager.initialize();
