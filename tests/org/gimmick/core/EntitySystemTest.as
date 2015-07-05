@@ -15,17 +15,18 @@ package org.gimmick.core
 
 	import flexunit.framework.Assert;
 
-	import org.flexunit.asserts.fail;
-
 	import org.gimmick.managers.EntitiesManager;
 
+	/**
+	 * Test case for EntitySystem
+	 */
 	public class EntitySystemTest extends EntitySystem
 	{
 
 		private var _initialized:Boolean;
 		private var _disposed:Boolean;
 		private var _activated:Boolean;
-		private var _activataionCount:int;
+		private var _activationCount:int;
 		//======================================================================================================================
 //{region											PUBLIC METHODS
 		public function EntitySystemTest()
@@ -58,7 +59,7 @@ package org.gimmick.core
 			Assert.assertTrue(_activated);
 			Assert.assertTrue(this.active);
 			this.active = true;
-			Assert.assertEquals(1, _activataionCount);
+			Assert.assertEquals(1, _activationCount);
 		}
 
 		[Test]
@@ -86,7 +87,7 @@ package org.gimmick.core
 		override protected function activate():void
 		{
 			_activated = true;
-			_activataionCount++;
+			_activationCount++;
 		}
 
 		override protected function deactivate():void
