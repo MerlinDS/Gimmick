@@ -17,7 +17,6 @@ package org.gimmick.managers
 	public class GimmickConfigTest
 	{
 
-
 		//======================================================================================================================
 //{region											PUBLIC METHODS
 		public function GimmickConfigTest()
