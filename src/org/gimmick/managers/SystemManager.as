@@ -13,7 +13,10 @@
 package org.gimmick.managers
 {
 
+	import flash.utils.Dictionary;
+
 	import org.gimmick.core.*;
+	import org.gimmick.utils.getInstanceClass;
 
 	/**
 	 * Managing of all systems in Gimmick engine
@@ -21,10 +24,22 @@ package org.gimmick.managers
 	public class SystemManager extends GimmickManager
 	{
 
+		private var _systemsTypes:Dictionary;
+		private var _systems:Vector.<EntitySystem>;
+		private var _systemsLength:int;
 //======================================================================================================================
 //{region											PUBLIC METHODS
 		public function SystemManager()
 		{
+		}
+
+		/**
+		 * @inheritDoc
+		 */
+		override public function initialize():void
+		{
+			_systems = new <EntitySystem>[];
+			_systemsTypes = new Dictionary(true);
 		}
 
 		/**
@@ -34,16 +49,42 @@ package org.gimmick.managers
 		 */
 		public function addSystem(system:EntitySystem):EntitySystem
 		{
+			var type:Class = getInstanceClass(system);
+			//remove old system from manager
+			if(_systemsTypes[type] != null)//Do not use hasOwnProperty, cause this method is very slow
+				this.removeSystem(type);
+			//save new systemType to map
+			_systemsTypes[type] = _systemsLength;
+			_systems[_systemsLength] = system;
+			_systemsLength++;
 			return system;
 		}
 
 		/**
 		 * Remove system from Gimmick engine.
 		 * @param systemType Type of the system that was added to Gimmick previously
+		 * @return Instance of disposed <code>EntitySystem</code>
+		 *
+		 * @throws ArgumentError EntitySystem was not added to Gimmick previously
 		 */
-		public function removeSystem(systemType:Class):void
+		public function removeSystem(systemType:Class):EntitySystem
 		{
-
+			var system:EntitySystem;
+			//trying to find system, do not use getSystemByType cause index of system will be need
+			if(_systemsTypes[systemType] != null)
+			{
+				var index:int = _systemsTypes[systemType];
+				system = _systems[index];
+			}
+			if(system == null)
+				throw new ArgumentError('EntitySystem was not added to Gimmick previously!');
+			system.active = false;//deactivate system
+			system.entities = null;//dispose system
+			//remove system from list and map
+			_systemsTypes[systemType] = null;
+			_systems.splice(index, 1);//No needs in fast method
+			_systemsLength--;
+			return system;
 		}
 
 		/**
@@ -61,7 +102,9 @@ package org.gimmick.managers
 		 */
 		public function activateSystem(systemType:Class):void
 		{
-			var system:EntitySystem;
+			var system:EntitySystem = this.getSystemByType(systemType);
+			if(system == null)
+				throw new ArgumentError('EntitySystem was not added to Gimmick previously!');
 			system.active = true;
 		}
 
@@ -82,8 +125,10 @@ package org.gimmick.managers
 		 */
 		public function deactivateSystem(systemType:Class):void
 		{
-			var system:EntitySystem;
-			system.active = true;
+			var system:EntitySystem = this.getSystemByType(systemType);
+			if(system == null)
+				throw new ArgumentError('EntitySystem was not added to Gimmick previously!');
+			system.active = false;
 		}
 
 		/**
@@ -92,17 +137,43 @@ package org.gimmick.managers
 		 */
 		public function tick(time:Number):void
 		{
-
+			for(var i:int = 0; i < _systemsLength; ++i)
+			{
+				var system:EntitySystem = _systems[i];
+				if(system.active)system.tick(time);
+			}
 		}
 
+		/**
+		 * @inheritDoc
+		 */
 		override public function dispose():void
 		{
-
+			//clean manager from systems
+			while(_systems.length > 0)
+			{
+				var system:EntitySystem = _systems.pop();
+				system.active = false;//deactivate system
+				system.entities = null;//dispose system
+			}
+			_systemsLength = 0;
+			_systemsTypes = null;
+			_systems = null;
 		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
-
+		[Inline]
+		private final function getSystemByType(systemType:Class):EntitySystem
+		{
+			var system:EntitySystem;
+			if(_systemsTypes[systemType] != null)
+			{
+				var index:int = _systemsTypes[systemType];
+				system = _systems[index];
+			}
+			return system;
+		}
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS
