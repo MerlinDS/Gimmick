@@ -67,7 +67,6 @@ package org.gimmick.collections
 		{
 			_bits = 0x0;
 			_cursor = 0;
-			_entities.length = 0;
 			_entities = null;
 			_parent = null;
 		}

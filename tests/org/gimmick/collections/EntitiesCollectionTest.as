@@ -50,6 +50,7 @@ package org.gimmick.collections
 		{
 			_collection.dispose();
 			_collection = null;
+			Assert.assertFalse(_entities.length == 0);
 			_entities.length = 0;
 			_entities = null;
 			_bits = 0x0;
