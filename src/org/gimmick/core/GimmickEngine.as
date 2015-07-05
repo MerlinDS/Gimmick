@@ -16,6 +16,9 @@ package org.gimmick.core
 
 	import org.gimmick.managers.ComponentsManager;
 	import org.gimmick.managers.EntitiesManager;
+	import org.gimmick.managers.IComponentsManager;
+	import org.gimmick.managers.IEntitiesManager;
+	import org.gimmick.managers.ISystemManager;
 	import org.gimmick.managers.SystemManager;
 
 	/**
@@ -24,18 +27,24 @@ package org.gimmick.core
 	internal class GimmickEngine
 	{
 		//managers
-		private var _systemsManager:SystemManager;
-		private var _entitiesManager:EntitiesManager;
-		private var _componentsManager:ComponentsManager;
+		private var _systemsManager:ISystemManager;
+		private var _entitiesManager:IEntitiesManager;
+		private var _componentsManager:IComponentsManager;
 		private var _componentTypeManagers:ComponentTypeManager;
 		//
 		private var _lastTimestamp:Number;
+		private var _initialized:Boolean;
 		private var _onPause:Boolean;
 //======================================================================================================================
 //{region											PUBLIC METHODS
 		public function GimmickEngine()
 		{
-			this.initialize();
+			this.initializeManagers();
+		}
+
+		public function initialize():void
+		{
+
 		}
 
 		/**
@@ -176,9 +185,9 @@ package org.gimmick.core
 		/**
 		 * Initialize GimmickEngine. Create all managers and startup preparations.
 		 */
-		private function initialize():void
+		private function initializeManagers():void
 		{
-			//initialize managers
+			//initializeManagers managers
 			_componentTypeManagers = new ComponentTypeManager();
 			//TODO need initialization with external managers
 			_systemsManager = new SystemManager();

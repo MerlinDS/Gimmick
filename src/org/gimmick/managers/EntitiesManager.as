@@ -19,7 +19,7 @@ package org.gimmick.managers
 	/**
 	 * Manager for controlling of entities
 	 */
-	public class EntitiesManager extends GimmickManager
+	public class EntitiesManager implements IEntitiesManager
 	{
 
 		private var _activeEntities:SetList;
@@ -31,14 +31,17 @@ package org.gimmick.managers
 		}
 
 		/**
-		 * Initialize entities manager
+		 * @inheritDoc
 		 */
-		override public function initialize():void
+		public function initialize():void
 		{
 			_passiveEntities = new SetList();
 			_activeEntities = new SetList();
 		}
 
+		/**
+		 * @inheritDoc
+		 */
 		public function addEntity(entity:IEntity):void
 		{
 			_passiveEntities.addValue(entity.id, entity);
@@ -73,7 +76,10 @@ package org.gimmick.managers
 
 		}
 
-		override public function dispose():void
+		/**
+		 * @inheritDoc
+		 */
+		public function dispose():void
 		{
 
 		}

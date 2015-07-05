@@ -13,13 +13,13 @@
 package org.gimmick.core
 {
 
-	import org.gimmick.managers.EntitiesManager;
+	import org.gimmick.managers.IEntitiesManager;
 
 	public class EntitySystem
 	{
 
 		private var _active:Boolean;
-		private var _entities:EntitiesManager;
+		private var _entities:IEntitiesManager;
 //======================================================================================================================
 //{region											PUBLIC METHODS
 		public function EntitySystem()
@@ -80,7 +80,7 @@ package org.gimmick.core
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS
-		public function set entities(value:EntitiesManager):void
+		public function set entities(value:IEntitiesManager):void
 		{
 			if(value != null)this.initialize();
 			else
@@ -91,7 +91,7 @@ package org.gimmick.core
 			_entities = value;
 		}
 
-		public function get entities():EntitiesManager
+		public function get entities():IEntitiesManager
 		{
 			return _entities;
 		}

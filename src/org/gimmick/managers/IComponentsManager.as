@@ -16,69 +16,46 @@ package org.gimmick.managers
 	import org.gimmick.core.ComponentType;
 	import org.gimmick.core.IEntity;
 
-	public class ComponentsManager implements IComponentsManager
+	/**
+	 * Interface for component managers
+	 */
+	public interface IComponentsManager extends IGimmickManager
 	{
-
-//======================================================================================================================
+		//======================================================================================================================
 //{region											PUBLIC METHODS
-		public function ComponentsManager()
-		{
-		}
-
 		/**
-		 * @inheritDoc
+		 * Link component instance to entity
+		 * @param entity Instance of the entity
+		 * @param componentType ComponentType of component
+		 * @param component Instance of the component
 		 */
-		public function addComponent(entity:IEntity, componentType:ComponentType, component:Object):void
-		{
-
-		}
-
+		function addComponent(entity:IEntity, componentType:ComponentType, component:Object):void;
 		/**
-		 * @inheritDoc
+		 * Remove link of component from entity
+		 * @param entity Instance of the entity
+		 * @param componentType Type of the component
 		 */
-		public function removeComponent(entity:IEntity, componentType:ComponentType):void
-		{
-
-		}
-
+		function removeComponent(entity:IEntity, componentType:ComponentType):void;
 		/**
-		 * @inheritDoc
+		 * Get component linked to Entity
+		 * @param entity Instance of the entity
+		 * @param componentType Type of the component
+		 * @return Component instance if it was linked to Entity. In other case will return null
+		 *
+		 * @see org.gimmick.core.ComponentManager.addComponent() Before getting linked component you need to add component link to entity
 		 */
-		public function getComponent(entity:IEntity, componentType:ComponentType):*
-		{
-			return null;
-		}
-
+		function getComponent(entity:IEntity, componentType:ComponentType):*;
 		/**
-		 * @inheritDoc
+		 * Gather all components of the entity to list and return it
+		 * @param entity Instance of the entity
+		 * @return List of all components of the entity
 		 */
-		public function getComponents(entity:IEntity):Array
-		{
-			return null;
-		}
-
+		function getComponents(entity:IEntity):Array;
 		/**
-		 * @inheritDoc
+		 * Remove all components linked to <code>Entity</code>
+		 * @param entity Instance of the entity
 		 */
-		public function removeComponents(entity:IEntity):void
-		{
-
-		}
-
-		/**
-		 * @inheritDoc
-		 */
-		public function initialize():void
-		{
-
-		}
-		/**
-		 * @inheritDoc
-		 */
-		public function dispose():void
-		{
-
-		}
+		function removeComponents(entity:IEntity):void;
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
@@ -88,6 +65,5 @@ package org.gimmick.managers
 //{region											GETTERS/SETTERS
 
 //} endregion GETTERS/SETTERS ==========================================================================================
-
 	}
 }

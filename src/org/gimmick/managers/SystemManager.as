@@ -15,13 +15,14 @@ package org.gimmick.managers
 
 	import flash.utils.Dictionary;
 
-	import org.gimmick.core.*;
+	import org.gimmick.core.EntitySystem;
+
 	import org.gimmick.utils.getInstanceClass;
 
 	/**
 	 * Managing of all systems in Gimmick engine
 	 */
-	public class SystemManager extends GimmickManager
+	public class SystemManager implements ISystemManager
 	{
 
 		private var _systemsTypes:Dictionary;
@@ -36,16 +37,14 @@ package org.gimmick.managers
 		/**
 		 * @inheritDoc
 		 */
-		override public function initialize():void
+		public function initialize():void
 		{
 			_systems = new <EntitySystem>[];
 			_systemsTypes = new Dictionary(true);
 		}
 
 		/**
-		 * Add instance of the <code>EntitySystem</code> to Gimmick engine.
-		 * @param system Instance of the system
-		 * @return Instance of the system (for chaining)
+		 * @inheritDoc
 		 */
 		public function addSystem(system:EntitySystem):EntitySystem
 		{
@@ -61,11 +60,7 @@ package org.gimmick.managers
 		}
 
 		/**
-		 * Remove system from Gimmick engine.
-		 * @param systemType Type of the system that was added to Gimmick previously
-		 * @return Instance of disposed <code>EntitySystem</code>
-		 *
-		 * @throws ArgumentError EntitySystem was not added to Gimmick previously
+		 * @inheritDoc
 		 */
 		public function removeSystem(systemType:Class):EntitySystem
 		{
@@ -88,17 +83,7 @@ package org.gimmick.managers
 		}
 
 		/**
-		 * Activate and add <code>EntitySystem</code> to Gimmick scope. <br />
-		 * After adding <code>EntitySystem</code> to scope <code>EntitySystem.tick()</code> method will be executed
-		 * for each tick (enter frame, or else loop).
-		 *
-		 * @param systemType Type of the <code>EntitySystem</code> that was added to Gimmick previously
-		 *
-		 * @throws ArgumentError EntitySystem was not added to Gimmick previously
-		 *
-		 * @see org.gimmick.core.EntitySystem#tick() EntitySystem.tick() loop method of the <code>EntitySystem</code>
-		 * @see org.gimmick.managers.SystemManager#addSystem() Adding <code>EntitySystem</code> instance to Gimmick framework
-		 * @see org.gimmick.core.Gimmick#tick() Main looping method of Gimmick framework
+		 * @inheritDoc
 		 */
 		public function activateSystem(systemType:Class):void
 		{
@@ -109,19 +94,7 @@ package org.gimmick.managers
 		}
 
 		/**
-		 * Deactivate and remove <code>EntitySystem</code> from scope, but not from Gimmick.
-		 * After removing EntitySystem from scope method <code>EntitySystem.tick()</code> will not be executed any more.
-		 * <br />
-		 * For totally removing <code>EntitySystem</code> from Gimmick use <code>removeSystem()</code> method instead.
-		 *
-		 * @param systemType Type of the <code>EntitySystem</code> that was added to Gimmick previously
-		 *
-		 * @throws ArgumentError EntitySystem was not added to Gimmick previously
-		 *
-		 * @see removeSystem()
-		 * @see addSystem
-		 * @see Gimmick.tick
-		 * @see EntitySystem.tick
+		 * @inheritDoc
 		 */
 		public function deactivateSystem(systemType:Class):void
 		{
@@ -132,8 +105,7 @@ package org.gimmick.managers
 		}
 
 		/**
-		 * Loop method
-		 * @param time Time passed from previous tick
+		 * @inheritDoc
 		 */
 		public function tick(time:Number):void
 		{
@@ -147,7 +119,7 @@ package org.gimmick.managers
 		/**
 		 * @inheritDoc
 		 */
-		override public function dispose():void
+		public function dispose():void
 		{
 			//clean manager from systems
 			while(_systems.length > 0)

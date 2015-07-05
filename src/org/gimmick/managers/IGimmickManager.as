@@ -13,72 +13,13 @@
 package org.gimmick.managers
 {
 
-	import org.gimmick.core.ComponentType;
-	import org.gimmick.core.IEntity;
-
-	public class ComponentsManager implements IComponentsManager
+	public interface IGimmickManager
 	{
-
-//======================================================================================================================
+		//======================================================================================================================
 //{region											PUBLIC METHODS
-		public function ComponentsManager()
-		{
-		}
-
-		/**
-		 * @inheritDoc
-		 */
-		public function addComponent(entity:IEntity, componentType:ComponentType, component:Object):void
-		{
-
-		}
-
-		/**
-		 * @inheritDoc
-		 */
-		public function removeComponent(entity:IEntity, componentType:ComponentType):void
-		{
-
-		}
-
-		/**
-		 * @inheritDoc
-		 */
-		public function getComponent(entity:IEntity, componentType:ComponentType):*
-		{
-			return null;
-		}
-
-		/**
-		 * @inheritDoc
-		 */
-		public function getComponents(entity:IEntity):Array
-		{
-			return null;
-		}
-
-		/**
-		 * @inheritDoc
-		 */
-		public function removeComponents(entity:IEntity):void
-		{
-
-		}
-
-		/**
-		 * @inheritDoc
-		 */
-		public function initialize():void
-		{
-
-		}
-		/**
-		 * @inheritDoc
-		 */
-		public function dispose():void
-		{
-
-		}
+		//TODO add description
+		function dispose():void;
+		function initialize():void
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
@@ -88,6 +29,5 @@ package org.gimmick.managers
 //{region											GETTERS/SETTERS
 
 //} endregion GETTERS/SETTERS ==========================================================================================
-
 	}
 }

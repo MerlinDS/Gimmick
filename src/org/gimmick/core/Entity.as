@@ -13,8 +13,8 @@
 package org.gimmick.core
 {
 
-	import org.gimmick.managers.ComponentsManager;
-	import org.gimmick.managers.EntitiesManager;
+	import org.gimmick.managers.IComponentsManager;
+	import org.gimmick.managers.IEntitiesManager;
 	import org.gimmick.utils.getUniqueId;
 
 	/**
@@ -58,8 +58,8 @@ package org.gimmick.core
 		private var _bits:uint;
 		//links to managers
 		private var _componentTypeManager:ComponentTypeManager;
-		private var _componentsManager:ComponentsManager;
-		private var _entitiesManager:EntitiesManager;
+		private var _componentsManager:IComponentsManager;
+		private var _entitiesManager:IEntitiesManager;
 //======================================================================================================================
 //{region											PUBLIC METHODS
 
@@ -159,7 +159,7 @@ package org.gimmick.core
 		 * @private
 		 */
 		[Inline]
-		internal final function set componentsManager(value:ComponentsManager):void
+		internal final function set componentsManager(value:IComponentsManager):void
 		{
 			if(value != null)//only dispose method can set _componentsManager to null
 				_componentsManager = value;
@@ -168,7 +168,7 @@ package org.gimmick.core
 		 * @private
 		 */
 		[Inline]
-		internal final function set entitiesManager(value:EntitiesManager):void
+		internal final function set entitiesManager(value:IEntitiesManager):void
 		{
 			if(value != null)//only dispose method can set _entitiesManager to null
 			{

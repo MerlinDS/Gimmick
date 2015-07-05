@@ -16,69 +16,42 @@ package org.gimmick.managers
 	import org.gimmick.core.ComponentType;
 	import org.gimmick.core.IEntity;
 
-	public class ComponentsManager implements IComponentsManager
+	public interface IEntitiesManager extends IGimmickManager
 	{
-
-//======================================================================================================================
+		//======================================================================================================================
 //{region											PUBLIC METHODS
-		public function ComponentsManager()
-		{
-		}
-
 		/**
-		 * @inheritDoc
+		 *
+		 * @param entity
 		 */
-		public function addComponent(entity:IEntity, componentType:ComponentType, component:Object):void
-		{
-
-		}
-
+		function addEntity(entity:IEntity):void;
 		/**
-		 * @inheritDoc
+		 * Remove entity
+		 * @param entity Instance of the entity
 		 */
-		public function removeComponent(entity:IEntity, componentType:ComponentType):void
-		{
-
-		}
-
+		function removeEntity(entity:IEntity):void;
 		/**
-		 * @inheritDoc
+		 *
+		 * @param entity
 		 */
-		public function getComponent(entity:IEntity, componentType:ComponentType):*
-		{
-			return null;
-		}
-
+		function changeEntityActivity(entity:IEntity):void;
 		/**
-		 * @inheritDoc
+		 *
+		 * @param entity
+		 * @param componentType
 		 */
-		public function getComponents(entity:IEntity):Array
-		{
-			return null;
-		}
-
+		function addToFilter(entity:IEntity, componentType:ComponentType):void;
 		/**
-		 * @inheritDoc
+		 *
+		 * @param entity
+		 * @param componentType
 		 */
-		public function removeComponents(entity:IEntity):void
-		{
-
-		}
-
+		function removeFromFilter(entity:IEntity, componentType:ComponentType):void;
 		/**
-		 * @inheritDoc
+		 *
+		 * @param components
 		 */
-		public function initialize():void
-		{
-
-		}
-		/**
-		 * @inheritDoc
-		 */
-		public function dispose():void
-		{
-
-		}
+		function getEntities(components:Array):void;
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
@@ -88,6 +61,5 @@ package org.gimmick.managers
 //{region											GETTERS/SETTERS
 
 //} endregion GETTERS/SETTERS ==========================================================================================
-
 	}
 }
