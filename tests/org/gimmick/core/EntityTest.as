@@ -140,47 +140,52 @@ import flexunit.framework.Assert;
 
 import org.gimmick.core.ComponentType;
 import org.gimmick.core.IEntity;
-import org.gimmick.managers.ComponentsManager;
-import org.gimmick.managers.EntitiesManager;
+import org.gimmick.managers.IComponentsManager;
+import org.gimmick.managers.IEntitiesManager;
 
 class TestComponent{}
 class NotAddedTestComponent{}
 //Fake managers
-class TestComponentsManager extends ComponentsManager
+class TestComponentsManager implements IComponentsManager
 {
 	private var _testComponent:Object;
 
 	public function TestComponentsManager(testComponent:Object)
 	{
 		_testComponent = testComponent;
-		this.initialize();
 	}
 
-	override public function getComponent(entity:IEntity, componentType:ComponentType):*
+	public function getComponent(entity:IEntity, componentType:ComponentType):*
 	{
 		return _testComponent;
 	}
 
-	override public function addComponent(entity:IEntity, componentType:ComponentType, component:Object):void
+	public function addComponent(entity:IEntity, componentType:ComponentType, component:Object):void
 	{
 		Assert.assertEquals(_testComponent, component);
 	}
 
-	override public function getComponents(entity:IEntity):Array
+	public function getComponents(entity:IEntity):Array
 	{
 		return [];
 	}
 
-	override public function removeComponent(entity:IEntity, componentType:ComponentType):void
-	{
-		//
-	}
+	public function removeComponent(entity:IEntity, componentType:ComponentType):void{}
+	public function removeComponents(entity:IEntity):void{}
+	public function dispose():void{}
+	public function initialize():void{}
 }
-class TestEntitiesManager extends EntitiesManager
+class TestEntitiesManager implements IEntitiesManager
 {
 
-	public function TestEntitiesManager()
-	{
-		this.initialize();
-	}
+	public function TestEntitiesManager(){}
+
+	public function addEntity(entity:IEntity):void{}
+	public function removeEntity(entity:IEntity):void{}
+	public function changeEntityActivity(entity:IEntity):void{}
+	public function addToFilter(entity:IEntity, componentType:ComponentType):void{}
+	public function removeFromFilter(entity:IEntity, componentType:ComponentType):void{}
+	public function getEntities(components:Array):void{}
+	public function dispose():void{}
+	public function initialize():void{}
 }

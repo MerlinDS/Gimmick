@@ -15,7 +15,7 @@ package org.gimmick.core
 
 	import flexunit.framework.Assert;
 
-	import org.gimmick.managers.EntitiesManager;
+	import org.gimmick.managers.GimmickConfig;
 
 	/**
 	 * Test case for EntitySystem
@@ -38,7 +38,7 @@ package org.gimmick.core
 		[Test]
 		public function testInitialization():void
 		{
-			this.entities = new EntitiesManager();
+			this.entities = new GimmickConfig().entityManager;
 			Assert.assertTrue(_initialized);
 			Assert.assertNotNull(this.entities);
 		}

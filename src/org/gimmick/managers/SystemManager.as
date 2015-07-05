@@ -22,7 +22,7 @@ package org.gimmick.managers
 	/**
 	 * Managing of all systems in Gimmick engine
 	 */
-	public class SystemManager implements ISystemManager
+	internal class SystemManager implements ISystemManager
 	{
 
 		private var _systemsTypes:Dictionary;

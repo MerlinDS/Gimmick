@@ -12,14 +12,14 @@
 package org.gimmick.core
 {
 
+	import flash.errors.IllegalOperationError;
 	import flash.utils.getTimer;
 
-	import org.gimmick.managers.ComponentsManager;
-	import org.gimmick.managers.EntitiesManager;
+	import org.gimmick.managers.GimmickConfig;
+
 	import org.gimmick.managers.IComponentsManager;
 	import org.gimmick.managers.IEntitiesManager;
 	import org.gimmick.managers.ISystemManager;
-	import org.gimmick.managers.SystemManager;
 
 	/**
 	 * This class contains public interface of Gimmick framework.
@@ -39,12 +39,36 @@ package org.gimmick.core
 //{region											PUBLIC METHODS
 		public function GimmickEngine()
 		{
-			this.initializeManagers();
+
 		}
-
-		public function initialize():void
+		/**
+		 *
+		 * @param config Configuration of Gimmick. Only for advanced usage
+		 * @param autoStart Start Gimmick automatically
+		 *
+		 * @throws flash.errors.IllegalOperationError Dispose Gimmick engine before new initialization
+		 *
+		 * @see org.gimmick.managers.GimmickConfig Gimmick configuration
+		 */
+		public function initialize(config:GimmickConfig = null, autoStart:Boolean = true):void
 		{
-
+			if(_initialized)
+				throw new IllegalOperationError("Gimmick already initialized!");
+			if(config == null)
+				config = new GimmickConfig();//create default configuration object
+			//set managers to engine
+			_componentTypeManagers = new ComponentTypeManager();
+			_systemsManager = config.systemManager;
+			_entitiesManager = config.entityManager;
+			_componentsManager = config.componentsManager;
+			//initializeManagers managers
+			_entitiesManager.initialize();
+			_systemsManager.initialize();
+			_componentsManager.initialize();
+			_lastTimestamp = 0;
+			_initialized = true;
+			if(autoStart)
+				this.resume(true);
 		}
 
 		/**
@@ -85,6 +109,7 @@ package org.gimmick.core
 			_entitiesManager = null;
 			_componentsManager = null;
 			_componentTypeManagers = null;
+			_initialized = false;
 		}
 		//delegates from entitiesManager
 		/**
@@ -182,24 +207,6 @@ package org.gimmick.core
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
-		/**
-		 * Initialize GimmickEngine. Create all managers and startup preparations.
-		 */
-		private function initializeManagers():void
-		{
-			//initializeManagers managers
-			_componentTypeManagers = new ComponentTypeManager();
-			//TODO need initialization with external managers
-			_systemsManager = new SystemManager();
-			_entitiesManager = new EntitiesManager();
-			_componentsManager = new ComponentsManager();
-			_entitiesManager.initialize();
-			_systemsManager.initialize();
-			_componentsManager.initialize();
-			//
-			_lastTimestamp = 0;
-			this.resume(true);
-		}
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS

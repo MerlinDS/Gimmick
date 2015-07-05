@@ -19,7 +19,7 @@ package org.gimmick.managers
 	/**
 	 * Manager for controlling of entities
 	 */
-	public class EntitiesManager implements IEntitiesManager
+	internal class EntitiesManager implements IEntitiesManager
 	{
 
 		private var _activeEntities:SetList;

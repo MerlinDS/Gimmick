@@ -16,7 +16,7 @@ package org.gimmick.managers
 	import org.gimmick.core.ComponentType;
 	import org.gimmick.core.IEntity;
 
-	public class ComponentsManager implements IComponentsManager
+	internal class ComponentsManager implements IComponentsManager
 	{
 
 //======================================================================================================================
