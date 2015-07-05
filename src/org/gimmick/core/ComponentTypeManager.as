@@ -15,12 +15,14 @@ package org.gimmick.core
 
 	import flash.utils.Dictionary;
 
+	import org.gimmick.managers.IGimmickManager;
+
 	import org.gimmick.utils.getInstanceClass;
 
 	/**
 	 * Manager for components types.
 	 */
-	internal final class ComponentTypeManager extends GimmickManager
+	internal final class ComponentTypeManager implements IGimmickManager
 	{
 
 		private var _nextBit:uint;
@@ -29,6 +31,13 @@ package org.gimmick.core
 //======================================================================================================================
 //{region											PUBLIC METHODS
 		public function ComponentTypeManager()
+		{
+		}
+
+		/**
+		 * @inheritDoc
+		 */
+		public function initialize():void
 		{
 			_nextBit = 0x1;
 			_componentTypes = new Dictionary(true);
@@ -67,9 +76,10 @@ package org.gimmick.core
 			return null;
 		}
 
-		override public final function dispose():void
+		public final function dispose():void
 		{
-
+			_nextBit = 0x0;
+			_componentTypes = null;
 		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
