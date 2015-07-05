@@ -61,11 +61,6 @@ package org.gimmick.collections
 		 * Get entity from collection that under cursor
 		 */
 		function get current():IEntity;
-
-		/**
-		 * Get types that create collection
-		 */
-		function get collectionTypes():Array;
 //} endregion GETTERS/SETTERS ==========================================================================================
 	}
 }

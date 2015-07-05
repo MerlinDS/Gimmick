@@ -14,7 +14,7 @@ package org.gimmick.managers
 
 	import flexunit.framework.Assert;
 
-	import org.gimmick.utils.TestComfig;
+	import org.gimmick.utils.TestConfig;
 
 	public class GimmickConfigTest
 	{
@@ -28,7 +28,7 @@ package org.gimmick.managers
 		[Test]
 		public function testEntityManager():void
 		{
-			var testConfig:TestComfig = new TestComfig();
+			var testConfig:TestConfig = new TestConfig();
 			var config:GimmickConfig = new GimmickConfig();
 			Assert.assertNotNull("Empty manager", config.entitiesManager);
 			Assert.assertNotNull("External manager", testConfig.entitiesManager);
@@ -37,7 +37,7 @@ package org.gimmick.managers
 		[Test]
 		public function testSystemManager():void
 		{
-			var testConfig:TestComfig = new TestComfig();
+			var testConfig:TestConfig = new TestConfig();
 			var config:GimmickConfig = new GimmickConfig();
 			Assert.assertNotNull("Empty manager", config.systemManager);
 			Assert.assertNotNull("External manager", testConfig.systemManager);
@@ -47,7 +47,7 @@ package org.gimmick.managers
 		public function testComponentsManager():void
 		{
 			var config:GimmickConfig = new GimmickConfig();
-			var testConfig:TestComfig = new TestComfig();
+			var testConfig:TestConfig = new TestConfig();
 			Assert.assertNotNull("Empty manager", config.componentsManager);
 			Assert.assertNotNull("External manager", testConfig.systemManager);
 		}

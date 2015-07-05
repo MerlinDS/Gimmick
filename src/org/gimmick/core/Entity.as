@@ -178,16 +178,16 @@ package org.gimmick.core
 			}
 		}
 
+//Implementation of public interface
 		/**
-		 * Bitwise mask of all components linked to entity
+		 * @inheritDoc
 		 */
 		[Inline]
-		internal function get bits():uint
+		public function get bits():uint
 		{
 			return _bits;
 		}
 
-//Implementation of public interface
 		/**
 		 * @inheritDoc
 		 */

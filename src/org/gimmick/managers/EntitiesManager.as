@@ -33,7 +33,7 @@ package org.gimmick.managers
 //{region											PUBLIC METHODS
 		public function EntitiesManager()
 		{
-			super (null);
+			super (null, 0x0);
 		}
 
 		/**

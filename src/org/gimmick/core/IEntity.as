@@ -81,7 +81,10 @@ package org.gimmick.core
 		 * Unique id of the Entity
 		 */
 		function get id():String;
-
+		/**
+		 * Bitwise mask of all components linked to entity
+		 */
+		function get bits():uint;
 		/**
 		 * List of all components that constance current Entity
 		 * WARNING: It is a slow method. Use it in great need

@@ -13,67 +13,104 @@
 package org.gimmick.collections
 {
 
+	import flexunit.framework.Assert;
+
 	import org.gimmick.core.IEntity;
 
-	public class EntitiesCollection implements IEntitiesCollection
+	public class EntitiesCollectionTest extends EntitiesCollection
 	{
 
 		private var _bits:uint;
-		private var _cursor:int;
+		private var _collection:IEntitiesCollection;
 		private var _entities:Vector.<IEntity>;
-		private var _parent:EntitiesCollection;
 		//======================================================================================================================
 //{region											PUBLIC METHODS
-		public function EntitiesCollection(entities:Vector.<IEntity>, bits:uint,
-										   parent:EntitiesCollection = null)
+		public function EntitiesCollectionTest()
 		{
-			_entities = entities;
-			_parent = parent;
-			_bits = bits;
+			super (null, 0x0);
 		}
 
-		public function begin():void
+		[Before]
+		public function setUp():void
 		{
-			_cursor = 0;
+			_bits = 0x1;
+			_entities = new <IEntity>[
+				new TestEntity(_bits),
+				new TestEntity(_bits | (_bits << 1)),
+				new TestEntity(_bits << 1),
+				new TestEntity(_bits)
+			];
+			_collection = new EntitiesCollection(_entities, _bits, this);
 		}
 
-		public function end():Boolean
+		[After]
+		public function tearDown():void
 		{
-			return _cursor >= _entities.length;
-		}
-
-		public function next():void
-		{
-			_cursor++;
-		}
-
-		public function getCollection(...types):IEntitiesCollection
-		{
-			var collection:EntitiesCollection;
-			if(_parent == null)
-				throw new Error("Parent of this collection is null! Something goes wrong!");
-			return _parent.getCollection.apply(this, types);
-		}
-
-		public function dispose():void
-		{
-			_bits = 0x0;
-			_cursor = 0;
+			_collection.dispose();
+			_collection = null;
 			_entities.length = 0;
 			_entities = null;
-			_parent = null;
+			_bits = 0x0;
+		}
+
+		[Test]
+		public function testGetCollection():void
+		{
+			var entityCollection:IEntitiesCollection = _collection.getCollection();
+			Assert.assertNotNull(entityCollection);
+			Assert.assertEquals(_collection, entityCollection);
+
+		}
+
+		[Test]
+		public function testIteration():void
+		{
+			var i:int;
+			var entities:Vector.<TestEntity> = new <TestEntity>[];
+			for(i = 0; i < _entities.length; i++)
+			{
+				if(_entities[i].bits & _bits)
+					entities.push(_entities[i]);
+			}
+			//
+			i = 0;
+			for(_collection.begin(); !_collection.end(); _collection.next())
+			{
+				Assert.assertEquals("Bad bits "+_collection.current.bits, entities[i++], _collection.current);
+			}
 		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
+
+		override public function getCollection(...types):IEntitiesCollection
+		{
+			return _collection;
+		}
+
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS
 
-		public function get current():IEntity
-		{
-			return _entities[ _cursor ] as IEntity;
-		}
 //} endregion GETTERS/SETTERS ==========================================================================================
 	}
+}
+
+import org.gimmick.core.IEntity;
+//class TestComponent{}
+class TestEntity implements IEntity
+{
+
+	private var _bits:uint;
+	public function TestEntity(bits:uint){_bits = bits;}
+	public function add(component:Object):*{return null;}
+	public function has(component:Class):Boolean{return false;}
+	public function get(component:Class):*{return null;}
+	public function remove(component:Class):void{}
+	public function get name():String{return "";}
+	public function get id():String{return "";}
+	public function get components():Array{return null;}
+	public function set active(value:Boolean):void{}
+	public function get active():Boolean{return false;}
+	public function get bits():uint{return _bits;}
 }

@@ -18,12 +18,12 @@ package org.gimmick.utils
 
 	import org.gimmick.managers.GimmickConfig;
 
-	public class TestComfig extends GimmickConfig
+	public class TestConfig extends GimmickConfig
 	{
 
 //======================================================================================================================
 //{region											PUBLIC METHODS
-		public function TestComfig()
+		public function TestConfig()
 		{
 			super (new TestSystemManager(), new TestComponentManager(), new TestEntityManager());
 		}

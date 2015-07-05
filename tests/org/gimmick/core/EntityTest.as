@@ -16,7 +16,7 @@ package org.gimmick.core
 	import flexunit.framework.Assert;
 
 	import org.gimmick.managers.GimmickConfig;
-	import org.gimmick.utils.TestComfig;
+	import org.gimmick.utils.TestConfig;
 
 	/**
 	 * Test case for basic methods of the Entity class
@@ -41,7 +41,7 @@ package org.gimmick.core
 			_entity = new Entity(_entityName);
 			_testComponent = new TestComponent();
 			//create managers
-			var config:TestComfig = new TestComfig();
+			var config:TestConfig = new TestConfig();
 			config.componentTypeManager.initialize();
 			_entity.componentTypeManager = config.componentTypeManager;
 			_entity.componentsManager = new TestComponentsManager(_testComponent);
