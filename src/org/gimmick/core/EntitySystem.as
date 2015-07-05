@@ -77,25 +77,6 @@ package org.gimmick.core
 
 		}
 
-		//else methods
-		/**
-		 * Get list of entities
-		 * @param components Components types for filtering
-		 * @example
-		 * <listing version="3.0">
-		 *     var entities:Iterator = this.getEntities(Component1, Component2, ...);
-		 *     for(entities.begin(); !entities.end(); entities.next())
-		 *     {
-		 *     		var entity:IEntity = entities.current;
-		 *     		...
-		 *     }
-		 * </listing>
-		 */
-		protected final function getEntities(...components):void
-		{
-
-		}
-
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS
