@@ -52,6 +52,20 @@ package org.gimmick.collections
 			Assert.assertNotNull(pooledNode);
 			Assert.assertEquals(_node, pooledNode);
 		}
+
+		[Test(order=4)]
+		public function testSeveralFree():void
+		{
+			this.testFreeNode();
+			var n:int = 2 + Math.random() * 8;
+			while(n-- > 0)CollectionNode.freeNode(_node);
+			var first:CollectionNode = CollectionNode.allocateNode();
+			var second:CollectionNode = CollectionNode.allocateNode();
+			Assert.assertNotNull(first);
+			Assert.assertEquals(_node, first);
+			Assert.assertNotNull(second);
+			Assert.assertTrue(_node != second);
+		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
