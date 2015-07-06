@@ -23,6 +23,7 @@ package org.gimmick.collections
 
 		private var _entity:IEntity;
 		private var _collection:IEntitiesCollection;
+		private var _copy:IEntitiesCollection;
 		//======================================================================================================================
 //{region											PUBLIC METHODS
 		public function EntitiesCollectionTest()
@@ -33,20 +34,24 @@ package org.gimmick.collections
 		public function setUp():void
 		{
 			_entity = new TestEntity();
-			_collection = new EntitiesCollection(this);
+			_collection = new EntitiesCollection();
+			_copy = (_collection as IEntities).copy();
 		}
 
 		[After]
 		public function tearDown():void
 		{
+			_copy.dispose();
 			_collection.dispose();
 			_collection = null;
+			_copy = null;
 		}
 
 		[Test]
 		public function testPush():void
 		{
 			_collection.push(_entity);
+			//also entity must be added to copy
 		}
 
 		[Test]
@@ -55,6 +60,8 @@ package org.gimmick.collections
 			this.testPush();
 			Assert.assertTrue(_collection.hasId(_entity.id));
 			Assert.assertFalse(_collection.hasId('bad id'));
+			Assert.assertTrue(_copy.hasId(_entity.id));
+			Assert.assertFalse(_copy.hasId('bad id'));
 		}
 
 		[Test]
@@ -62,8 +69,10 @@ package org.gimmick.collections
 		{
 			this.testPush();
 			Assert.assertTrue(_collection.hasEntity(_entity));
+			Assert.assertTrue(_copy.hasEntity(_entity));
 			var entity:TestEntity = new TestEntity();
 			Assert.assertFalse(_collection.hasEntity(entity));
+			Assert.assertFalse(_copy.hasEntity(entity));
 		}
 
 		[Test]
@@ -72,6 +81,8 @@ package org.gimmick.collections
 			this.testPush();
 			Assert.assertNotNull(_collection.getById(_entity.id));
 			Assert.assertNull(_collection.getById('bad id'));
+			Assert.assertNotNull(_copy.getById(_entity.id));
+			Assert.assertNull(_copy.getById('bad id'));
 		}
 
 		[Test]
@@ -79,15 +90,24 @@ package org.gimmick.collections
 		{
 			this.testPush();
 			_collection.pop(_entity);
+			//also entity must be removed from copy
 			Assert.assertFalse(_collection.hasEntity(_entity));
+			Assert.assertFalse(_copy.hasEntity(_entity));
 		}
 
 		[Test]
 		public function testClear():void
 		{
 			this.testPush();
+			_copy.clear();
+			Assert.assertFalse(_copy.hasEntity(_entity));
+			//copy does not dispose parent content
+			Assert.assertTrue(_collection.hasEntity(_entity));
+			this.testPush();
 			_collection.clear();
+			//also must clear all copies
 			Assert.assertFalse(_collection.hasEntity(_entity));
+			Assert.assertFalse(_copy.hasEntity(_entity));
 		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================

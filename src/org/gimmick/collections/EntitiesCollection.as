@@ -19,15 +19,15 @@ package org.gimmick.collections
 
 	/**
 	 * Concrete entities collection
+	 * Holder of entities list
 	 */
 	public class EntitiesCollection implements IEntities
 	{
 
-		private var _parent:IEntitiesCollection;
 		//
+		private var _head:CollectionNode;
+		private var _tail:CollectionNode;
 		private var _cursor:CollectionNode;
-		internal var _head:CollectionNode;
-		internal var _tail:CollectionNode;
 
 		/**
 		 * Hash map of collection nodes.
@@ -35,16 +35,28 @@ package org.gimmick.collections
 		 * Value = CollectionNode that contains entity
 		 */
 		private var _hashMap:Dictionary;
+		/**
+		 * Flag for indication of copied instance
+		 */
+		private var _isCopy:Boolean;
 		//======================================================================================================================
 //{region											PUBLIC METHODS
 		/**
 		 * Constructor
-		 * @param parent Parent entities collection. Collection can be a part of other collection
 		 */
-		public function EntitiesCollection(parent:IEntitiesCollection = null)
+		public function EntitiesCollection()
 		{
-			_parent = parent;
 			this.clear();
+		}
+
+		public function copy():IEntities
+		{
+			var copy:EntitiesCollection = new EntitiesCollection();
+			copy._isCopy = true;
+			copy._hashMap = _hashMap;
+			copy._head = _head;
+			copy._tail = _tail;
+			return copy;
 		}
 
 		/**
@@ -127,16 +139,20 @@ package org.gimmick.collections
 		public function clear():void
 		{
 			_hashMap = new Dictionary(true);
-			//free all nodes
-			var next:CollectionNode;
-			var node:CollectionNode = _head;
-			while(node != null)
+			if(!_isCopy)
 			{
-				next = node.next;
-				CollectionNode.freeNode(node);
-				node = next;
+				//free all nodes
+				var next:CollectionNode;
+				var node:CollectionNode = _head;
+				while(node != null)
+				{
+					next = node.next;
+					CollectionNode.freeNode(node);
+					node = next;
+				}
 			}
 			//clean links
+			_cursor = null;
 			_head = null;
 			_tail = null;
 		}
@@ -148,7 +164,6 @@ package org.gimmick.collections
 		{
 			this.clear();
 			_hashMap = null;
-			_parent = null;
 		}
 		//internal iterator implementation
 		/**

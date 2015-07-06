@@ -20,7 +20,12 @@ package org.gimmick.collections
 	{
 		//======================================================================================================================
 //{region											PUBLIC METHODS
-
+		/**
+		 * Crate copy of IEntities.
+		 * Created copy will works with parent content, but asses of disposing of content will be denied.
+		 * @return Instance of new copy.
+		 */
+		function copy():IEntities;
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
