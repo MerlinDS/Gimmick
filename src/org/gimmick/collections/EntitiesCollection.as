@@ -21,14 +21,14 @@ package org.gimmick.collections
 	 * Concrete entities collection
 	 * Holder of entities list
 	 */
-	public class EntitiesCollection implements IEntities
+	public final class EntitiesCollection implements IEntities
 	{
 
-		//
 		private var _head:CollectionNode;
 		private var _tail:CollectionNode;
 		private var _cursor:CollectionNode;
 
+		private var _bits:uint;
 		/**
 		 * Hash map of collection nodes.
 		 * Key = Id of entity
@@ -49,6 +49,9 @@ package org.gimmick.collections
 			this.clear();
 		}
 
+		/**
+		 * @inheritDoc
+		 */
 		public function copy():IEntities
 		{
 			var copy:EntitiesCollection = new EntitiesCollection();
@@ -62,7 +65,8 @@ package org.gimmick.collections
 		/**
 		 * @inheritDoc
 		 */
-		public function push(entity:IEntity):void
+		[Inline]
+		public final function push(entity:IEntity):void
 		{
 			//Add new entity only in case if it was not added previously
 			if(_hashMap[entity.id] == null)
@@ -87,7 +91,8 @@ package org.gimmick.collections
 		/**
 		 * @inheritDoc
 		 */
-		public function pop(entity:IEntity):void
+		[Inline]
+		public final function pop(entity:IEntity):void
 		{
 			var node:CollectionNode = _hashMap[entity.id];
 			//Remove entity only in case if it was added previously
@@ -127,7 +132,8 @@ package org.gimmick.collections
 		/**
 		 * @inheritDoc
 		 */
-		public function getById(entityId:String):IEntity
+		[Inline]
+		public final function getById(entityId:String):IEntity
 		{
 			var node:CollectionNode = _hashMap[entityId];
 			return node != null ? node.entity : null;
@@ -208,6 +214,16 @@ package org.gimmick.collections
 		{
 			return _cursor != null ? _cursor.entity : null;
 		}
+
+		/**
+		 * @inheritDoc
+		 */
+		[Inline]
+		public final function set bits(value:uint)
+		{
+			_bits = value;
+		}
+
 //} endregion GETTERS/SETTERS ==========================================================================================
 	}
 }

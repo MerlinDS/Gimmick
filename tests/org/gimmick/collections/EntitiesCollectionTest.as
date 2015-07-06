@@ -18,7 +18,7 @@ package org.gimmick.collections
 	import org.gimmick.core.IEntity;
 	import org.gimmick.utils.TestEntity;
 
-	public class EntitiesCollectionTest extends EntitiesCollection
+	public class EntitiesCollectionTest
 	{
 
 		private var _entity:IEntity;

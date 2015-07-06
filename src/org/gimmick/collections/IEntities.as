@@ -33,7 +33,13 @@ package org.gimmick.collections
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS
-
+		/**
+		 * Update filtration bitwise mask for collection.
+		 * Don't do this without big necessity.
+		 * Will be automatically updated by engine
+		 * @param value New filtration bitwise mask
+		 */
+		function set bits(value:uint);
 //} endregion GETTERS/SETTERS ==========================================================================================
 	}
 }
