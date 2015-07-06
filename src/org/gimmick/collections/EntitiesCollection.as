@@ -66,7 +66,7 @@ package org.gimmick.collections
 				}
 				_tail = node;
 				//add to hash map
-				_hashMap[entity.bits] = node;
+				_hashMap[entity.id] = node;
 			}
 			//if node was already added do nothing
 		}
