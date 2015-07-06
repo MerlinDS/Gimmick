@@ -56,6 +56,11 @@ package org.gimmick.collections
 		function getById(entityId:String):IEntity;
 
 		/**
+		 * Clear collection for new usage
+		 */
+		function clear():void;
+
+		/**
 		 * Dispose collection and prepare it for GC
 		 */
 		function dispose():void;

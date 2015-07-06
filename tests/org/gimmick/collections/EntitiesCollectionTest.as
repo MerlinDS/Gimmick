@@ -88,6 +88,14 @@ package org.gimmick.collections
 			_collection.pop(_entity);
 			Assert.assertFalse(_collection.hasEntity(_entity));
 		}
+
+		[Test]
+		public function testClear():void
+		{
+			this.testPush();
+			_collection.clear();
+			Assert.assertFalse(_collection.hasEntity(_entity));
+		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS

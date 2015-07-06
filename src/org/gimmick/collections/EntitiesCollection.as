@@ -10,9 +10,6 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/**
- * Created by MerlinDS on 06.07.2015.
- */
 package org.gimmick.collections
 {
 
@@ -20,9 +17,14 @@ package org.gimmick.collections
 
 	import org.gimmick.core.IEntity;
 
+	/**
+	 * Concrete entities collection
+	 */
 	public class EntitiesCollection implements IEntitiesCollection
 	{
 
+		private var _parent:IEntitiesCollection;
+		//
 		private var _head:CollectionNode;
 		private var _tail:CollectionNode;
 
@@ -36,10 +38,12 @@ package org.gimmick.collections
 //{region											PUBLIC METHODS
 		/**
 		 * Constructor
+		 * @param parent Parent entities collection. Collection can be a part of other collection
 		 */
-		public function EntitiesCollection()
+		public function EntitiesCollection(parent:IEntitiesCollection = null)
 		{
-			this.dispose();
+			_parent = parent;
+			this.clear();
 		}
 
 		/**
@@ -119,7 +123,7 @@ package org.gimmick.collections
 		/**
 		 * @inheritDoc
 		 */
-		public function dispose():void
+		public function clear():void
 		{
 			_hashMap = new Dictionary(true);
 			//free all nodes
@@ -136,6 +140,16 @@ package org.gimmick.collections
 			_tail = null;
 		}
 
+		/**
+		 * @inheritDoc
+		 */
+		public function dispose():void
+		{
+			this.clear();
+			_hashMap = null;
+			_parent = null;
+		}
+
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
@@ -148,7 +162,9 @@ package org.gimmick.collections
 		 */
 		public function get iterator():ICollectionIterator
 		{
-			return null;
+			var iterator:ICollectionIterator = _parent.iterator;
+//			iterator.target(_head, _tail);
+			return iterator;
 		}
 
 //} endregion GETTERS/SETTERS ==========================================================================================
