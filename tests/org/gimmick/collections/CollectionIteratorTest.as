@@ -86,7 +86,7 @@ package org.gimmick.collections
 				Assert.assertNotNull(_iterator.current);
 				Assert.assertEquals(entities[i++], _iterator.current);
 			}
-			Assert.assertEquals(0, i);
+			Assert.assertEquals(entities.length, i);
 		}
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
