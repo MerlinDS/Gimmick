@@ -22,9 +22,10 @@ package org.gimmick.utils
 		private var _bits:uint;
 		//======================================================================================================================
 //{region											PUBLIC METHODS
-		public function TestEntity(_bits:uint = 0x0)
+		public function TestEntity(bits:uint = 0x0)
 		{
 			_id = getUniqueId();
+			_bits = bits;
 		}
 
 		public function add(component:Object):*

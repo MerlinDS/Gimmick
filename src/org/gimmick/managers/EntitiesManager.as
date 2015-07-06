@@ -63,6 +63,7 @@ package org.gimmick.managers
 			else
 			{
 				//do something
+				_active[0] = null;
 			}
 		}
 		/**

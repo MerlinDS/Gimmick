@@ -53,11 +53,14 @@ package org.gimmick.managers
 		{
 			_entitiesManager.dispose();
 			_entitiesManager = null;
+			_entities = null;
+			_bits = 0x0;
 		}
 
 		[Test]
 		public function testAddEntity():void
 		{
+			_entitiesManager.addBits(_entities[0], _bits << 1);
 			Assert.fail('Test not implemented yet');
 		}
 //} endregion PUBLIC METHODS ===========================================================================================

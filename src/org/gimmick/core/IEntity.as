@@ -100,7 +100,7 @@ package org.gimmick.core
 		/**
 		 * @private
 		 */
-		function get active():Boolean;;
+		function get active():Boolean;
 
 //} endregion GETTERS/SETTERS ==========================================================================================
 	}
