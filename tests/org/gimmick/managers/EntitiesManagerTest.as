@@ -13,6 +13,7 @@ package org.gimmick.managers
 {
 
 	import org.flexunit.Assert;
+	import org.gimmick.collections.EntitiesCollection;
 	import org.gimmick.collections.ICollectionIterator;
 	import org.gimmick.core.IEntity;
 	import org.gimmick.utils.TestConfig;
@@ -73,7 +74,7 @@ package org.gimmick.managers
 		{
 			this.testAddEntity();
 			var i:int = _entities.length;
-			var collection:ICollectionIterator = _entitiesManager.collection.iterator;
+			var collection:EntitiesCollection = _entitiesManager.collection;
 			//for start all entities are not active
 			for(collection.begin(); !collection.end(); collection.next())
 				i--;//bad iteration, all entities are passive, collection has no iterations
@@ -96,7 +97,7 @@ package org.gimmick.managers
 		[Test]
 		public function testGetCollection():void
 		{
-			var collection:ICollectionIterator = _entitiesManager.collection.iterator;
+			var collection:ICollectionIterator = _entitiesManager.collection;
 			for(collection.begin(); !collection.end(); collection.next()){}
 		}
 
@@ -116,7 +117,7 @@ package org.gimmick.managers
 		[Test]
 		public function testGetBitsCollection():void
 		{
-			var collection:ICollectionIterator = _entitiesManager.getCollection(TestComponent).iterator;
+			var collection:ICollectionIterator = _entitiesManager.getCollection(TestComponent);
 			var i:int;
 			var entities:Vector.<TestEntity> = new <TestEntity>[];
 			for(i = 0; i < _entities.length; i++)

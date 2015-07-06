@@ -41,6 +41,7 @@ package org.gimmick.utils
 	}
 }
 
+import org.gimmick.collections.EntitiesCollection;
 import org.gimmick.collections.IEntitiesCollection;
 import org.gimmick.core.ComponentType;
 import org.gimmick.core.EntitySystem;
@@ -80,10 +81,10 @@ class TestEntityManager implements IEntitiesManager
 	public function changeEntityActivity(entity:IEntity):void{}
 	public function addToCollection(entity:IEntity, componentType:ComponentType):void{}
 	public function removeFromCollection(entity:IEntity, componentType:ComponentType):void{}
-	public function get collection():IEntitiesCollection{return null;}
+	public function get collection():EntitiesCollection{return null;}
 	public function dispose():void{}
 	public function initialize():void{}
-	public function getCollection(...types):IEntitiesCollection{return null;}
+	public function getCollection(...types):EntitiesCollection{return null;}
 	public function begin():void{}
 	public function end():Boolean{return false;}
 	public function next():void{}
