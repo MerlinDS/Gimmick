@@ -13,8 +13,11 @@
 package org.gimmick.managers
 {
 
+	import flash.utils.Dictionary;
+
+	import org.gimmick.collections.EntitiesCollection;
 	import org.gimmick.collections.IEntities;
-	import org.gimmick.core.*;
+	import org.gimmick.core.IEntity;
 
 	/**
 	 * Manager for controlling of entities
@@ -22,7 +25,8 @@ package org.gimmick.managers
 	internal class EntitiesManager implements IEntitiesManager
 	{
 
-
+		private var _passive:IEntities;
+		private var _active:Dictionary;
 //======================================================================================================================
 //{region											PUBLIC METHODS
 		public function EntitiesManager()
@@ -35,7 +39,8 @@ package org.gimmick.managers
 		 */
 		public function initialize():void
 		{
-
+			_active = new Dictionary(true);
+			_passive = new EntitiesCollection();
 		}
 
 		/**
@@ -43,45 +48,47 @@ package org.gimmick.managers
 		 */
 		public function addEntity(entity:IEntity):void
 		{
-
+			_passive.push(entity);
 		}
 		/**
 		 * @inheritDoc
 		 */
 		public function removeEntity(entity:IEntity):void
 		{
-
-		}
-		/**
-		 * @inheritDoc
-		 */
-		public function getEntity(id:String):IEntity
-		{
-			return null;
+			if(!entity.active)
+				_passive.pop(entity);
+			else
+			{
+				//do something
+			}
 		}
 		/**
 		 * @inheritDoc
 		 */
 		public function changeEntityActivity(entity:IEntity):void
 		{
-
+			if(entity.active)
+			{
+				_passive.pop(entity);
+				//TODO add to all active collections
+			}
 		}
 		/**
 		 * @inheritDoc
 		 */
-		public function addToCollection(entity:IEntity, componentType:ComponentType):void
+		public function addBits(entity:IEntity, bits:uint):void
 		{
-
+			//TODO add to active collection
 		}
 		/**
 		 * @inheritDoc
 		 */
-		public function removeFromCollection(entity:IEntity, componentType:ComponentType):void
+		public function removeBits(entity:IEntity, bits:uint):void
 		{
-
+			//TODO remove form active collection
 		}
 
-		public function getEntities(...types):IEntities
+		public function getEntities(firstBit:uint = 0x0, bits:uint = 0x0):IEntities
 		{
 			return null;
 		}
@@ -97,10 +104,6 @@ package org.gimmick.managers
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS
-		public function get entities():IEntities
-		{
-			return null;
-		}
 
 //} endregion GETTERS/SETTERS ==========================================================================================
 

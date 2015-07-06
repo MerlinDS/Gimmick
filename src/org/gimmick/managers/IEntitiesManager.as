@@ -13,9 +13,7 @@
 package org.gimmick.managers
 {
 
-	import org.gimmick.collections.EntitiesCollection;
 	import org.gimmick.collections.IEntities;
-	import org.gimmick.core.ComponentType;
 	import org.gimmick.core.IEntity;
 
 	public interface IEntitiesManager extends IGimmickManager
@@ -41,15 +39,23 @@ package org.gimmick.managers
 		/**
 		 *
 		 * @param entity
-		 * @param componentType
+		 * @param bits
 		 */
-		function addToCollection(entity:IEntity, componentType:ComponentType):void;
+		function addBits(entity:IEntity, bits:uint):void;
 		/**
 		 *
 		 * @param entity
-		 * @param componentType
+		 * @param bits
 		 */
-		function removeFromCollection(entity:IEntity, componentType:ComponentType):void;
+		function removeBits(entity:IEntity, bits:uint):void;
+		/**
+		 *
+		 * @param types
+		 * @return
+		 */
+		function getEntities(firstBit:uint = 0x0, bits:uint = 0x0):IEntities;
+
+//		function getPassiveEntities():IEntities;
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
@@ -57,16 +63,6 @@ package org.gimmick.managers
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS
-		/**
-		 *
-		 */
-		function get entities():IEntities;
-		/**
-		 *
-		 * @param types
-		 * @return
-		 */
-		function getEntities(...types):IEntities;
 //} endregion GETTERS/SETTERS ==========================================================================================
 	}
 }

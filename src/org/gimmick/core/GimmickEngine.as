@@ -15,6 +15,8 @@ package org.gimmick.core
 	import flash.errors.IllegalOperationError;
 	import flash.utils.getTimer;
 
+	import org.gimmick.collections.IEntities;
+
 	import org.gimmick.managers.GimmickConfig;
 	import org.gimmick.managers.IComponentTypeManager;
 	import org.gimmick.managers.IComponentsManager;
@@ -145,6 +147,22 @@ package org.gimmick.core
 		{
 			_componentsManager.removeComponents(entity as Entity);
 			_entitiesManager.removeEntity(entity as Entity);
+		}
+
+		public function getEntities(...types):IEntities
+		{
+			//get types bits
+			var firstBit:uint = 0x0, bits:uint = 0x0;
+			if(types != null)
+			{
+				var n:int = types.length;
+				for(var i:int = 0; i < n; i++)
+				{
+					bits |= _componentTypeManagers.getType(types[i]).bit;
+					if(i == 0)firstBit = bits;
+				}
+			}
+			return _entitiesManager.getEntities(firstBit, bits);
 		}
 		//delegates from systemsManager
 		/**

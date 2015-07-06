@@ -49,7 +49,7 @@ Update entity position by velocity with MovementSystem
     
         override public function tick(time:Number):void
         {
-            var entities:IEntities = this.getEntities(VelocityComponent, PositionComponent);
+            var entities:IEntities = Gimmick.getEntities(VelocityComponent, PositionComponent);
             for(entities.begin(); !entities.end(); entities.next())
             {
                 var entity:IEntity = entities.current;
