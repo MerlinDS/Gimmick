@@ -10,56 +10,58 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/**
+ * Created by MerlinDS on 06.07.2015.
+ */
 package org.gimmick.collections
 {
 
 	import org.gimmick.core.IEntity;
 
-	/**
-	 * Interface of entities collection.
-	 */
-	public interface IEntityCollection
+	public class EntitiesCollection implements IEntitiesCollection
 	{
-//======================================================================================================================
+
+
+		//======================================================================================================================
 //{region											PUBLIC METHODS
-		//list methods
-		/**
-		 * Push Entity to collection
-		 * @param entity Instance of entity
-		 */
-		function push(entity:IEntity):void;
+		public function EntitiesCollection()
+		{
+		}
 
-		/**
-		 * Pop Entity from collection
-		 * @param entity Instance of entity
-		 */
-		function pop(entity:IEntity):void;
+		public function push(entity:IEntity):void
+		{
+		}
 
-		/**
-		 * Check if collection contains entity with id
-		 * @param entityId Entity Id
-		 * @return True if collection contains such entity. False in other case
-		 */
-		function has(entityId:String):Boolean;
+		public function pop(entity:IEntity):void
+		{
+		}
 
-		/**
-		 * Get entity from collection by id
-		 * @param entityId Entity Id
-		 * @return Instance of entity if collection contains such entity. Null in other case
-		 */
-		function get(entityId:String):IEntity;
+		public function has(entityId:String):Boolean
+		{
+			return false;
+		}
 
-		/**
-		 * Dispose collection and prepare it for GC
-		 */
-		function dispose():void;
+		public function get(entityId:String):IEntity
+		{
+			return null;
+		}
+
+		public function dispose():void
+		{
+		}
+
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
-		function get iterator():ICollectionIterator;
+
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS
+
+		public function get iterator():ICollectionIterator
+		{
+			return null;
+		}
 
 //} endregion GETTERS/SETTERS ==========================================================================================
 	}

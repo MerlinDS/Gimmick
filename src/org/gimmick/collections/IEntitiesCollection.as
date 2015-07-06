@@ -10,99 +10,57 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.gimmick.managers
+package org.gimmick.collections
 {
 
-	import org.gimmick.collections.IEntitiesCollection;
-	import org.gimmick.core.*;
+	import org.gimmick.core.IEntity;
 
 	/**
-	 * Manager for controlling of entities
+	 * Interface of entities collection.
 	 */
-	internal class EntitiesManager implements IEntitiesManager
+	public interface IEntitiesCollection
 	{
-
-
 //======================================================================================================================
 //{region											PUBLIC METHODS
-		public function EntitiesManager()
-		{
-			super ();
-		}
+		//list methods
+		/**
+		 * Push Entity to collection
+		 * @param entity Instance of entity
+		 */
+		function push(entity:IEntity):void;
 
 		/**
-		 * @inheritDoc
+		 * Pop Entity from collection
+		 * @param entity Instance of entity
 		 */
-		public function initialize():void
-		{
-
-		}
+		function pop(entity:IEntity):void;
 
 		/**
-		 * @inheritDoc
+		 * Check if collection contains entity with id
+		 * @param entityId Entity Id
+		 * @return True if collection contains such entity. False in other case
 		 */
-		public function addEntity(entity:IEntity):void
-		{
+		function has(entityId:String):Boolean;
 
-		}
 		/**
-		 * @inheritDoc
+		 * Get entity from collection by id
+		 * @param entityId Entity Id
+		 * @return Instance of entity if collection contains such entity. Null in other case
 		 */
-		public function removeEntity(entity:IEntity):void
-		{
+		function get(entityId:String):IEntity;
 
-		}
 		/**
-		 * @inheritDoc
+		 * Dispose collection and prepare it for GC
 		 */
-		public function getEntity(id:String):IEntity
-		{
-			return null;
-		}
-		/**
-		 * @inheritDoc
-		 */
-		public function changeEntityActivity(entity:IEntity):void
-		{
-
-		}
-		/**
-		 * @inheritDoc
-		 */
-		public function addToCollection(entity:IEntity, componentType:ComponentType):void
-		{
-
-		}
-		/**
-		 * @inheritDoc
-		 */
-		public function removeFromCollection(entity:IEntity, componentType:ComponentType):void
-		{
-
-		}
-
-		public function getCollection(...types):IEntitiesCollection
-		{
-			return null;
-		}
-
-		public function dispose():void
-		{
-		}
-
+		function dispose():void;
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
-
+		function get iterator():ICollectionIterator;
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS
-		public function get collection():IEntitiesCollection
-		{
-			return null;
-		}
 
 //} endregion GETTERS/SETTERS ==========================================================================================
-
 	}
 }

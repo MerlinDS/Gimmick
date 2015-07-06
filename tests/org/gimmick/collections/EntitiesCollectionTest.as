@@ -10,86 +10,69 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.gimmick.managers
+/**
+ * Created by MerlinDS on 06.07.2015.
+ */
+package org.gimmick.collections
 {
 
-	import org.gimmick.collections.IEntitiesCollection;
-	import org.gimmick.core.*;
-
-	/**
-	 * Manager for controlling of entities
-	 */
-	internal class EntitiesManager implements IEntitiesManager
+	public class EntitiesCollectionTest
 	{
 
 
-//======================================================================================================================
+		//======================================================================================================================
 //{region											PUBLIC METHODS
-		public function EntitiesManager()
+		public function EntitiesCollectionTest()
 		{
-			super ();
 		}
 
-		/**
-		 * @inheritDoc
-		 */
-		public function initialize():void
+		[Before]
+		public function setUp():void
 		{
 
 		}
 
-		/**
-		 * @inheritDoc
-		 */
-		public function addEntity(entity:IEntity):void
-		{
-
-		}
-		/**
-		 * @inheritDoc
-		 */
-		public function removeEntity(entity:IEntity):void
-		{
-
-		}
-		/**
-		 * @inheritDoc
-		 */
-		public function getEntity(id:String):IEntity
-		{
-			return null;
-		}
-		/**
-		 * @inheritDoc
-		 */
-		public function changeEntityActivity(entity:IEntity):void
-		{
-
-		}
-		/**
-		 * @inheritDoc
-		 */
-		public function addToCollection(entity:IEntity, componentType:ComponentType):void
-		{
-
-		}
-		/**
-		 * @inheritDoc
-		 */
-		public function removeFromCollection(entity:IEntity, componentType:ComponentType):void
+		[After]
+		public function tearDown():void
 		{
 
 		}
 
-		public function getCollection(...types):IEntitiesCollection
+		[Test]
+		public function testPush():void
 		{
-			return null;
+
 		}
 
-		public function dispose():void
+		[Test]
+		public function testHas():void
 		{
+
 		}
 
+		[Test]
+		public function testDispose():void
+		{
+
+		}
+
+		[Test]
+		public function testGet():void
+		{
+
+		}
+
+		[Test]
+		public function testIterator():void
+		{
+
+		}
+
+		[Test]
+		public function testPop():void
+		{
+
+		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
@@ -97,12 +80,7 @@ package org.gimmick.managers
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS
-		public function get collection():IEntitiesCollection
-		{
-			return null;
-		}
 
 //} endregion GETTERS/SETTERS ==========================================================================================
-
 	}
 }
