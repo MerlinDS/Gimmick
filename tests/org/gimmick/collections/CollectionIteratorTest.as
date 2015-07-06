@@ -20,6 +20,7 @@ package org.gimmick.collections
 
 	public class CollectionIteratorTest
 	{
+		private var _bits:uint;
 		private var _entities:Vector.<IEntity>;
 		private var _iterator:EntitiesCollection;
 		//======================================================================================================================
@@ -34,12 +35,14 @@ package org.gimmick.collections
 		[Before]
 		public function setUp():void
 		{
+			_bits = 0x1;
 			_entities = new <IEntity>[
-				new TestEntity(),
-				new TestEntity(),
-				new TestEntity(),
-				new TestEntity(),
-				new TestEntity()
+				new TestEntity(_bits << 1),
+				new TestEntity(_bits),
+				new TestEntity(_bits << 1 | _bits),
+				new TestEntity(_bits << 1),
+				new TestEntity(_bits),
+				new TestEntity(_bits << 1)
 			];
 			_iterator = new EntitiesCollection();
 			for(var i:int = 0; i < _entities.length; i++)
@@ -64,6 +67,25 @@ package org.gimmick.collections
 				i--;
 			}
 
+			Assert.assertEquals(0, i);
+		}
+
+		[Test]
+		public function testIterationsWithExcludes():void
+		{
+			var entities:Vector.<IEntity> = new <IEntity>[];
+			for(var i:int = 0; i < _entities.length; i++)
+			{
+				if(_entities[i].bits & _bits)
+					entities.push(_entities[i]);
+			}
+			i = 0;
+			_iterator.bits = _bits;
+			for(_iterator.begin(); !_iterator.end(); _iterator.next())
+			{
+				Assert.assertNotNull(_iterator.current);
+				Assert.assertEquals(entities[i++], _iterator.current);
+			}
 			Assert.assertEquals(0, i);
 		}
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================

@@ -19,9 +19,10 @@ package org.gimmick.utils
 	{
 
 		private var _id:String;
+		private var _bits:uint;
 		//======================================================================================================================
 //{region											PUBLIC METHODS
-		public function TestEntity()
+		public function TestEntity(_bits:uint = 0x0)
 		{
 			_id = getUniqueId();
 		}
@@ -57,7 +58,7 @@ package org.gimmick.utils
 
 		public function get bits():uint
 		{
-			return 0;
+			return _bits;
 		}
 
 		public function get components():Array

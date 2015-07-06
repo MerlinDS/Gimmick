@@ -179,6 +179,9 @@ package org.gimmick.collections
 		public final function begin():ICollectionIterator
 		{
 			_cursor = _head;
+			if(_bits > 0x0)
+				while(_cursor != null && !(_cursor.entity.bits & _bits))
+					_cursor = _cursor.next;
 			return this;
 		}
 
@@ -197,7 +200,12 @@ package org.gimmick.collections
 		[Inline]
 		public final function next():void
 		{
-			_cursor = _cursor.next;
+			if(_bits > 0x0)
+			{
+				do _cursor = _cursor.next;
+				while(_cursor != null && !(_cursor.entity.bits & _bits));
+			}else
+				_cursor = _cursor.next;
 		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
