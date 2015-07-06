@@ -40,14 +40,20 @@ package org.gimmick.collections
 		 * @param entityId Entity Id
 		 * @return True if collection contains such entity. False in other case
 		 */
-		function has(entityId:String):Boolean;
+		function hasId(entityId:String):Boolean;
 
+		/**
+		 * Check if collection contains entity
+		 * @param entity Instance of entity
+		 * @return True if collection contains such entity. False in other case
+		 */
+		function hasEntity(entity:IEntity):Boolean;
 		/**
 		 * Get entity from collection by id
 		 * @param entityId Entity Id
 		 * @return Instance of entity if collection contains such entity. Null in other case
 		 */
-		function get(entityId:String):IEntity;
+		function getById(entityId:String):IEntity;
 
 		/**
 		 * Dispose collection and prepare it for GC

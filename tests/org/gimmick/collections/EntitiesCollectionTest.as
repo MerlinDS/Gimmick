@@ -13,9 +13,15 @@
 package org.gimmick.collections
 {
 
+	import flexunit.framework.Assert;
+
+	import org.gimmick.core.IEntity;
+	import org.gimmick.utils.TestEntity;
+
 	public class EntitiesCollectionTest
 	{
 
+		private var _entity:IEntity;
 		private var _collection:IEntitiesCollection;
 		//======================================================================================================================
 //{region											PUBLIC METHODS
@@ -26,6 +32,7 @@ package org.gimmick.collections
 		[Before]
 		public function setUp():void
 		{
+			_entity = new TestEntity();
 			_collection = new EntitiesCollection();
 		}
 
@@ -40,37 +47,46 @@ package org.gimmick.collections
 		[Test]
 		public function testPush():void
 		{
-
+			_collection.push(_entity);
 		}
 
 		[Test]
-		public function testHas():void
+		public function testHasId():void
 		{
-
+			this.testPush();
+			Assert.assertTrue(_collection.hasId(_entity.id));
+			Assert.assertFalse(_collection.hasId('bad id'));
 		}
 
 		[Test]
-		public function testDispose():void
+		public function testHasEntity():void
 		{
-
+			this.testPush();
+			Assert.assertTrue(_collection.hasEntity(_entity));
+			var entity:TestEntity = new TestEntity();
+			Assert.assertFalse(_collection.hasEntity(entity));
 		}
 
 		[Test]
-		public function testGet():void
+		public function testGetById():void
 		{
-
+			this.testPush();
+			Assert.assertNotNull(_collection.getById(_entity.id));
+			Assert.assertNull(_collection.getById('bad id'));
 		}
 
 		[Test]
 		public function testIterator():void
 		{
-
+			Assert.fail('Test not implemented yet!');
 		}
 
 		[Test]
 		public function testPop():void
 		{
-
+			this.testPush();
+			_collection.pop(_entity);
+			Assert.assertFalse(_collection.hasEntity(_entity));
 		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================

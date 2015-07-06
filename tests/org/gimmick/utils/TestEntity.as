@@ -18,11 +18,12 @@ package org.gimmick.utils
 	public class TestEntity implements IEntity
 	{
 
-
+		private var _id:String;
 		//======================================================================================================================
 //{region											PUBLIC METHODS
 		public function TestEntity()
 		{
+			_id = getUniqueId();
 		}
 
 		public function add(component:Object):*
@@ -51,7 +52,7 @@ package org.gimmick.utils
 
 		public function get id():String
 		{
-			return "";
+			return _id;
 		}
 
 		public function get bits():uint

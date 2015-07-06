@@ -16,37 +16,124 @@
 package org.gimmick.collections
 {
 
+	import flash.utils.Dictionary;
+
 	import org.gimmick.core.IEntity;
 
 	public class EntitiesCollection implements IEntitiesCollection
 	{
 
+		private var _head:CollectionNode;
+		private var _tail:CollectionNode;
+
+		/**
+		 * Hash map of collection nodes.
+		 * Key = Id of entity
+		 * Value = CollectionNode that contains entity
+		 */
+		private var _hashMap:Dictionary;
 		//======================================================================================================================
 //{region											PUBLIC METHODS
+		/**
+		 * Constructor
+		 */
 		public function EntitiesCollection()
 		{
+			this.dispose();
 		}
 
+		/**
+		 * @inheritDoc
+		 */
 		public function push(entity:IEntity):void
 		{
+			//Add new entity only in case if it was not added previously
+			if(_hashMap[entity.id] == null)
+			{
+				var node:CollectionNode = CollectionNode.allocateNode();
+				node.entity = entity;
+				//add to linked list
+				if(_head == null)
+					_head = node;
+				else
+				{
+					node.prev = _tail;
+					_tail.next = node;
+				}
+				_tail = node;
+				//add to hash map
+				_hashMap[entity.bits] = node;
+			}
+			//if node was already added do nothing
 		}
 
+		/**
+		 * @inheritDoc
+		 */
 		public function pop(entity:IEntity):void
 		{
+			var node:CollectionNode = _hashMap[entity.id];
+			//Remove entity only in case if it was added previously
+			if(node != null)
+			{
+				var next:CollectionNode = node.next;
+				var prev:CollectionNode = node.prev;
+				if(next != null)//set previous link to next node
+					next.prev = prev;
+				if(prev != null)//set next node link to previous node
+					prev.next = next;
+				CollectionNode.freeNode(node);
+				//remove from has map
+				_hashMap[entity.id] = null;
+			}
+			//if node was not added do nothing
 		}
 
-		public function has(entityId:String):Boolean
+		/**
+		 * @inheritDoc
+		 */
+		[Inline]
+		public final function hasId(entityId:String):Boolean
 		{
-			return false;
+			return _hashMap[entityId] != null;
 		}
 
-		public function get(entityId:String):IEntity
+		/**
+		 * @inheritDoc
+		 */
+		[Inline]
+		public final function hasEntity(entity:IEntity):Boolean
 		{
-			return null;
+			return _hashMap[entity.id] != null;
 		}
 
+		/**
+		 * @inheritDoc
+		 */
+		public function getById(entityId:String):IEntity
+		{
+			var node:CollectionNode = _hashMap[entityId];
+			return node != null ? node.entity : null;
+		}
+
+		/**
+		 * @inheritDoc
+		 */
 		public function dispose():void
 		{
+			_hashMap = new Dictionary(true);
+			//free all nodes
+			var next:CollectionNode;
+			var node:CollectionNode = _head;
+			while(node != null)
+			{
+				next = node.next;
+				CollectionNode.freeNode(node);
+				node = next;
+			}
+			//clean links
+			_head = null;
+			_tail = null;
 		}
 
 //} endregion PUBLIC METHODS ===========================================================================================
@@ -56,7 +143,9 @@ package org.gimmick.collections
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS
-
+		/**
+		 * @inheritDoc
+		 */
 		public function get iterator():ICollectionIterator
 		{
 			return null;
