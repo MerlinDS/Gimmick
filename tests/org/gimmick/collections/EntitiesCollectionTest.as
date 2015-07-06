@@ -18,11 +18,12 @@ package org.gimmick.collections
 	import org.gimmick.core.IEntity;
 	import org.gimmick.utils.TestEntity;
 
-	public class EntitiesCollectionTest
+	public class EntitiesCollectionTest extends EntitiesCollection
 	{
 
 		private var _entity:IEntity;
 		private var _collection:IEntitiesCollection;
+		private var _collectionIterator:CollectionIterator;
 		//======================================================================================================================
 //{region											PUBLIC METHODS
 		public function EntitiesCollectionTest()
@@ -33,13 +34,16 @@ package org.gimmick.collections
 		public function setUp():void
 		{
 			_entity = new TestEntity();
-			_collection = new EntitiesCollection();
+			_collection = new EntitiesCollection(this);
+			_collectionIterator = new CollectionIterator();
 		}
 
 		[After]
 		public function tearDown():void
 		{
 
+			_collectionIterator.targetCollection = null;
+			_collectionIterator = null;
 			_collection.dispose();
 			_collection = null;
 		}
@@ -78,7 +82,9 @@ package org.gimmick.collections
 		[Test]
 		public function testIterator():void
 		{
-			Assert.fail('Test not implemented yet!');
+			Assert.assertNotNull(_collection.iterator);
+			Assert.assertEquals(_collectionIterator, _collection.iterator);
+			Assert.assertEquals(_collection, _collectionIterator.collection);
 		}
 
 		[Test]
@@ -99,6 +105,11 @@ package org.gimmick.collections
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
+
+		override public function get iterator():ICollectionIterator
+		{
+			return _collectionIterator;
+		}
 
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================

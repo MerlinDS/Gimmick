@@ -162,8 +162,9 @@ package org.gimmick.collections
 		 */
 		public function get iterator():ICollectionIterator
 		{
-			var iterator:ICollectionIterator = _parent.iterator;
-//			iterator.target(_head, _tail);
+			//TODO change this
+			var iterator:CollectionIterator = _parent.iterator as CollectionIterator;
+			iterator.targetCollection = this;
 			return iterator;
 		}
 
