@@ -48,14 +48,15 @@ package org.gimmick.managers
 		 * @param bits
 		 */
 		function removeBits(entity:IEntity, bits:uint):void;
+
 		/**
 		 *
-		 * @param types
 		 * @return
+		 * @param firstBit
+		 * @param bits
 		 */
 		function getEntities(firstBit:uint = 0x0, bits:uint = 0x0):IEntities;
 
-//		function getPassiveEntities():IEntities;
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
@@ -63,6 +64,10 @@ package org.gimmick.managers
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS
+		/**
+		 *
+		 */
+		function get passiveEntities():IEntities;
 //} endregion GETTERS/SETTERS ==========================================================================================
 	}
 }

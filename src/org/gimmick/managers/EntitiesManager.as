@@ -29,6 +29,9 @@ package org.gimmick.managers
 		private var _active:Dictionary;
 //======================================================================================================================
 //{region											PUBLIC METHODS
+		/**
+		 * Constructor
+		 */
 		public function EntitiesManager()
 		{
 			super ();
@@ -87,12 +90,16 @@ package org.gimmick.managers
 		{
 			//TODO remove form active collection
 		}
-
+		/**
+		 * @inheritDoc
+		 */
 		public function getEntities(firstBit:uint = 0x0, bits:uint = 0x0):IEntities
 		{
 			return null;
 		}
-
+		/**
+		 * @inheritDoc
+		 */
 		public function dispose():void
 		{
 		}
@@ -104,6 +111,13 @@ package org.gimmick.managers
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS
+		/**
+		 * @inheritDoc
+		 */
+		public function get passiveEntities():IEntities
+		{
+			return null;
+		}
 
 //} endregion GETTERS/SETTERS ==========================================================================================
 
