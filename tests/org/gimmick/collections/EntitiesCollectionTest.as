@@ -10,16 +10,13 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/**
- * Created by MerlinDS on 06.07.2015.
- */
 package org.gimmick.collections
 {
 
 	public class EntitiesCollectionTest
 	{
 
-
+		private var _collection:IEntitiesCollection;
 		//======================================================================================================================
 //{region											PUBLIC METHODS
 		public function EntitiesCollectionTest()
@@ -29,13 +26,15 @@ package org.gimmick.collections
 		[Before]
 		public function setUp():void
 		{
-
+			_collection = new EntitiesCollection();
 		}
 
 		[After]
 		public function tearDown():void
 		{
 
+			_collection.dispose();
+			_collection = null;
 		}
 
 		[Test]

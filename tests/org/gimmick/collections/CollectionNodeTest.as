@@ -10,45 +10,48 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/**
- * Created by MerlinDS on 06.07.2015.
- */
 package org.gimmick.collections
 {
 
-	import org.gimmick.core.IEntity;
+	import flexunit.framework.Assert;
 
-	public class EntitiesCollection implements IEntitiesCollection
+	import org.gimmick.utils.TestEntity;
+
+	public class CollectionNodeTest
 	{
 
+		private var _node:CollectionNode;
 		//======================================================================================================================
 //{region											PUBLIC METHODS
-		public function EntitiesCollection()
+		public function CollectionNodeTest()
 		{
 		}
 
-		public function push(entity:IEntity):void
+		[Test(order=1)]
+		public function testAllocateNode():void
 		{
+			_node = CollectionNode.allocateNode();
+			Assert.assertNotNull(_node);
+			_node.entity = new TestEntity();
+
 		}
 
-		public function pop(entity:IEntity):void
+		[Test(order=2)]
+		public function testFreeNode():void
 		{
+			this.testAllocateNode();
+			CollectionNode.freeNode(_node);
+			Assert.assertNull(_node.entity);
 		}
 
-		public function has(entityId:String):Boolean
+		[Test(order=3)]
+		public function testAllocateFromPoolNode():void
 		{
-			return false;
+			this.testFreeNode();
+			var pooledNode:CollectionNode = CollectionNode.allocateNode();
+			Assert.assertNotNull(pooledNode);
+			Assert.assertEquals(_node, pooledNode);
 		}
-
-		public function get(entityId:String):IEntity
-		{
-			return null;
-		}
-
-		public function dispose():void
-		{
-		}
-
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
@@ -57,11 +60,7 @@ package org.gimmick.collections
 //======================================================================================================================
 //{region											GETTERS/SETTERS
 
-		public function get iterator():ICollectionIterator
-		{
-			return null;
-		}
-
 //} endregion GETTERS/SETTERS ==========================================================================================
+
 	}
 }

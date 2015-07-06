@@ -10,43 +10,72 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/**
- * Created by MerlinDS on 06.07.2015.
- */
 package org.gimmick.collections
 {
 
 	import org.gimmick.core.IEntity;
 
-	public class EntitiesCollection implements IEntitiesCollection
+	/**
+	 * Internal class.
+	 * Node for entities collection.
+	 * Contains allocation methods.
+	 */
+	internal class CollectionNode
 	{
+		/**
+		 * Pool for free nodes
+		 */
+		private static const _free:Vector.<CollectionNode> = new <CollectionNode>[];
+		/**
+		 * Link to next node in collection
+		 */
+		public var next:CollectionNode;
+		/**
+		 * Link to previous node in collection
+		 */
+		public var prev:CollectionNode;
 
+		/**
+		 * Value of the node. Link to instance of entity collection.
+		 */
+		public var entity:IEntity;
 		//======================================================================================================================
 //{region											PUBLIC METHODS
-		public function EntitiesCollection()
+
+		/**
+		 * Constructor. Don't use it. Use allocateNode() method instead!
+		 *
+		 * @see org.gimmick.collections.CollectionNode#allocateNode() Use allocateNode() method for node creating
+		 * @see org.gimmick.collections.CollectionNode#freeNode() Use freeNode() for node disposing
+		 */
+		public function CollectionNode()
 		{
 		}
 
-		public function push(entity:IEntity):void
+		/**
+		 * Allocate node for collection. If node does not exist create new one
+		 * @return CollectionNode
+		 */
+		[Inline]
+		public static function allocateNode():CollectionNode
 		{
+			var node:CollectionNode = _free.length == 0 ? new CollectionNode() : _free.pop();
+			return node;
 		}
 
-		public function pop(entity:IEntity):void
+		/**
+		 * Free node and add it to pool for using it next time
+		 * @param node CollectionNode that need to be free
+		 */
+		[Inline]
+		public static function freeNode(node:CollectionNode):void
 		{
-		}
-
-		public function has(entityId:String):Boolean
-		{
-			return false;
-		}
-
-		public function get(entityId:String):IEntity
-		{
-			return null;
-		}
-
-		public function dispose():void
-		{
+			//delete data from node
+			node.entity = null;
+			node.next = null;
+			node.prev = null;
+			//set node to pool
+			_free[_free.length] = node;
 		}
 
 //} endregion PUBLIC METHODS ===========================================================================================
@@ -56,11 +85,6 @@ package org.gimmick.collections
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS
-
-		public function get iterator():ICollectionIterator
-		{
-			return null;
-		}
 
 //} endregion GETTERS/SETTERS ==========================================================================================
 	}
