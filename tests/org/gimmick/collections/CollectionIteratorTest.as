@@ -18,10 +18,10 @@ package org.gimmick.collections
 	import org.gimmick.core.IEntity;
 	import org.gimmick.utils.TestEntity;
 
-	public class CollectionIteratorTest extends EntitiesCollection
+	public class CollectionIteratorTest
 	{
 		private var _entities:Vector.<IEntity>;
-		private var _iterator:CollectionIterator;
+		private var _iterator:EntitiesCollection;
 		//======================================================================================================================
 //{region											PUBLIC METHODS
 		public function CollectionIteratorTest()
@@ -41,20 +41,17 @@ package org.gimmick.collections
 				new TestEntity(),
 				new TestEntity()
 			];
+			_iterator = new EntitiesCollection();
 			for(var i:int = 0; i < _entities.length; i++)
-				this.push(_entities[i]);
-			_iterator = new CollectionIterator();
-			_iterator.targetCollection = this;
+				_iterator.push(_entities[i]);
 
 		}
 
 		[After]
 		public function tearDown():void
 		{
-			_iterator.targetCollection = null;
 			_entities.length = 0;
 			_entities = null;
-			this.dispose();
 		}
 
 		[Test]
@@ -68,13 +65,6 @@ package org.gimmick.collections
 			}
 
 			Assert.assertEquals(0, i);
-		}
-
-		[Test]
-		public function testCollection():void
-		{
-			Assert.assertNotNull(_iterator.collection);
-			Assert.assertEquals(this, _iterator.collection);
 		}
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================

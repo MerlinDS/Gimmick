@@ -49,11 +49,6 @@ package org.gimmick.collections
 		 * Return entity that under internal cursor.
 		 */
 		function get current():IEntity;
-
-		/**
-		 * Collection that iterate current iterator
-		 */
-		function get collection():IEntitiesCollection;
 //} endregion GETTERS/SETTERS ==========================================================================================
 	}
 }

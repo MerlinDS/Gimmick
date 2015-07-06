@@ -20,11 +20,12 @@ package org.gimmick.collections
 	/**
 	 * Concrete entities collection
 	 */
-	public class EntitiesCollection implements IEntitiesCollection
+	public class EntitiesCollection implements IEntitiesCollection, ICollectionIterator
 	{
 
 		private var _parent:IEntitiesCollection;
 		//
+		private var _cursor:CollectionNode;
 		internal var _head:CollectionNode;
 		internal var _tail:CollectionNode;
 
@@ -149,7 +150,34 @@ package org.gimmick.collections
 			_hashMap = null;
 			_parent = null;
 		}
+		//internal iterator implementation
+		/**
+		 * @inheritDoc
+		 */
+		[Inline]
+		public final function begin():ICollectionIterator
+		{
+			_cursor = _head;
+			return this;
+		}
 
+		/**
+		 * @inheritDoc
+		 */
+		[Inline]
+		public final function end():Boolean
+		{
+			return _cursor == null;
+		}
+
+		/**
+		 * @inheritDoc
+		 */
+		[Inline]
+		public final function next():void
+		{
+			_cursor = _cursor.next;
+		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
@@ -160,14 +188,11 @@ package org.gimmick.collections
 		/**
 		 * @inheritDoc
 		 */
-		public function get iterator():ICollectionIterator
+		[Inline]
+		public final function get current():IEntity
 		{
-			//TODO change this
-			var iterator:CollectionIterator = _parent.iterator as CollectionIterator;
-			iterator.targetCollection = this;
-			return iterator;
+			return _cursor != null ? _cursor.entity : null;
 		}
-
 //} endregion GETTERS/SETTERS ==========================================================================================
 	}
 }
