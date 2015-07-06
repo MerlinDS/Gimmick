@@ -10,85 +10,16 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.gimmick.managers
+/**
+ * Created by MerlinDS on 06.07.2015.
+ */
+package org.gimmick.collections
 {
 
-	import org.gimmick.collections.IEntities;
-	import org.gimmick.core.*;
-
-	/**
-	 * Manager for controlling of entities
-	 */
-	internal class EntitiesManager implements IEntitiesManager
+	public interface IEntities extends IEntitiesCollection, ICollectionIterator
 	{
-
-
-//======================================================================================================================
+		//======================================================================================================================
 //{region											PUBLIC METHODS
-		public function EntitiesManager()
-		{
-			super ();
-		}
-
-		/**
-		 * @inheritDoc
-		 */
-		public function initialize():void
-		{
-
-		}
-
-		/**
-		 * @inheritDoc
-		 */
-		public function addEntity(entity:IEntity):void
-		{
-
-		}
-		/**
-		 * @inheritDoc
-		 */
-		public function removeEntity(entity:IEntity):void
-		{
-
-		}
-		/**
-		 * @inheritDoc
-		 */
-		public function getEntity(id:String):IEntity
-		{
-			return null;
-		}
-		/**
-		 * @inheritDoc
-		 */
-		public function changeEntityActivity(entity:IEntity):void
-		{
-
-		}
-		/**
-		 * @inheritDoc
-		 */
-		public function addToCollection(entity:IEntity, componentType:ComponentType):void
-		{
-
-		}
-		/**
-		 * @inheritDoc
-		 */
-		public function removeFromCollection(entity:IEntity, componentType:ComponentType):void
-		{
-
-		}
-
-		public function getEntities(...types):IEntities
-		{
-			return null;
-		}
-
-		public function dispose():void
-		{
-		}
 
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
@@ -97,12 +28,7 @@ package org.gimmick.managers
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS
-		public function get entities():IEntities
-		{
-			return null;
-		}
 
 //} endregion GETTERS/SETTERS ==========================================================================================
-
 	}
 }

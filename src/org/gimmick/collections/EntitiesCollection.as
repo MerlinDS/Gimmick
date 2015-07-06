@@ -20,7 +20,7 @@ package org.gimmick.collections
 	/**
 	 * Concrete entities collection
 	 */
-	public class EntitiesCollection implements IEntitiesCollection, ICollectionIterator
+	public class EntitiesCollection implements IEntities
 	{
 
 		private var _parent:IEntitiesCollection;
