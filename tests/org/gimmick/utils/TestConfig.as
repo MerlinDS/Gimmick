@@ -80,13 +80,8 @@ class TestEntityManager implements IEntitiesManager
 	public function changeEntityActivity(entity:IEntity):void{}
 	public function addBits(entity:IEntity, bits:uint):void {}
 	public function removeBits(entity:IEntity, bits:uint):void {}
-	public function get entities():IEntities{return null;}
 	public function dispose():void{}
 	public function initialize():void{}
 	public function getEntities(firstBit:uint = 0x0, bits:uint = 0x0):IEntities{return null;}
-	public function begin():void{}
-	public function end():Boolean{return false;}
-	public function next():void{}
-	public function getEntity(id:String):IEntity{return null;}
-	public function get current():IEntity{return null;}
+	public function get passiveEntities():IEntities{return null;};
 }
