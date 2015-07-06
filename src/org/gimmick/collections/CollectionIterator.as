@@ -84,9 +84,13 @@ package org.gimmick.collections
 		 */
 		internal function set targetCollection(collection:EntitiesCollection):void
 		{
-			_collection = collection;
-			if(_collection != null)this.begin();
-			else _cursor = null;
+			//do nothing if collection was not changed
+			if(_collection != collection)
+			{
+				_collection = collection;
+				if(_collection != null)this.begin();
+				else _cursor = null;
+			}
 		}
 //} endregion GETTERS/SETTERS ==========================================================================================
 	}
