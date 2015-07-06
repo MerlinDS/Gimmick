@@ -25,8 +25,8 @@ package org.gimmick.collections
 
 		private var _parent:IEntitiesCollection;
 		//
-		private var _head:CollectionNode;
-		private var _tail:CollectionNode;
+		internal var _head:CollectionNode;
+		internal var _tail:CollectionNode;
 
 		/**
 		 * Hash map of collection nodes.

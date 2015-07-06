@@ -15,29 +15,46 @@ package org.gimmick.collections
 
 	import org.gimmick.core.IEntity;
 
-	/**
-	 * Interface of collection iterator
-	 */
-	public interface ICollectionIterator
+	public class CollectionIterator implements ICollectionIterator
 	{
+		private var _cursor:CollectionNode;
+		private var _collection:EntitiesCollection;
 		//======================================================================================================================
 //{region											PUBLIC METHODS
 		/**
-		 * Method for iterations. Move internal cursor to first element of collection.
-		 * @return Current collection
+		 * Constructor
 		 */
-		function begin():ICollectionIterator;
+		public function CollectionIterator()
+		{
+		}
 
 		/**
-		 * Method for iterations. Flag of the end of collection that indicate end of iteration.
-		 * @return True if internal cursor points to last element of collection. In other return false.
+		 * @inheritDoc
 		 */
-		function end():Boolean;
+		[Inline]
+		public final function begin():ICollectionIterator
+		{
+			_cursor = _collection._head;
+			return this;
+		}
 
 		/**
-		 * Method for iterations. Move internal cursor to next element of collection.
+		 * @inheritDoc
 		 */
-		function next():void;
+		[Inline]
+		public final function end():Boolean
+		{
+			return _cursor == null;
+		}
+
+		/**
+		 * @inheritDoc
+		 */
+		[Inline]
+		public final function next():void
+		{
+			_cursor = _cursor.next;
+		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
@@ -46,14 +63,31 @@ package org.gimmick.collections
 //======================================================================================================================
 //{region											GETTERS/SETTERS
 		/**
-		 * Return entity that under internal cursor.
+		 * @inheritDoc
 		 */
-		function get current():IEntity;
+		[Inline]
+		public final function get current():IEntity
+		{
+			return _cursor != null ? _cursor.entity : null;
+		}
 
 		/**
-		 * Collection that iterate current iterator
+		 * @inheritDoc
 		 */
-		function get collection():IEntitiesCollection;
+		public function get collection():IEntitiesCollection
+		{
+			return _collection;
+		}
+
+		/**
+		 * Internal method for set new collection to iterator
+		 */
+		internal function set targetCollection(collection:EntitiesCollection):void
+		{
+			_collection = collection;
+			if(_collection != null)this.begin();
+			else _cursor = null;
+		}
 //} endregion GETTERS/SETTERS ==========================================================================================
 	}
 }

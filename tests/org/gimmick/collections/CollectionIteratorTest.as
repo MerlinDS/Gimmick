@@ -13,47 +13,74 @@
 package org.gimmick.collections
 {
 
-	import org.gimmick.core.IEntity;
+	import flexunit.framework.Assert;
 
-	/**
-	 * Interface of collection iterator
-	 */
-	public interface ICollectionIterator
+	import org.gimmick.core.IEntity;
+	import org.gimmick.utils.TestEntity;
+
+	public class CollectionIteratorTest extends EntitiesCollection
 	{
+		private var _entities:Vector.<IEntity>;
+		private var _iterator:CollectionIterator;
 		//======================================================================================================================
 //{region											PUBLIC METHODS
-		/**
-		 * Method for iterations. Move internal cursor to first element of collection.
-		 * @return Current collection
-		 */
-		function begin():ICollectionIterator;
+		public function CollectionIteratorTest()
+		{
+		}
 
-		/**
-		 * Method for iterations. Flag of the end of collection that indicate end of iteration.
-		 * @return True if internal cursor points to last element of collection. In other return false.
-		 */
-		function end():Boolean;
-
-		/**
-		 * Method for iterations. Move internal cursor to next element of collection.
-		 */
-		function next():void;
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
+		[Before]
+		public function setUp():void
+		{
+			_entities = new <IEntity>[
+				new TestEntity(),
+				new TestEntity(),
+				new TestEntity(),
+				new TestEntity(),
+				new TestEntity()
+			];
+			for(var i:int = 0; i < _entities.length; i++)
+				this.push(_entities[i]);
+			_iterator = new CollectionIterator();
+			_iterator.targetCollection = this;
 
+		}
+
+		[After]
+		public function tearDown():void
+		{
+			_iterator.targetCollection = null;
+			_entities.length = 0;
+			_entities = null;
+			this.dispose();
+		}
+
+		[Test]
+		public function testIterations():void
+		{
+			var i:int = _entities.length;
+			for(_iterator.begin(); !_iterator.end(); _iterator.next())
+			{
+				Assert.assertNotNull(_iterator.current);
+				i--;
+			}
+
+			Assert.assertEquals(0, i);
+		}
+
+		[Test]
+		public function testCollection():void
+		{
+			Assert.assertNotNull(_iterator.collection);
+			Assert.assertEquals(this, _iterator.collection);
+		}
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS
-		/**
-		 * Return entity that under internal cursor.
-		 */
-		function get current():IEntity;
 
-		/**
-		 * Collection that iterate current iterator
-		 */
-		function get collection():IEntitiesCollection;
 //} endregion GETTERS/SETTERS ==========================================================================================
+
 	}
 }
