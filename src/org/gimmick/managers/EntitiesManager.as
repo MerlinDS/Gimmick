@@ -16,7 +16,6 @@ package org.gimmick.managers
 	import org.gimmick.collections.EntitiesCollection;
 	import org.gimmick.collections.IEntitiesCollection;
 	import org.gimmick.core.*;
-	import org.gimmick.utils.SetList;
 
 	/**
 	 * Manager for controlling of entities
@@ -24,8 +23,8 @@ package org.gimmick.managers
 	internal class EntitiesManager extends EntitiesCollection implements IEntitiesManager
 	{
 
-		private var _activeEntities:SetList;
-		private var _passiveEntities:SetList;
+		private var _activeEntities:Vector.<IEntity>;
+		private var _passiveEntities:Vector.<IEntity>;
 
 		private var _collectionPool:Vector.<EntitiesCollection>;
 		private var _existCollections:Vector.<EntitiesCollection>;
@@ -41,8 +40,8 @@ package org.gimmick.managers
 		 */
 		public function initialize():void
 		{
-			_passiveEntities = new SetList();
-			_activeEntities = new SetList();
+			_passiveEntities = new <IEntity>[];
+			_activeEntities = new <IEntity>[];
 
 		}
 
@@ -51,38 +50,43 @@ package org.gimmick.managers
 		 */
 		public function addEntity(entity:IEntity):void
 		{
-			_passiveEntities.addValue(entity.id, entity);
+			_passiveEntities[_passiveEntities.length] = entity;
 		}
 		/**
-		 * Remove entity
-		 * @param entity Instance of the entity
+		 * @inheritDoc
 		 */
 		public function removeEntity(entity:IEntity):void
 		{
 
 		}
-
+		/**
+		 * @inheritDoc
+		 */
+		override public function getEntity(id:String):IEntity
+		{
+			return null;
+		}
+		/**
+		 * @inheritDoc
+		 */
 		public function changeEntityActivity(entity:IEntity):void
 		{
 
 		}
-
-
-		public function addToFilter(entity:IEntity, componentType:ComponentType):void
+		/**
+		 * @inheritDoc
+		 */
+		public function addToCollection(entity:IEntity, componentType:ComponentType):void
 		{
 
 		}
-
-		public function removeFromFilter(entity:IEntity, componentType:ComponentType):void
+		/**
+		 * @inheritDoc
+		 */
+		public function removeFromCollection(entity:IEntity, componentType:ComponentType):void
 		{
 
 		}
-
-		public function get collection():IEntitiesCollection
-		{
-			return this;
-		}
-
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
@@ -90,7 +94,10 @@ package org.gimmick.managers
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS
-
+		public function get collection():IEntitiesCollection
+		{
+			return this;
+		}
 //} endregion GETTERS/SETTERS ==========================================================================================
 
 	}

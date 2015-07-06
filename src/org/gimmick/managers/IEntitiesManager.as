@@ -16,10 +16,10 @@ package org.gimmick.managers
 	import org.gimmick.collections.IEntitiesCollection;
 	import org.gimmick.core.ComponentType;
 	import org.gimmick.core.IEntity;
-	import org.gimmick.managers.IGimmickManager;
 
-	public interface IEntitiesManager extends IGimmickManager
+	public interface IEntitiesManager extends IEntitiesCollection, IGimmickManager
 	{
+		//TODO add descriptions
 		//======================================================================================================================
 //{region											PUBLIC METHODS
 		/**
@@ -42,15 +42,13 @@ package org.gimmick.managers
 		 * @param entity
 		 * @param componentType
 		 */
-		function addToFilter(entity:IEntity, componentType:ComponentType):void;
+		function addToCollection(entity:IEntity, componentType:ComponentType):void;
 		/**
 		 *
 		 * @param entity
 		 * @param componentType
 		 */
-		function removeFromFilter(entity:IEntity, componentType:ComponentType):void;
-
-		function get collection():IEntitiesCollection;
+		function removeFromCollection(entity:IEntity, componentType:ComponentType):void;
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
@@ -58,7 +56,10 @@ package org.gimmick.managers
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS
-
+		/**
+		 *
+		 */
+		function get collection():IEntitiesCollection;
 //} endregion GETTERS/SETTERS ==========================================================================================
 	}
 }

@@ -10,9 +10,6 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/**
- * Created by MerlinDS on 05.07.2015.
- */
 package org.gimmick.utils
 {
 
@@ -26,6 +23,10 @@ package org.gimmick.utils
 		public function TestConfig()
 		{
 			super (new TestSystemManager(), new TestComponentManager(), new TestEntityManager());
+			this.systemManager.initialize();
+			this.componentsManager.initialize();
+			this.componentTypeManager.initialize();
+			this.entitiesManager.initialize();
 		}
 
 //} endregion PUBLIC METHODS ===========================================================================================
@@ -76,9 +77,15 @@ class TestEntityManager implements IEntitiesManager
 	public function addEntity(entity:IEntity):void{}
 	public function removeEntity(entity:IEntity):void{}
 	public function changeEntityActivity(entity:IEntity):void{}
-	public function addToFilter(entity:IEntity, componentType:ComponentType):void{}
-	public function removeFromFilter(entity:IEntity, componentType:ComponentType):void{}
+	public function addToCollection(entity:IEntity, componentType:ComponentType):void{}
+	public function removeFromCollection(entity:IEntity, componentType:ComponentType):void{}
 	public function get collection():IEntitiesCollection{return null;}
 	public function dispose():void{}
 	public function initialize():void{}
+	public function getCollection(...types):IEntitiesCollection{return null;}
+	public function begin():void{}
+	public function end():Boolean{return false;}
+	public function next():void{}
+	public function getEntity(id:String):IEntity{return null;}
+	public function get current():IEntity{return null;}
 }

@@ -42,7 +42,6 @@ package org.gimmick.core
 			_testComponent = new TestComponent();
 			//create managers
 			var config:TestConfig = new TestConfig();
-			config.componentTypeManager.initialize();
 			_entity.componentTypeManager = config.componentTypeManager;
 			_entity.componentsManager = new TestComponentsManager(_testComponent);
 			_entity.entitiesManager = config.entitiesManager;
