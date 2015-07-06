@@ -18,7 +18,7 @@ package org.gimmick.collections
 	/**
 	 * Interface of entities collection.
 	 */
-	public interface IEntityList
+	public interface IEntityCollection
 	{
 //======================================================================================================================
 //{region											PUBLIC METHODS

@@ -13,7 +13,7 @@
 package org.gimmick.managers
 {
 
-	import org.gimmick.collections.IEntityList;
+	import org.gimmick.collections.IEntityCollection;
 	import org.gimmick.core.*;
 
 	/**
@@ -81,7 +81,7 @@ package org.gimmick.managers
 
 		}
 
-		public function getCollection(...types):IEntityList
+		public function getCollection(...types):IEntityCollection
 		{
 			return null;
 		}
@@ -97,7 +97,7 @@ package org.gimmick.managers
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS
-		public function get collection():IEntityList
+		public function get collection():IEntityCollection
 		{
 			return null;
 		}

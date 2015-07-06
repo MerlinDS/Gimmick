@@ -26,7 +26,7 @@ package org.gimmick.collections
 		 * Method for iterations. Move internal cursor to first element of collection.
 		 * @return Current collection
 		 */
-		function begin():IEntityList;
+		function begin():IEntityCollection;
 
 		/**
 		 * Method for iterations. Flag of the end of collection that indicate end of iteration.

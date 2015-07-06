@@ -13,7 +13,7 @@
 package org.gimmick.managers
 {
 
-	import org.gimmick.collections.IEntityList;
+	import org.gimmick.collections.IEntityCollection;
 	import org.gimmick.core.ComponentType;
 	import org.gimmick.core.IEntity;
 
@@ -59,13 +59,13 @@ package org.gimmick.managers
 		/**
 		 *
 		 */
-		function get collection():IEntityList;
+		function get collection():IEntityCollection;
 		/**
 		 *
 		 * @param types
 		 * @return
 		 */
-		function getCollection(...types):IEntityList;
+		function getCollection(...types):IEntityCollection;
 //} endregion GETTERS/SETTERS ==========================================================================================
 	}
 }
