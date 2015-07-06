@@ -15,6 +15,9 @@ package org.gimmick.collections
 
 	import org.gimmick.core.IEntity;
 
+	/**
+	 * External collection iterator
+	 */
 	public class CollectionIterator implements ICollectionIterator
 	{
 		private var _cursor:CollectionNode;
