@@ -39,6 +39,8 @@ package org.gimmick.collections
 		 * Value of the node. Link to instance of entity collection.
 		 */
 		public var entity:IEntity;
+
+		private var _allocated:Boolean;
 		//======================================================================================================================
 //{region											PUBLIC METHODS
 
@@ -60,6 +62,7 @@ package org.gimmick.collections
 		public static function allocateNode():CollectionNode
 		{
 			var node:CollectionNode = _free.length == 0 ? new CollectionNode() : _free.pop();
+			node._allocated = true;
 			return node;
 		}
 
@@ -70,12 +73,17 @@ package org.gimmick.collections
 		[Inline]
 		public static function freeNode(node:CollectionNode):void
 		{
-			//delete data from node
-			node.entity = null;
-			node.next = null;
-			node.prev = null;
-			//set node to pool
-			_free[_free.length] = node;
+			//if node allocated
+			if(node._allocated)
+			{
+				//delete data from node
+				node.entity = null;
+				node.next = null;
+				node.prev = null;
+				node._allocated = false;
+				//set node to pool
+				_free[_free.length] = node;
+			}
 		}
 
 //} endregion PUBLIC METHODS ===========================================================================================
