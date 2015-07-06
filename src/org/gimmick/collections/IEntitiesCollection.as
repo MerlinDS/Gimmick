@@ -27,6 +27,8 @@ package org.gimmick.collections
 		 * Get new collection for set of types
 		 * @param types Types of the components
 		 * @return new IEntitiesCollection
+		 *
+		 * @throws Error Collection has no parent (internal error)
 		 */
 		function getCollection(...types):IEntitiesCollection;
 
@@ -50,6 +52,15 @@ package org.gimmick.collections
 		 * Move cursor to nest entity in entities collection
 		 */
 		function next():void;
+
+		/**
+		 * Get exist entity by it's unique ID that was added to this collection
+		 * @param id Unique ID of the entity
+		 * @return Instance of the entity
+		 *
+		 * @throws Error Collection has no parent (internal error)
+		 */
+		function getEntity(id:String):IEntity;
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS

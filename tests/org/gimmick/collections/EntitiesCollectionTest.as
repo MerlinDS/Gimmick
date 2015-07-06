@@ -62,7 +62,44 @@ package org.gimmick.collections
 			var entityCollection:IEntitiesCollection = _collection.getCollection();
 			Assert.assertNotNull(entityCollection);
 			Assert.assertEquals(_collection, entityCollection);
+		}
 
+		override public function getCollection(...types):IEntitiesCollection
+		{
+			return _collection;
+		}
+
+		[Test]
+		public function testGetEntity():void
+		{
+			for(var i:int = 0; i < _entities.length; i++)
+			{
+				var entity:IEntity = _entities[i];
+				if(entity.bits & _bits)
+				{
+					Assert.assertNotNull(_collection.getEntity(entity.id));
+					Assert.assertEquals(entity, _collection.getEntity(entity.id));
+				}
+				else
+				{
+					Assert.assertNull(_collection.getEntity(entity.id));
+				}
+			}
+			Assert.assertNull(_collection.getEntity('this entity was not added'));
+
+		}
+
+		override public function getEntity(id:String):IEntity
+		{
+			var entity:IEntity;
+			//get exist entity
+			for(var i:int = 0; i < _entities.length; i++)
+			{
+				entity = _entities[i];
+				if(entity.id == id)break;
+				entity = null;
+			}
+			return entity;
 		}
 
 		[Test]
@@ -87,10 +124,7 @@ package org.gimmick.collections
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
 
-		override public function getCollection(...types):IEntitiesCollection
-		{
-			return _collection;
-		}
+
 
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
@@ -101,18 +135,24 @@ package org.gimmick.collections
 }
 
 import org.gimmick.core.IEntity;
+import org.gimmick.utils.getUniqueId;
+
 //class TestComponent{}
 class TestEntity implements IEntity
 {
 
 	private var _bits:uint;
-	public function TestEntity(bits:uint){_bits = bits;}
+	private var _id:String;
+	public function TestEntity(bits:uint){
+		_bits = bits;
+		_id = getUniqueId();
+	}
 	public function add(component:Object):*{return null;}
 	public function has(component:Class):Boolean{return false;}
 	public function get(component:Class):*{return null;}
 	public function remove(component:Class):void{}
 	public function get name():String{return "";}
-	public function get id():String{return "";}
+	public function get id():String{return _id;}
 	public function get components():Array{return null;}
 	public function set active(value:Boolean):void{}
 	public function get active():Boolean{return false;}

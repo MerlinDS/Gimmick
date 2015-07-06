@@ -32,6 +32,9 @@ package org.gimmick.collections
 			_bits = bits;
 		}
 
+		/**
+		 * @inheritDoc
+		 */
 		[Inline]
 		public final function begin():void
 		{
@@ -39,13 +42,17 @@ package org.gimmick.collections
 			if((_entities[_cursor].bits & _bits) == false)
 				this.next();
 		}
-
+		/**
+		 * @inheritDoc
+		 */
 		[Inline]
 		public final function end():Boolean
 		{
 			return _cursor >= _entities.length;
 		}
-
+		/**
+		 * @inheritDoc
+		 */
 		[Inline]
 		public final function next():void
 		{
@@ -54,15 +61,30 @@ package org.gimmick.collections
 				(_entities[_cursor].bits & _bits) == false
 			)_cursor++;
 		}
-
+		/**
+		 * @inheritDoc
+		 */
 		public function getCollection(...types):IEntitiesCollection
 		{
 			var collection:EntitiesCollection;
 			if(_parent == null)
-				throw new Error("Parent of this collection is null! Something goes wrong!");
+				throw new Error("This collection has no parent! Something goes wrong!");
 			return _parent.getCollection.apply(this, types);
 		}
-
+		/**
+		 * @inheritDoc
+		 */
+		public function getEntity(id:String):IEntity
+		{
+			if(_parent == null)
+				throw new Error("This collection has no parent! Something goes wrong!");
+			var entity:IEntity = _parent.getEntity(id);
+			//check affiliation of entity to this collection
+			return entity != null && (entity.bits & _bits) ? entity : null;
+		}
+		/**
+		 * @inheritDoc
+		 */
 		public function dispose():void
 		{
 			_bits = 0x0;
@@ -76,7 +98,9 @@ package org.gimmick.collections
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS
-
+		/**
+		 * @inheritDoc
+		 */
 		[Inline]
 		public final function get current():IEntity
 		{
