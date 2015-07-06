@@ -13,11 +13,11 @@
 package org.gimmick.managers
 {
 
-	import org.gimmick.collections.IEntitiesCollection;
+	import org.gimmick.collections.IEntityList;
 	import org.gimmick.core.ComponentType;
 	import org.gimmick.core.IEntity;
 
-	public interface IEntitiesManager extends IEntitiesCollection, IGimmickManager
+	public interface IEntitiesManager extends IGimmickManager
 	{
 		//TODO add descriptions
 		//======================================================================================================================
@@ -59,7 +59,13 @@ package org.gimmick.managers
 		/**
 		 *
 		 */
-		function get collection():IEntitiesCollection;
+		function get collection():IEntityList;
+		/**
+		 *
+		 * @param types
+		 * @return
+		 */
+		function getCollection(...types):IEntityList;
 //} endregion GETTERS/SETTERS ==========================================================================================
 	}
 }

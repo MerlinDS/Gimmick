@@ -16,62 +16,51 @@ package org.gimmick.collections
 	import org.gimmick.core.IEntity;
 
 	/**
-	 * Interface for entities collection.
-	 * Contains iterator of entities.
+	 * Interface of entities collection.
 	 */
-	public interface IEntitiesCollection
+	public interface IEntityList
 	{
-		//======================================================================================================================
+//======================================================================================================================
 //{region											PUBLIC METHODS
+		//list methods
 		/**
-		 * Get new collection for set of types
-		 * @param types Types of the components
-		 * @return new IEntitiesCollection
-		 *
-		 * @throws Error Collection has no parent (internal error)
+		 * Push Entity to collection
+		 * @param entity Instance of entity
 		 */
-		function getCollection(...types):IEntitiesCollection;
+		function push(entity:IEntity):void;
 
 		/**
-		 * Dispose collection. Prepare collection for GC
+		 * Pop Entity from collection
+		 * @param entity Instance of entity
+		 */
+		function pop(entity:IEntity):void;
+
+		/**
+		 * Check if collection contains entity with id
+		 * @param entityId Entity Id
+		 * @return True if collection contains such entity. False in other case
+		 */
+		function has(entityId:String):Boolean;
+
+		/**
+		 * Get entity from collection by id
+		 * @param entityId Entity Id
+		 * @return Instance of entity if collection contains such entity. Null in other case
+		 */
+		function get(entityId:String):IEntity;
+
+		/**
+		 * Dispose collection and prepare it for GC
 		 */
 		function dispose():void;
-		/* iterator */
-		/**
-		 * Set cursor to begin of collection
-		 */
-		function begin():void;
-
-		/**
-		 * Flag that indicate tail of entities collection
-		 * @return True if cursor pointed to tail on entities collection. False in other case.
-		 */
-		function end():Boolean;
-
-		/**
-		 * Move cursor to nest entity in entities collection
-		 */
-		function next():void;
-
-		/**
-		 * Get exist entity by it's unique ID that was added to this collection
-		 * @param id Unique ID of the entity
-		 * @return Instance of the entity
-		 *
-		 * @throws Error Collection has no parent (internal error)
-		 */
-		function getEntity(id:String):IEntity;
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
-
+		function get iterator():ICollectionIterator;
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS
-		/**
-		 * Get entity from collection that under cursor
-		 */
-		function get current():IEntity;
+
 //} endregion GETTERS/SETTERS ==========================================================================================
 	}
 }

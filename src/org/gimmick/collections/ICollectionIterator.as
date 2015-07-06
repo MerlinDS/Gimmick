@@ -15,97 +15,40 @@ package org.gimmick.collections
 
 	import org.gimmick.core.IEntity;
 
-	public class EntitiesCollection implements IEntitiesCollection
+	/**
+	 * Interface of collection iterator
+	 */
+	public interface ICollectionIterator
 	{
-
-		private var _bits:uint;
-		private var _cursor:int;
-		private var _entities:Vector.<IEntity>;
-		private var _parent:EntitiesCollection;
 		//======================================================================================================================
 //{region											PUBLIC METHODS
-		public function EntitiesCollection(entities:Vector.<IEntity>, bits:uint,
-										   parent:EntitiesCollection = null)
-		{
-			_entities = entities;
-			_parent = parent;
-			_bits = bits;
-		}
+		/**
+		 * Method for iterations. Move internal cursor to first element of collection.
+		 * @return Current collection
+		 */
+		function begin():IEntityList;
 
 		/**
-		 * @inheritDoc
+		 * Method for iterations. Flag of the end of collection that indicate end of iteration.
+		 * @return True if internal cursor points to last element of collection. In other return false.
 		 */
-		[Inline]
-		public final function begin():void
-		{
-			_cursor = 0;
-			if((_entities[_cursor].bits & _bits) == false)
-				this.next();
-		}
+		function end():Boolean;
+
 		/**
-		 * @inheritDoc
+		 * Method for iterations. Move internal cursor to next element of collection.
 		 */
-		[Inline]
-		public final function end():Boolean
-		{
-			return _cursor >= _entities.length;
-		}
-		/**
-		 * @inheritDoc
-		 */
-		[Inline]
-		public final function next():void
-		{
-			_cursor++;
-			while(_cursor < _entities.length &&
-				(_entities[_cursor].bits & _bits) == false
-			)_cursor++;
-		}
-		/**
-		 * @inheritDoc
-		 */
-		public function getCollection(...types):IEntitiesCollection
-		{
-			var collection:EntitiesCollection;
-			if(_parent == null)
-				throw new Error("This collection has no parent! Something goes wrong!");
-			return _parent.getCollection.apply(this, types);
-		}
-		/**
-		 * @inheritDoc
-		 */
-		public function getEntity(id:String):IEntity
-		{
-			if(_parent == null)
-				throw new Error("This collection has no parent! Something goes wrong!");
-			var entity:IEntity = _parent.getEntity(id);
-			//check affiliation of entity to this collection
-			return entity != null && (entity.bits & _bits) ? entity : null;
-		}
-		/**
-		 * @inheritDoc
-		 */
-		public function dispose():void
-		{
-			_bits = 0x0;
-			_cursor = 0;
-			_entities = null;
-			_parent = null;
-		}
+		function next():void;
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
+
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS
 		/**
-		 * @inheritDoc
+		 * Return entity that under internal cursor.
 		 */
-		[Inline]
-		public final function get current():IEntity
-		{
-			return _entities[ _cursor ] as IEntity;
-		}
+		function get current():IEntity;
 //} endregion GETTERS/SETTERS ==========================================================================================
 	}
 }

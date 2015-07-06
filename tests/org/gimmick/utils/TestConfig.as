@@ -40,7 +40,8 @@ package org.gimmick.utils
 //} endregion GETTERS/SETTERS ==========================================================================================        
 	}
 }
-import org.gimmick.collections.IEntitiesCollection;
+
+import org.gimmick.collections.IEntityList;
 import org.gimmick.core.ComponentType;
 import org.gimmick.core.EntitySystem;
 import org.gimmick.core.IEntity;
@@ -79,10 +80,10 @@ class TestEntityManager implements IEntitiesManager
 	public function changeEntityActivity(entity:IEntity):void{}
 	public function addToCollection(entity:IEntity, componentType:ComponentType):void{}
 	public function removeFromCollection(entity:IEntity, componentType:ComponentType):void{}
-	public function get collection():IEntitiesCollection{return null;}
+	public function get collection():IEntityList{return null;}
 	public function dispose():void{}
 	public function initialize():void{}
-	public function getCollection(...types):IEntitiesCollection{return null;}
+	public function getCollection(...types):IEntityList{return null;}
 	public function begin():void{}
 	public function end():Boolean{return false;}
 	public function next():void{}

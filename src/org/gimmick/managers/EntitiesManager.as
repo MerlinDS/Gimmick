@@ -13,26 +13,21 @@
 package org.gimmick.managers
 {
 
-	import org.gimmick.collections.EntitiesCollection;
-	import org.gimmick.collections.IEntitiesCollection;
+	import org.gimmick.collections.IEntityList;
 	import org.gimmick.core.*;
 
 	/**
 	 * Manager for controlling of entities
 	 */
-	internal class EntitiesManager extends EntitiesCollection implements IEntitiesManager
+	internal class EntitiesManager implements IEntitiesManager
 	{
 
-		private var _activeEntities:Vector.<IEntity>;
-		private var _passiveEntities:Vector.<IEntity>;
 
-		private var _collectionPool:Vector.<EntitiesCollection>;
-		private var _existCollections:Vector.<EntitiesCollection>;
 //======================================================================================================================
 //{region											PUBLIC METHODS
 		public function EntitiesManager()
 		{
-			super (null, 0x0);
+			super ();
 		}
 
 		/**
@@ -40,8 +35,6 @@ package org.gimmick.managers
 		 */
 		public function initialize():void
 		{
-			_passiveEntities = new <IEntity>[];
-			_activeEntities = new <IEntity>[];
 
 		}
 
@@ -50,7 +43,7 @@ package org.gimmick.managers
 		 */
 		public function addEntity(entity:IEntity):void
 		{
-			_passiveEntities[_passiveEntities.length] = entity;
+
 		}
 		/**
 		 * @inheritDoc
@@ -62,7 +55,7 @@ package org.gimmick.managers
 		/**
 		 * @inheritDoc
 		 */
-		override public function getEntity(id:String):IEntity
+		public function getEntity(id:String):IEntity
 		{
 			return null;
 		}
@@ -87,6 +80,16 @@ package org.gimmick.managers
 		{
 
 		}
+
+		public function getCollection(...types):IEntityList
+		{
+			return null;
+		}
+
+		public function dispose():void
+		{
+		}
+
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
@@ -94,10 +97,11 @@ package org.gimmick.managers
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS
-		public function get collection():IEntitiesCollection
+		public function get collection():IEntityList
 		{
-			return this;
+			return null;
 		}
+
 //} endregion GETTERS/SETTERS ==========================================================================================
 
 	}
