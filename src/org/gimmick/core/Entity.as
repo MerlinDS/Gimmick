@@ -80,7 +80,7 @@ package org.gimmick.core
 		 * @inheritDoc
 		 */
 		[Inline]
-		public final function add(component:Object):*
+		public final function add(component:Component):Component
 		{
 			var componentType:ComponentType = _componentTypeManager.getType(component);
 			_componentsManager.addComponent(this, componentType, component);
@@ -104,7 +104,7 @@ package org.gimmick.core
 		 * @inheritDoc
 		 */
 		[Inline]
-		public final function get(component:Class):*
+		public final function get(component:Class):Component
 		{
 			var componentType:ComponentType = _componentTypeManager.getType(component);
 			//for faster works copy code from has method

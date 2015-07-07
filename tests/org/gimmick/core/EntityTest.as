@@ -141,12 +141,14 @@ package org.gimmick.core
 
 import flexunit.framework.Assert;
 
+import org.gimmick.core.Component;
+
 import org.gimmick.core.ComponentType;
 import org.gimmick.core.IEntity;
 import org.gimmick.managers.IComponentsManager;
 
-class TestComponent{}
-class NotAddedTestComponent{}
+class TestComponent extends Component{}
+class NotAddedTestComponent extends Component{}
 //Fake managers
 class TestComponentsManager implements IComponentsManager
 {

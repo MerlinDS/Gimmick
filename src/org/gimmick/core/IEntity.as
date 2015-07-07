@@ -40,10 +40,19 @@ package org.gimmick.core
 //{region											PUBLIC METHODS
 		/**
 		 * Add component to Entity. If component with similar type was already added new component will replace it.
-		 * @param component Instance of the component
-		 * @return Instance of the component. For chaining.
+		 *
+		 * @param component Instance of the component.
+		 * @return Instance of the component that was added to entity. For chaining.
+		 *
+		 * @see org.gimmick.core.Component Abstract Component super class
+		 *
+		 * @example
+		 * <listing version="3.0">
+		 *     var entity:IEntity = Gimmick.createEntity('Entity name');
+		 *     var component:SomeComponent = entity.add(new SomeComponent());
+		 * </listing>
 		 */
-		function add(component:Object):*;
+		function add(component:Component):Component;
 
 		/**
 		 * Check if component was linked to Entity
@@ -57,8 +66,10 @@ package org.gimmick.core
 		 * this method will return null.
 		 * @param component Component Class
 		 * @return Instance of the component.
+		 *
+		 * @see org.gimmick.core.Component Abstract Component super class
 		 */
-		function get(component:Class):*;
+		function get(component:Class):Component;
 
 		/**
 		 * Remove component from Entity.

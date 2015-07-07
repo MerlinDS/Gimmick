@@ -13,6 +13,7 @@
 package org.gimmick.utils
 {
 
+	import org.gimmick.core.Component;
 	import org.gimmick.core.IEntity;
 
 	public class TestEntity implements IEntity
@@ -28,7 +29,7 @@ package org.gimmick.utils
 			_bits = bits;
 		}
 
-		public function add(component:Object):*
+		public function add(component:Component):Component
 		{
 			return null;
 		}
@@ -38,7 +39,7 @@ package org.gimmick.utils
 			return false;
 		}
 
-		public function get(component:Class):*
+		public function get(component:Class):Component
 		{
 			return null;
 		}
