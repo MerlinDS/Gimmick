@@ -113,6 +113,12 @@ Usage (Main class of the application):
         }
         
     }
+    
+##TODO
+
+* Restructure project: Add gimmick_extenction module for additional functionality
+  that not applies to core functionality
+* Create Active and Passive components to indicate activity of entity
 
 ##License
 
