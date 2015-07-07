@@ -35,7 +35,7 @@ package org.gimmick.collections
 		 * Will be automatically updated by engine
 		 * @param value New filtration bitwise mask
 		 */
-		function set bits(value:uint);
+		function set bits(value:uint):void;
 //} endregion GETTERS/SETTERS ==========================================================================================
 	}
 }

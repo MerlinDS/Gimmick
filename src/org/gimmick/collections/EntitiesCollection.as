@@ -227,7 +227,7 @@ package org.gimmick.collections
 		 * @inheritDoc
 		 */
 		[Inline]
-		public final function set bits(value:uint)
+		public final function set bits(value:uint):void
 		{
 			_bits = value;
 		}
