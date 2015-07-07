@@ -13,9 +13,6 @@
 package org.gimmick.managers
 {
 
-	import flash.utils.Dictionary;
-
-	import org.gimmick.collections.EntitiesCollection;
 	import org.gimmick.collections.IEntities;
 	import org.gimmick.core.IEntity;
 
@@ -72,7 +69,7 @@ package org.gimmick.managers
 		/**
 		 * @inheritDoc
 		 */
-		public function getEntities(firstBit:uint = 0x0, bits:uint = 0x0):IEntities
+		public function getEntities(...types):IEntities
 		{
 			return null;
 		}

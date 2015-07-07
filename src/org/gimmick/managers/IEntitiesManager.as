@@ -48,10 +48,9 @@ package org.gimmick.managers
 		/**
 		 *
 		 * @return
-		 * @param firstBit
-		 * @param bits
+		 * @param types Bitwise mask for filtering entities collection
 		 */
-		function getEntities(firstBit:uint = 0x0, bits:uint = 0x0):IEntities;
+		function getEntities(...types):IEntities;
 
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================

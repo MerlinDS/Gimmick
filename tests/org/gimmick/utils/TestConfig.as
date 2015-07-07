@@ -82,5 +82,5 @@ class TestEntityManager implements IEntitiesManager
 	public function removeBits(entity:IEntity, bits:uint):void {}
 	public function dispose():void{}
 	public function initialize():void{}
-	public function getEntities(firstBit:uint = 0x0, bits:uint = 0x0):IEntities{return null;}
+	public function getEntities(...types):IEntities{return null;}
 }

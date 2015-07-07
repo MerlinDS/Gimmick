@@ -159,17 +159,15 @@ package org.gimmick.core
 		public function getEntities(...types):IEntities
 		{
 			//get types bits
-			var firstBit:uint = 0x0, bits:uint = 0x0;
 			if(types != null)
 			{
 				var n:int = types.length;
 				for(var i:int = 0; i < n; i++)
 				{
-					bits |= _componentTypeManagers.getType(types[i]).bit;
-					if(i == 0)firstBit = bits;
+					types[0] = _componentTypeManagers.getType(types[i]).bit;
 				}
 			}
-			return _entitiesManager.getEntities(firstBit, bits);
+			return _entitiesManager.getEntities.apply(this, types);
 		}
 
 		//delegates from systemsManager
