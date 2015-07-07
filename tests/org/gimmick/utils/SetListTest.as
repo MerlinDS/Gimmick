@@ -35,9 +35,9 @@ package org.gimmick.utils
 		{
 			_length = 0;
 			_values = {
-				1:{value:1},
-				2:{value:2},
-				3:{value:3}
+				1:new TestComponent(1),
+				2:new TestComponent(2),
+				3:new TestComponent(3)
 			};
 			_setList = new SetList();
 		}
@@ -63,7 +63,7 @@ package org.gimmick.utils
 			}
 			Assert.assertEquals("Length not equals after adding", _length, _setList.length);
 			//set adding to same key
-			_setList.addValue("1", {value:_length});
+			_setList.addValue("1", new TestComponent(_length));
 			Assert.assertEquals("Length not equals after replacing", _length, _setList.length);
 			_setList.addValue("1", _values[1]);//return ald value for else tests
 		}
@@ -126,5 +126,17 @@ package org.gimmick.utils
 //{region											GETTERS/SETTERS
 
 //} endregion GETTERS/SETTERS ==========================================================================================
+	}
+}
+
+import org.gimmick.core.Component;
+
+class TestComponent extends Component
+{
+	public var value:int;
+
+	public function TestComponent(value:int)
+	{
+		this.value = value;
 	}
 }
