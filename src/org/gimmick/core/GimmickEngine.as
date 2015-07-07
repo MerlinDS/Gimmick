@@ -118,7 +118,6 @@ package org.gimmick.core
 		/**
 		 * Create new entity and add it to main loop
 		 * @param name Name of the new Entity. Can be generated automatically
-		 * @param auto Auto activation of new entity
 		 *
 		 * @return Instance of new Entity. New entity will be empty (without components).
 		 * To add a component to Entity use Entity.add() method.
@@ -130,13 +129,12 @@ package org.gimmick.core
 		 * entity.add(new Component());
 		 * </listing>
 		 */
-		public function createEntity(name:String = null, auto:Boolean = true):IEntity
+		public function createEntity(name:String = null):IEntity
 		{
 			var entity:Entity = new Entity(name);
 			entity.componentTypeManager = _componentTypeManagers;
 			entity.componentsManager = _componentsManager;
 			entity.entitiesManager = _entitiesManager;
-			if(auto)entity.active = true;
 			return entity;
 		}
 
@@ -174,14 +172,6 @@ package org.gimmick.core
 			return _entitiesManager.getEntities(firstBit, bits);
 		}
 
-		/**
-		 * Get collection of passive entities
-		 * @return IEntity - collection of passive entities
-		 */
-		public function getPassiveEntities():IEntities
-		{
-			return _entitiesManager.passiveEntities;
-		}
 		//delegates from systemsManager
 		/**
 		 * @copy org.gimmick.managers.SystemManager#addSystem()

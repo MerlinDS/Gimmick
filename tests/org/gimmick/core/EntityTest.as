@@ -120,14 +120,7 @@ package org.gimmick.core
 			Assert.assertEquals(_entityName, _entity.name);
 		}
 
-		[Test]
-		public function testActive():void
-		{
-			Assert.assertFalse(_entity.active);
-			_entity.active = true;
-			Assert.assertTrue(_entity.active);
-		}
-//} endregion PUBLIC METHODS ===========================================================================================
+		//} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
 

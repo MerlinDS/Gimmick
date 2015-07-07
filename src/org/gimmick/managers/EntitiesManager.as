@@ -24,9 +24,6 @@ package org.gimmick.managers
 	 */
 	internal class EntitiesManager implements IEntitiesManager
 	{
-
-		private var _passive:IEntities;
-		private var _active:Dictionary;
 //======================================================================================================================
 //{region											PUBLIC METHODS
 		/**
@@ -42,8 +39,6 @@ package org.gimmick.managers
 		 */
 		public function initialize():void
 		{
-			_active = new Dictionary(true);
-			_passive = new EntitiesCollection();
 		}
 
 		/**
@@ -51,45 +46,28 @@ package org.gimmick.managers
 		 */
 		public function addEntity(entity:IEntity):void
 		{
-			_passive.push(entity);
+
 		}
 		/**
 		 * @inheritDoc
 		 */
 		public function removeEntity(entity:IEntity):void
 		{
-			if(!entity.active)
-				_passive.pop(entity);
-			else
-			{
-				//do something
-				_active[0] = null;
-			}
 		}
-		/**
-		 * @inheritDoc
-		 */
-		public function changeEntityActivity(entity:IEntity):void
-		{
-			if(entity.active)
-			{
-				_passive.pop(entity);
-				//TODO add to all active collections
-			}
-		}
+
 		/**
 		 * @inheritDoc
 		 */
 		public function addBits(entity:IEntity, bits:uint):void
 		{
-			//TODO add to active collection
+
 		}
 		/**
 		 * @inheritDoc
 		 */
 		public function removeBits(entity:IEntity, bits:uint):void
 		{
-			//TODO remove form active collection
+
 		}
 		/**
 		 * @inheritDoc
@@ -112,13 +90,6 @@ package org.gimmick.managers
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS
-		/**
-		 * @inheritDoc
-		 */
-		public function get passiveEntities():IEntities
-		{
-			return null;
-		}
 
 //} endregion GETTERS/SETTERS ==========================================================================================
 

@@ -31,11 +31,7 @@ package org.gimmick.managers
 		 * @param entity Instance of the entity
 		 */
 		function removeEntity(entity:IEntity):void;
-		/**
-		 *
-		 * @param entity
-		 */
-		function changeEntityActivity(entity:IEntity):void;
+
 		/**
 		 *
 		 * @param entity
@@ -64,10 +60,6 @@ package org.gimmick.managers
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS
-		/**
-		 *
-		 */
-		function get passiveEntities():IEntities;
 //} endregion GETTERS/SETTERS ==========================================================================================
 	}
 }

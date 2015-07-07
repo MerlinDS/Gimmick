@@ -68,15 +68,6 @@ package org.gimmick.utils
 			return null;
 		}
 
-		public function set active(value:Boolean):void
-		{
-		}
-
-		public function get active():Boolean
-		{
-			return false;
-		}
-
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS

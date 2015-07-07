@@ -46,10 +46,6 @@ package org.gimmick.core
 
 		private var _name:String;
 		/**
-		 * Entity activity
-		 */
-		private var _active:Boolean;
-		/**
 		 * Unique ID of the component
 		 */
 		private var _id:String;
@@ -217,26 +213,7 @@ package org.gimmick.core
 			return [];
 		}
 
-		/**
-		 * @inheritDoc
-		 */
-		[Inline]
-		public final function get active():Boolean
-		{
-			return _active;
-		}
-
-		/**
-		 * @inheritDoc
-		 */
-		[Inline]
-		public final function set active(value:Boolean):void
-		{
-			_active = value;
-			_entitiesManager.changeEntityActivity(this);
-		}
-
-//} endregion GETTERS/SETTERS ==========================================================================================
+		//} endregion GETTERS/SETTERS ==========================================================================================
 
 	}
 }
