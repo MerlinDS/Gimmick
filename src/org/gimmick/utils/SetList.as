@@ -12,6 +12,12 @@
 
 package org.gimmick.utils
 {
+
+	import org.gimmick.core.Component;
+
+//TODO change description
+//TODO change class naming
+//TODO pre extend _values vector, set big lenght for data consistaisy
 	/**
 	 * List with set of unique keys and values
 	 */
@@ -23,7 +29,7 @@ package org.gimmick.utils
 		 * Will be filled when value removed from values list.
 		 */
 		private var _freeIndexes:Vector.<int>;
-		private var _values:Vector.<Object>;
+		private var _values:Vector.<Component>;
 		private var _map:Object;
 //======================================================================================================================
 //{region											PUBLIC METHODS
@@ -35,7 +41,7 @@ package org.gimmick.utils
 			//initialize free indexes with first free index
 			_freeIndexes = new <int>[0];
 			//initialize list with empty space
-			_values = new <Object>[null];
+			_values = new <Component>[null];
 			_map = {};
 		}
 
@@ -45,7 +51,7 @@ package org.gimmick.utils
 		 * @param value Instance of item
 		 */
 		[Inline]
-		public final function addValue(key:String, value:Object):void
+		public final function addValue(key:String, value:Component):void
 		{
 			var index:int = _map[key] != null ? _map[key] : -1;
 			if(index < 0)//was not added previously
@@ -66,9 +72,9 @@ package org.gimmick.utils
 		 * @return Instance of item
 		 */
 		[Inline]
-		public final function getValue(key:String):*
+		public final function getValue(key:String):Component
 		{
-			var value:Object = null;
+			var value:Component = null;
 			var index:int = _map[key] != null ? _map[key] : -1;
 			if(index >= 0 && index < _values.length)value = _values[index];
 			return value;
@@ -130,7 +136,7 @@ package org.gimmick.utils
 			return _values.length - _freeIndexes.length;
 		}
 
-		public function get values():Vector.<Object>
+		public function get values():Vector.<Component>
 		{
 			return _values;
 		}
