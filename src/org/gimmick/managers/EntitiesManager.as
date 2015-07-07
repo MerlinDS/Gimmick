@@ -14,6 +14,7 @@ package org.gimmick.managers
 {
 
 	import org.gimmick.collections.IEntities;
+	import org.gimmick.core.ComponentType;
 	import org.gimmick.core.IEntity;
 
 	/**
