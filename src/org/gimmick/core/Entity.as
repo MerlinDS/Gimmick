@@ -80,7 +80,7 @@ package org.gimmick.core
 		{
 			var componentType:ComponentType = _componentTypeManager.getType(component);
 			_componentsManager.addComponent(this, componentType, component);
-			_entitiesManager.addBits(this, componentType.bit);
+			_entitiesManager.addComponentType(this, componentType);
 			//add bit to bitwise mask if component was adding first time
 			if(!(_bits & componentType.bit))_bits |= componentType.bit;
 			return component;
@@ -117,7 +117,7 @@ package org.gimmick.core
 		{
 			var componentType:ComponentType = _componentTypeManager.getType(component);
 			_componentsManager.removeComponent(this, componentType);
-			_entitiesManager.removeBits(this, componentType.bit);
+			_entitiesManager.removeComponentType(this, componentType);
 			//remove bit from bitwise mask
 			_bits = _bits &~ componentType.bit;
 		}

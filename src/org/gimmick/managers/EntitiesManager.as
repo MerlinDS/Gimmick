@@ -55,14 +55,14 @@ package org.gimmick.managers
 		/**
 		 * @inheritDoc
 		 */
-		public function addBits(entity:IEntity, bits:uint):void
+		public function addComponentType(entity:IEntity, componentType:ComponentType):void
 		{
 
 		}
 		/**
 		 * @inheritDoc
 		 */
-		public function removeBits(entity:IEntity, bits:uint):void
+		public function removeComponentType(entity:IEntity, componentType:ComponentType):void
 		{
 
 		}

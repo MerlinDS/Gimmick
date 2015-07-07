@@ -60,7 +60,7 @@ package org.gimmick.managers
 		[Test]
 		public function testAddEntity():void
 		{
-			_entitiesManager.addBits(_entities[0], _bits << 1);
+			_entitiesManager.addComponentType(_entities[0], null);
 			Assert.fail('Test not implemented yet');
 		}
 //} endregion PUBLIC METHODS ===========================================================================================

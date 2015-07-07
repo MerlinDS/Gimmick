@@ -14,6 +14,7 @@ package org.gimmick.managers
 {
 
 	import org.gimmick.collections.IEntities;
+	import org.gimmick.core.ComponentType;
 	import org.gimmick.core.IEntity;
 
 	public interface IEntitiesManager extends IGimmickManager
@@ -35,15 +36,16 @@ package org.gimmick.managers
 		/**
 		 *
 		 * @param entity
-		 * @param bits
+		 * @param componentType
 		 */
-		function addBits(entity:IEntity, bits:uint):void;
+		function addComponentType(entity:IEntity, componentType:ComponentType):void;
+
 		/**
 		 *
 		 * @param entity
-		 * @param bits
+		 * @param componentType
 		 */
-		function removeBits(entity:IEntity, bits:uint):void;
+		function removeComponentType(entity:IEntity, componentType:ComponentType):void;
 
 		/**
 		 *
