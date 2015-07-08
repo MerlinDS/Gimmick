@@ -13,13 +13,27 @@
 package org.gimmick.managers
 {
 
+	/**
+	 * Base interface for managers in Gimmick framework.
+	 * Each manager that will be added to Gimmick, must implement current interface.
+	 */
 	public interface IGimmickManager
 	{
 		//======================================================================================================================
 //{region											PUBLIC METHODS
-		//TODO add description
-		function dispose():void;
+		/**
+		 * Initialize manager.
+		 */
 		function initialize():void
+
+		/**
+		 * Dispose manager.
+		 * Prepare manager for GC.
+		 */
+		function dispose():void;
+
+		//TODO Tick in Base managers interface #20
+		//function tick(time:Number):void;
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
