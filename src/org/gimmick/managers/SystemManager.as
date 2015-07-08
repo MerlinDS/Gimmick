@@ -24,13 +24,10 @@ package org.gimmick.managers
 	internal class SystemManager implements ISystemManager
 	{
 
-		//TODO Data consistency #10
-		private var _activeSystems:Vector.<IEntitySystem>;
-		private var _passiveSystems:Vector.<IEntitySystem>;
 		private var _systemsTypes:Dictionary;
-
-		private var _systems:Vector.<IEntitySystem>;
-		private var _systemsLength:int;
+		private var _passiveSystems:Vector.<IEntitySystem>;
+		private var _activeSystems:Vector.<IEntitySystem>;
+		private var _activeLength:int;
 //======================================================================================================================
 //{region											PUBLIC METHODS
 		public function SystemManager()
@@ -42,7 +39,9 @@ package org.gimmick.managers
 		 */
 		public function initialize():void
 		{
-			_systems = new <IEntitySystem>[];
+			//TODO Data consistency #10
+			_activeSystems = new <IEntitySystem>[];
+			_passiveSystems = new <IEntitySystem>[];
 			_systemsTypes = new Dictionary(true);
 		}
 
@@ -56,9 +55,10 @@ package org.gimmick.managers
 			if(_systemsTypes[type] != null)//Do not use hasOwnProperty, cause this method is very slow
 				this.removeSystem(type);
 			//save new systemType to map
-			_systemsTypes[type] = _systemsLength;
-			_systems[_systemsLength] = system;
-			_systemsLength++;
+			_passiveSystems[_passiveSystems.length] = system;
+			_systemsTypes[type] = system;
+			//all was done nornaly, lets initialize system
+			system.initialize();
 			return system;
 		}
 
@@ -67,19 +67,34 @@ package org.gimmick.managers
 		 */
 		public function removeSystem(systemType:Class):IEntitySystem
 		{
+			var index:int;
 			var system:IEntitySystem;
-			//trying to find system, do not use getSystemByType cause index of system will be need
-			if(_systemsTypes[systemType] != null)
-			{
-				var index:int = _systemsTypes[systemType];
-				system = _systems[index];
-			}
+			var list:Vector.<IEntitySystem>;
+			system = _systemsTypes[systemType];
 			if(system == null)
 				throw new ArgumentError('IEntitySystem was not added to Gimmick previously!');
+			//trying to find system, do not use getSystemByType cause index and list of system will be need
+			if(_systemsTypes[systemType] != null)
+			{
+				//in normal behavior system will be olready deactivated
+				list = _passiveSystems;
+				index = list.indexOf(system);
+				if(index < 0)//system is not deactivated yet :(
+				{
+					list = _activeSystems;
+					index = list.indexOf(system);
+					//if system was not found in both list, something goes wrong!
+					if(index < 0)
+						throw new Error('System was not found nor in active systems neither in passive!');
+					system.deactivate();
+					_activeLength--;
+				}
+			}
 			//remove system from list and map
 			_systemsTypes[systemType] = null;
-			_systems.splice(index, 1);//No needs in fast method
-			_systemsLength--;
+			list.splice(index, 1);//No needs in fast method
+			//all was done nornaly, lets dispose system
+			system.dispose();
 			return system;
 		}
 
@@ -88,9 +103,16 @@ package org.gimmick.managers
 		 */
 		public function activateSystem(systemType:Class):void
 		{
-			var system:IEntitySystem = this.getSystemByType(systemType);
+			var system:IEntitySystem = _systemsTypes[systemType];
 			if(system == null)
 				throw new ArgumentError('IEntitySystem was not added to Gimmick previously!');
+			var indes:int = _passiveSystems.indexOf(system);
+			if(indes >= 0)//in other case system was already activated
+			{
+				_passiveSystems.splice(indes, 1);//!!! slow, with redundant allocations
+				_activeSystems[_activeLength++] = system;
+				system.activate();
+			}
 		}
 
 		/**
@@ -98,9 +120,17 @@ package org.gimmick.managers
 		 */
 		public function deactivateSystem(systemType:Class):void
 		{
-			var system:IEntitySystem = this.getSystemByType(systemType);
+			var system:IEntitySystem = _systemsTypes[systemType];
 			if(system == null)
 				throw new ArgumentError('IEntitySystem was not added to Gimmick previously!');
+			var indes:int = _activeSystems.indexOf(system);
+			if(indes >= 0)//in other case was olready deactivated
+			{
+				_activeSystems.splice(indes, 1);//!!! slow, with redundant allocations
+				_passiveSystems[_passiveSystems.length] = system;
+				_activeLength--;
+				system.deactivate();
+			}
 		}
 
 		/**
@@ -108,7 +138,7 @@ package org.gimmick.managers
 		 */
 		public function tick(time:Number):void
 		{
-			for(var i:int = 0; i < _systemsLength; ++i)
+			for(var i:int = 0; i < _activeLength; ++i)
 			{
 				//update only active systems
 				_activeSystems[i].tick(time);
@@ -120,25 +150,24 @@ package org.gimmick.managers
 		 */
 		public function dispose():void
 		{
+			//deactivate and dispose active systems
+			while(_activeSystems.length > 0)
+			{
+				_activeSystems[_activeSystems.length - 1].deactivate();
+				_activeSystems.pop().dispose();
+			}
+			//dispose passive systems
+			while(_passiveSystems.length > 0)
+				_passiveSystems.pop().dispose();
 			//clean manager from systems
-			_systemsLength = 0;
 			_systemsTypes = null;
-			_systems = null;
+			_passiveSystems = null;
+			_activeSystems = null;
+			_activeLength = 0;
 		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
-		[Inline]
-		private final function getSystemByType(systemType:Class):IEntitySystem
-		{
-			var system:IEntitySystem;
-			if(_systemsTypes[systemType] != null)
-			{
-				var index:int = _systemsTypes[systemType];
-				system = _systems[index];
-			}
-			return system;
-		}
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS
