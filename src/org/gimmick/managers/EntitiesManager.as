@@ -13,6 +13,10 @@
 package org.gimmick.managers
 {
 
+	import flash.utils.Dictionary;
+
+	import org.gimmick.collections.EntitiesCollection;
+
 	import org.gimmick.collections.IEntities;
 	import org.gimmick.core.ComponentType;
 	import org.gimmick.core.IEntity;
@@ -22,6 +26,13 @@ package org.gimmick.managers
 	 */
 	internal class EntitiesManager implements IEntitiesManager
 	{
+		/**
+		 * Comtaince all collections of entities.
+		 * key - bits of collection mask
+		 * value - vector of one type collections,
+		 * where firts element is collection and other one is it's depended clones
+		 */
+		private var _collectionsMap:Dictionary;
 //======================================================================================================================
 //{region											PUBLIC METHODS
 		/**
@@ -37,53 +48,98 @@ package org.gimmick.managers
 		 */
 		public function initialize():void
 		{
+			_collectionsMap = new Dictionary(true);
+			//initialize base collection without any filltration (contains all entities)
+			_collectionsMap[0x0] = new EntitiesCollection();
 		}
 
 		/**
 		 * @inheritDoc
 		 */
-		public function addEntity(entity:IEntity):void
+		public function addEntity(entity:IEntity, componentType:ComponentType = null):void
 		{
-
+			var bits:uint;
+			if(componentType == null)
+			{
+				//add to base collection
+				bits = entity.bits;
+				_collectionsMap[0x0].push(entity);
+			}else
+				bits = componentType.bit;
+			this.updateCollections(entity, bits, true);
 		}
 		/**
 		 * @inheritDoc
 		 */
-		public function removeEntity(entity:IEntity):void
+		public function removeEntity(entity:IEntity, componentType:ComponentType = null):void
 		{
+
+			var bits:uint;
+			if(componentType == null)
+			{
+				//remove from all collection
+				bits = entity.bits;
+				_collectionsMap[0x0].pop(entity);
+			}else
+				bits = componentType.bit;
+			this.updateCollections(entity, bits, false);
+		}
+
+
+		/**
+		 * @inheritDoc
+		 */
+		public function getEntities(types:Array):IEntities
+		{
+			var bits:uint = 0x0;
+			while(types.length > 0)bits |= types.pop();
+			var collection:IEntities = _collectionsMap[bits];
+			if(collection == null)
+			{
+				collection = _collectionsMap[0x0];
+			}
+			return collection;
 		}
 
 		/**
 		 * @inheritDoc
 		 */
-		public function addComponentType(entity:IEntity, componentType:ComponentType):void
+		public function freeEntities():void
 		{
+		}
 
-		}
-		/**
-		 * @inheritDoc
-		 */
-		public function removeComponentType(entity:IEntity, componentType:ComponentType):void
-		{
-
-		}
-		/**
-		 * @inheritDoc
-		 */
-		public function getEntities(...types):IEntities
-		{
-			return null;
-		}
 		/**
 		 * @inheritDoc
 		 */
 		public function dispose():void
 		{
+			for each(var collection:IEntities in _collectionsMap)
+				collection.dispose();
+			_collectionsMap = null;
 		}
 
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
+		[Inline]
+		private final function updateCollections(entity:IEntity, bits:uint, push:Boolean):void
+		{
+			for (var collectionBits:uint in _collectionsMap)
+			{
+				//collection included current entity
+				if (bits & collectionBits)
+				{
+					/*
+				  	 * If entities [removes from]/[added to] base collection,
+				  	 * depeneded clones are also will updated
+				  	*/
+					if(push)
+						_collectionsMap[collectionBits].push(entity);
+					else
+						_collectionsMap[collectionBits].pop(entity);
+				}
+			}
+		}
 
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================

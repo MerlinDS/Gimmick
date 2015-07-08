@@ -23,37 +23,30 @@ package org.gimmick.managers
 		//======================================================================================================================
 //{region											PUBLIC METHODS
 		/**
-		 *
-		 * @param entity
+		 * Add entity to entities collections
+		 * @param entity Entity instance
+		 * @param componentType Type of the component
 		 */
-		function addEntity(entity:IEntity):void;
+		function addEntity(entity:IEntity, componentType:ComponentType = null):void;
+
 		/**
 		 * Remove entity
 		 * @param entity Instance of the entity
-		 */
-		function removeEntity(entity:IEntity):void;
-
-		/**
-		 *
-		 * @param entity
 		 * @param componentType
 		 */
-		function addComponentType(entity:IEntity, componentType:ComponentType):void;
-
-		/**
-		 *
-		 * @param entity
-		 * @param componentType
-		 */
-		function removeComponentType(entity:IEntity, componentType:ComponentType):void;
+		function removeEntity(entity:IEntity, componentType:ComponentType = null):void;
 
 		/**
 		 *
 		 * @return
 		 * @param types Bitwise mask for filtering entities collection
 		 */
-		function getEntities(...types):IEntities;
+		function getEntities(types:Array):IEntities;
 
+		/**
+		 *
+		 */
+		function freeEntities():void;
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS

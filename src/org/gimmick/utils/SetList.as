@@ -17,7 +17,6 @@ package org.gimmick.utils
 
 //TODO change description
 //TODO change class naming
-//TODO pre extend _values vector, set big lenght for data consistaisy
 	/**
 	 * List with set of unique keys and values
 	 */
@@ -28,6 +27,7 @@ package org.gimmick.utils
 		 * Contains free indexes of the values list.
 		 * Will be filled when value removed from values list.
 		 */
+		//TODO Data consistency #10
 		private var _freeIndexes:Vector.<int>;
 		private var _values:Vector.<Component>;
 		private var _map:Object;

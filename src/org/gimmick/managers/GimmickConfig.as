@@ -12,6 +12,7 @@
 
 package org.gimmick.managers
 {
+	//TODO Gimmick initialization #7
 	/**
 	 * Configuration for Gimmick engine.
 	 * Constance managers classes and collections

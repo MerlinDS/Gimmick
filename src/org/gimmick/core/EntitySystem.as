@@ -15,6 +15,8 @@ package org.gimmick.core
 
 	import org.gimmick.managers.IEntitiesManager;
 
+	//TODO Create interface for Gimmick systems #5
+	[Deprecated]
 	public class EntitySystem
 	{
 

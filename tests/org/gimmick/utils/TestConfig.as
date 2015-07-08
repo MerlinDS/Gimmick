@@ -75,12 +75,10 @@ class TestComponentManager implements IComponentsManager
 
 class TestEntityManager implements IEntitiesManager
 {
-	public function addEntity(entity:IEntity):void{}
-	public function removeEntity(entity:IEntity):void{}
-
-	public function addComponentType(entity:IEntity, componentType:ComponentType):void {}
-	public function removeComponentType(entity:IEntity, componentType:ComponentType):void {}
+	public function addEntity(entity:IEntity, componentType:ComponentType = null):void {}
+	public function removeEntity(entity:IEntity, componentType:ComponentType = null):void {}
 	public function dispose():void{}
 	public function initialize():void{}
-	public function getEntities(...types):IEntities{return null;}
+	public function getEntities(types:Array):IEntities{return null;}
+	public function freeEntities():void{}
 }

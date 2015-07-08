@@ -80,7 +80,7 @@ package org.gimmick.core
 		{
 			var componentType:ComponentType = _componentTypeManager.getType(component);
 			_componentsManager.addComponent(this, componentType, component);
-			_entitiesManager.addComponentType(this, componentType);
+			_entitiesManager.addEntity(this, componentType);
 			//add bit to bitwise mask if component was adding first time
 			if(!(_bits & componentType.bit))_bits |= componentType.bit;
 			return component;
@@ -117,7 +117,7 @@ package org.gimmick.core
 		{
 			var componentType:ComponentType = _componentTypeManager.getType(component);
 			_componentsManager.removeComponent(this, componentType);
-			_entitiesManager.removeComponentType(this, componentType);
+			_entitiesManager.removeEntity(this, componentType);
 			//remove bit from bitwise mask
 			_bits = _bits &~ componentType.bit;
 		}
@@ -127,6 +127,7 @@ package org.gimmick.core
 		 * Prepare entity instance for removing from memory
 		 * Only Gimmick Engine could execute this method!
 		 */
+		//TODO Entity disposing #9
 		internal final function dispose():void
 		{
 			_bits = 0x0;

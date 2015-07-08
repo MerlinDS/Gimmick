@@ -12,6 +12,8 @@
 package org.gimmick.managers
 {
 
+	import flash.utils.getTimer;
+
 	import flexunit.framework.Assert;
 
 	import org.gimmick.core.IEntity;
@@ -60,8 +62,13 @@ package org.gimmick.managers
 		[Test]
 		public function testAddEntity():void
 		{
-			_entitiesManager.addComponentType(_entities[0], null);
+			_entitiesManager.addEntity(_entities[0], null);
 			Assert.fail('Test not implemented yet');
+		}
+
+		private function testMethod(...args):void
+		{
+			var a:int = 1 + args[0];
 		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================

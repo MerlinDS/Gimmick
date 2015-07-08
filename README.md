@@ -114,11 +114,11 @@ Usage (Main class of the application):
         
     }
     
-##TODO
+##TODO, BUGS and PROPOSALS
 
-* Restructure project: Add gimmick_extenction module for additional functionality
-  that not applies to core functionality
-* Create Active and Passive components to indicate activity of entity
+To see all tasks and bugs of this project visit:
+[https://github.com/MerlinDS/Gimmick/issues](https://github.com/MerlinDS/Gimmick/issues)
+
 
 ##License
 

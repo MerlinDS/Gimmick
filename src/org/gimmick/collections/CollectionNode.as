@@ -25,6 +25,7 @@ package org.gimmick.collections
 		/**
 		 * Pool for free nodes
 		 */
+		//TODO Data consistency #10
 		private static const _free:Vector.<CollectionNode> = new <CollectionNode>[];
 		/**
 		 * Link to next node in collection

@@ -23,6 +23,7 @@ package org.gimmick.core
 	import org.gimmick.managers.IEntitiesManager;
 	import org.gimmick.managers.ISystemManager;
 
+	//TODO Unit test for GimmickEngine #6
 	/**
 	 * This class contains public interface of Gimmick framework.
 	 */
@@ -52,6 +53,7 @@ package org.gimmick.core
 		 *
 		 * @see org.gimmick.managers.GimmickConfig Gimmick configuration
 		 */
+		//TODO Gimmick initialization #7
 		public function initialize(config:GimmickConfig = null, autoStart:Boolean = true):void
 		{
 			if(_initialized)
@@ -146,9 +148,9 @@ package org.gimmick.core
 		 */
 		public function disposeEntity(entity:IEntity):void
 		{
-			//TODO dispose entity with delay and add it to pool
+			//TODO Entity disposing #9
 			_componentsManager.removeComponents(entity as Entity);
-			_entitiesManager.removeEntity(entity as Entity);
+			_entitiesManager.removeEntity(entity as Entity, null);
 		}
 
 		/**
@@ -158,16 +160,16 @@ package org.gimmick.core
 		 */
 		public function getEntities(...types):IEntities
 		{
-			//get types bits
+			//get componentTypes
 			if(types != null)
 			{
 				var n:int = types.length;
 				for(var i:int = 0; i < n; i++)
 				{
-					types[0] = _componentTypeManagers.getType(types[i]).bit;
+					types[0] = _componentTypeManagers.getType(types[i]);
 				}
 			}
-			return _entitiesManager.getEntities.apply(this, types);
+			return _entitiesManager.getEntities(types);
 		}
 
 		//delegates from systemsManager
