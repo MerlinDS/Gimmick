@@ -16,7 +16,6 @@ package org.gimmick.managers
 	import flash.utils.Dictionary;
 
 	import org.gimmick.collections.EntitiesCollection;
-
 	import org.gimmick.collections.IEntities;
 	import org.gimmick.core.ComponentType;
 	import org.gimmick.core.IEntity;
@@ -104,7 +103,7 @@ package org.gimmick.managers
 		/**
 		 * @inheritDoc
 		 */
-		public function freeEntities():void
+		public function tick(time:Number):void
 		{
 		}
 

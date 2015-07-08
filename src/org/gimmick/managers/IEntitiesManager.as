@@ -44,9 +44,14 @@ package org.gimmick.managers
 		function getEntities(types:Array):IEntities;
 
 		/**
+		 * Method for manager looping
+		 * @param time Time from the previous tick in microseconds
 		 *
+		 * @see org.gimmick.core.GimmickEngine.tick() Gimmick.tick() looping method
 		 */
-		function freeEntities():void;
+		function tick(time:Number):void;
+
+
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS

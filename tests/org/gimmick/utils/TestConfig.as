@@ -80,5 +80,5 @@ class TestEntityManager implements IEntitiesManager
 	public function dispose():void{}
 	public function initialize():void{}
 	public function getEntities(types:Array):IEntities{return null;}
-	public function freeEntities():void{}
+	public function tick(time:Number):void {}
 }
