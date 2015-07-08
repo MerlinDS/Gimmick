@@ -78,7 +78,8 @@ package org.gimmick.core
 
 		/**
 		 * Set Gimmick to pause.
-		 * Entity systems will not updated (EntitySystem.tick() will not be executed event EntitySystems are in scope)
+		 * Entity systems will not be updated.
+		 * IEntitySystem.tick() will not be executed event if IEntitySystems are activated.
 		 */
 		public function pause():void
 		{
@@ -176,18 +177,17 @@ package org.gimmick.core
 		/**
 		 * @copy org.gimmick.managers.SystemManager#addSystem()
 		 */
-		public function addSystem(system:EntitySystem):EntitySystem
+		public function addSystem(system:IEntitySystem):IEntitySystem
 		{
-			system.entities = _entitiesManager;
 			return _systemsManager.addSystem(system);
 		}
 
 		/**
 		 * @copy org.gimmick.managers.SystemManager#removeSystem()
 		 */
-		public function removeSystem(systemType:Class):void
+		public function removeSystem(systemType:Class):IEntitySystem
 		{
-			_systemsManager.removeSystem(systemType);
+			return _systemsManager.removeSystem(systemType);
 		}
 		/**
 		 * @copy org.gimmick.managers.SystemManager#activateSystem()

@@ -57,24 +57,25 @@ package org.gimmick.managers
 			this.testActivateSystem();//system need to be initialized and activated
 			var newSystem:TestSystem = new TestSystem();
 			_systemManager.addSystem(newSystem);
-			Assert.assertFalse(_testSystem.active);
-			Assert.assertNull(_testSystem.entities);
+			Assert.assertFalse(_testSystem.activated);
 		}
 
 		[Test]
 		public function testRemoveSystem():void
 		{
-			this.testAddSystem();
+			this.testActivateSystem();
 			_systemManager.removeSystem(TestSystem);
+			Assert.assertFalse(_testSystem.activated);
+			Assert.assertFalse(_testSystem.initialized);
 		}
 
 		[Test]
 		public function testActivateSystem():void
 		{
 			this.testAddSystem();
-			Assert.assertFalse(_testSystem.active);
+			Assert.assertFalse(_testSystem.activated);
 			_systemManager.activateSystem(TestSystem);
-			Assert.assertTrue(_testSystem.active);
+			Assert.assertTrue(_testSystem.activated);
 		}
 
 		[Test]
@@ -82,7 +83,7 @@ package org.gimmick.managers
 		{
 			this.testActivateSystem();
 			_systemManager.deactivateSystem(TestSystem);
-			Assert.assertFalse(_testSystem.active);
+			Assert.assertFalse(_testSystem.activated);
 		}
 
 		[Test]
@@ -125,14 +126,38 @@ package org.gimmick.managers
 	}
 }
 
-import org.gimmick.core.EntitySystem;
+import org.gimmick.core.IEntitySystem;
 
-class TestSystem extends EntitySystem{
+class TestSystem implements IEntitySystem
+{
 
 	public var ticksCount:int;
+	public var initialized:Boolean;
+	public var activated:Boolean;
 
-	override public function tick(time:Number):void
+	public function tick(time:Number):void
 	{
-		ticksCount++;
+		if(this.initialized && this.activated)
+			ticksCount++;
+	}
+
+	public function initialize():void
+	{
+		this.initialized = true;
+	}
+
+	public function dispose():void
+	{
+		this.initialized = false;
+	}
+
+	public function activate():void
+	{
+		this.activated = true;
+	}
+
+	public function deactivate():void
+	{
+		this.activated = false;
 	}
 }

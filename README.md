@@ -18,7 +18,7 @@ If you are interested feel free to ask questions:
 ##Simple Example
 VelocityComponent and PositionComponent.
 
-    public class VelocityComponent
+    public class VelocityComponent extends Component
     {
         public var x:Number;
         public var y:Number;
@@ -30,7 +30,7 @@ VelocityComponent and PositionComponent.
         }
     }
     
-    public class PositionComponent
+    public class PositionComponent extends Component
     {
         public var x:Number;
         public var y:Number;
@@ -44,32 +44,45 @@ VelocityComponent and PositionComponent.
 
 Update entity position by velocity with MovementSystem
 
-    public class MovementSystem extends EntitySystem 
+    public class MovementSystem extends IEntitySystem 
     {
     
-        override public function tick(time:Number):void
+        private var _entities:IEntities;
+        
+        public function initialize():void
         {
-            var entities:IEntities = Gimmick.getEntities(VelocityComponent, PositionComponent);
-            for(entities.begin(); !entities.end(); entities.next())
+            //For quick iterations through entities use pre initialized of entities collection
+            _entities = Gimmick.getEntities(VelocityComponent, PositionComponent);
+        }
+        
+        public function tick(time:Number):void
+        {
+            /*
+            * Collection can be created in body of tick method, 
+            * but in this case iteration through will be slower.
+            * var entities:IEntities = Gimmick.getEntities(VelocityComponent, PositionComponent);
+            */
+            for(_entities.begin(); !_entities.end(); _entities.next())
             {
                 var entity:IEntity = entities.current;
                 entity.get(PositionComponent).x += entity.get(VelocityComponent).x * time;
                 entity.get(PositionComponent).y += entity.get(VelocityComponent).y * time;
             }
         }
+        //... implementation of other methods from  IEntitySystem interface
     }
 
 Or with EntityProcessingSystem
 
-    public class MovementSystem extends EntityProcessingSystem 
+    public class MovementSystem extends IEntityProcessingSystem 
     {
         
-        override protected function initialize():void
+        public function initialize():void
         {
             this.setProcessingEntities(VelocityComponent, PositionComponent);
         }
         
-        override public function processEntity(entity:IEntity):void
+        public function processEntity(entity:IEntity):void
         {
             entity.get(PositionComponent).x += entity.get(VelocityComponent).x * this.time;
             entity.get(PositionComponent).y += entity.get(VelocityComponent).y * this.time;
@@ -94,7 +107,7 @@ Usage (Main class of the application):
             this.removeEventListener(Event.ADD_TO_STAGE, this.addToStageHandler);
             //Initialize Gimmick
             Gimmick.initialize();//Can be initialized with external managers
-            Gimmick.addSystem(MovementSystem);
+            Gimmick.addSystem(new MovementSystem());
             Gimmick.addToScope(MovementSystem);
             //Create new entity
             _entity = Gimmick.createEntity("Some entity");

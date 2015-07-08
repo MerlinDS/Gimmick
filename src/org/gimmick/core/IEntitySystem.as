@@ -28,7 +28,7 @@ package org.gimmick.core
 		 *
 		 * @see org.gimmick.core.GimmickEngine.tick() Gimmick.tick() looping method
 		 */
-		function tick(time:Number);
+		function tick(time:Number):void;
 
 		/**
 		 * System initialization. Will be executed automatically

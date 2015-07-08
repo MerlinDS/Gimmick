@@ -15,8 +15,7 @@ package org.gimmick.managers
 
 	import flash.utils.Dictionary;
 
-	import org.gimmick.core.EntitySystem;
-
+	import org.gimmick.core.IEntitySystem;
 	import org.gimmick.utils.getInstanceClass;
 
 	/**
@@ -25,8 +24,12 @@ package org.gimmick.managers
 	internal class SystemManager implements ISystemManager
 	{
 
+		//TODO Data consistency #10
+		private var _activeSystems:Vector.<IEntitySystem>;
+		private var _passiveSystems:Vector.<IEntitySystem>;
 		private var _systemsTypes:Dictionary;
-		private var _systems:Vector.<EntitySystem>;
+
+		private var _systems:Vector.<IEntitySystem>;
 		private var _systemsLength:int;
 //======================================================================================================================
 //{region											PUBLIC METHODS
@@ -39,14 +42,14 @@ package org.gimmick.managers
 		 */
 		public function initialize():void
 		{
-			_systems = new <EntitySystem>[];
+			_systems = new <IEntitySystem>[];
 			_systemsTypes = new Dictionary(true);
 		}
 
 		/**
 		 * @inheritDoc
 		 */
-		public function addSystem(system:EntitySystem):EntitySystem
+		public function addSystem(system:IEntitySystem):IEntitySystem
 		{
 			var type:Class = getInstanceClass(system);
 			//remove old system from manager
@@ -62,9 +65,9 @@ package org.gimmick.managers
 		/**
 		 * @inheritDoc
 		 */
-		public function removeSystem(systemType:Class):EntitySystem
+		public function removeSystem(systemType:Class):IEntitySystem
 		{
-			var system:EntitySystem;
+			var system:IEntitySystem;
 			//trying to find system, do not use getSystemByType cause index of system will be need
 			if(_systemsTypes[systemType] != null)
 			{
@@ -72,9 +75,7 @@ package org.gimmick.managers
 				system = _systems[index];
 			}
 			if(system == null)
-				throw new ArgumentError('EntitySystem was not added to Gimmick previously!');
-			system.active = false;//deactivate system
-			system.entities = null;//dispose system
+				throw new ArgumentError('IEntitySystem was not added to Gimmick previously!');
 			//remove system from list and map
 			_systemsTypes[systemType] = null;
 			_systems.splice(index, 1);//No needs in fast method
@@ -87,10 +88,9 @@ package org.gimmick.managers
 		 */
 		public function activateSystem(systemType:Class):void
 		{
-			var system:EntitySystem = this.getSystemByType(systemType);
+			var system:IEntitySystem = this.getSystemByType(systemType);
 			if(system == null)
-				throw new ArgumentError('EntitySystem was not added to Gimmick previously!');
-			system.active = true;
+				throw new ArgumentError('IEntitySystem was not added to Gimmick previously!');
 		}
 
 		/**
@@ -98,10 +98,9 @@ package org.gimmick.managers
 		 */
 		public function deactivateSystem(systemType:Class):void
 		{
-			var system:EntitySystem = this.getSystemByType(systemType);
+			var system:IEntitySystem = this.getSystemByType(systemType);
 			if(system == null)
-				throw new ArgumentError('EntitySystem was not added to Gimmick previously!');
-			system.active = false;
+				throw new ArgumentError('IEntitySystem was not added to Gimmick previously!');
 		}
 
 		/**
@@ -111,8 +110,8 @@ package org.gimmick.managers
 		{
 			for(var i:int = 0; i < _systemsLength; ++i)
 			{
-				var system:EntitySystem = _systems[i];
-				if(system.active)system.tick(time);
+				//update only active systems
+				_activeSystems[i].tick(time);
 			}
 		}
 
@@ -122,12 +121,6 @@ package org.gimmick.managers
 		public function dispose():void
 		{
 			//clean manager from systems
-			while(_systems.length > 0)
-			{
-				var system:EntitySystem = _systems.pop();
-				system.active = false;//deactivate system
-				system.entities = null;//dispose system
-			}
 			_systemsLength = 0;
 			_systemsTypes = null;
 			_systems = null;
@@ -136,9 +129,9 @@ package org.gimmick.managers
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
 		[Inline]
-		private final function getSystemByType(systemType:Class):EntitySystem
+		private final function getSystemByType(systemType:Class):IEntitySystem
 		{
-			var system:EntitySystem;
+			var system:IEntitySystem;
 			if(_systemsTypes[systemType] != null)
 			{
 				var index:int = _systemsTypes[systemType];
