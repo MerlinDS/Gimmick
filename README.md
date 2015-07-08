@@ -10,6 +10,9 @@ Main goals of "Gimmick" development:
 
 For more documentation see *[Wiki](https://github.com/MerlinDS/Gimmick/wiki)*
 
+To see all tasks, create bug or leave proposal, please visit:
+[https://github.com/MerlinDS/Gimmick/issues](https://github.com/MerlinDS/Gimmick/issues)
+
 If you are interested feel free to ask questions:
 * [Twitter - MerlinDS](https://twitter.com/MerlinDs)
 * Email - merlinkolv@gmail.com
@@ -59,7 +62,7 @@ Update entity position by velocity with MovementSystem
         {
             /*
             * Collection can be created in body of tick method, 
-            * but in this case iteration through will be slower.
+            * but in this case iteration through entities will be slower.
             * var entities:IEntities = Gimmick.getEntities(VelocityComponent, PositionComponent);
             */
             for(_entities.begin(); !_entities.end(); _entities.next())
@@ -126,12 +129,6 @@ Usage (Main class of the application):
         }
         
     }
-    
-##TODO, BUGS and PROPOSALS
-
-To see all tasks and bugs of this project visit:
-[https://github.com/MerlinDS/Gimmick/issues](https://github.com/MerlinDS/Gimmick/issues)
-
 
 ##License
 
