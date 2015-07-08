@@ -16,59 +16,86 @@ package org.gimmick.managers
 
 	import flexunit.framework.Assert;
 
+	import org.gimmick.collections.IEntities;
+
+	import org.gimmick.core.ComponentType;
+
 	import org.gimmick.core.IEntity;
 	import org.gimmick.utils.TestConfig;
 	import org.gimmick.utils.TestEntity;
 
+	[RunWith("org.flexunit.runners.Parameterized")]
 	public class EntitiesManagerTest
 	{
 
-		private var _bits:uint;
-		private var _entities:Vector.<IEntity>;
+		[Parameters]
+		public static var testData:Array = [
+			[ [/**Entities*/[/**Components*/], [], []], [/**PreInit collection**/], [/**PostInit collection**/] ],
+			[ [[TestComponent0, TestComponent1]], [TestComponent1], [TestComponent0] ]
+		];
+
+
+		private var _entities:Array;
+		private var _preinit:Array;
+		private var _postinit:Array;
+
+		private var _preinitCollection:IEntities;
+
+		private var _componentTypeManager:ComponentTypeManager;
 		private var _entitiesManager:EntitiesManager;
 		//======================================================================================================================
 //{region											PUBLIC METHODS
-		public function EntitiesManagerTest()
+		public function EntitiesManagerTest(entities:Array, preinit:Array, postinit:Array)
 		{
+			_entities = entities;
+			_postinit = postinit;
+			_preinit = preinit;
 		}
 
 		[Before]
 		public function setUp():void
 		{
 			var testConfig:TestConfig = new TestConfig();
-			_bits = testConfig.componentTypeManager.getType(TestComponent).bit;
-			_entities = new <IEntity>[
-				new TestEntity(0x0),
-				new TestEntity(_bits),
-				new TestEntity(_bits | (_bits << 1)),
-				new TestEntity(_bits << 1),
-				new TestEntity(_bits),
-				new TestEntity(_bits << 1)
-			];
+			_componentTypeManager = testConfig.componentTypeManager;
 			_entitiesManager = new EntitiesManager();
 			_entitiesManager.initialize();
-
+			//initialize collection befor start of looping
+			_preinitCollection = _entitiesManager.getEntities(_preinit);
+			_entitiesManager.tick(0);
 		}
 
 		[After]
 		public function tearDown():void
 		{
+			_componentTypeManager.dispose();
+			_componentTypeManager = null;
 			_entitiesManager.dispose();
 			_entitiesManager = null;
-			_entities = null;
-			_bits = 0x0;
 		}
 
 		[Test]
-		public function testAddEntity():void
+		public function testAddNewEntity():void
 		{
-			_entitiesManager.addEntity(_entities[0], null);
-			Assert.fail('Test not implemented yet');
+			for(var i:int = 0; i < _entities.length; i++)
+				_entitiesManager.addEntity(new TestEntity());
+
 		}
 
-		private function testMethod(...args):void
+		[Test]
+		public function testAddComponent2EmptyEntity():void
 		{
-			var a:int = 1 + args[0];
+			for(var i:int = 0; i < _entities.length; i++)
+			{
+				var components:Array = _entities[i];
+				var entity:IEntity = new TestEntity();
+				_entitiesManager.addEntity(entity);
+				for(var j:int = 0; j < components.length; j++)
+				{
+					if(components[j] == null)continue;
+					var componentType:ComponentType = _componentTypeManager.getType( components[j] );
+					_entitiesManager.addEntity(entity, componentType);
+				}
+			}
 		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
@@ -81,4 +108,9 @@ package org.gimmick.managers
 //} endregion GETTERS/SETTERS ==========================================================================================
 	}
 }
-class TestComponent{}
+
+import org.gimmick.core.Component;
+import org.gimmick.utils.TestEntity;
+
+class TestComponent0 extends Component{}
+class TestComponent1 extends Component{}
