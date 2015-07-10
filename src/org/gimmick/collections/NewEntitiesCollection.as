@@ -9,7 +9,6 @@
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-
 package org.gimmick.collections
 {
 
@@ -17,49 +16,54 @@ package org.gimmick.collections
 
 	import org.gimmick.core.IEntity;
 
-	/**
-	 * Concrete entities collection
-	 * Holder of entities list
-	 */
-	public final class EntitiesCollection implements IEntities
+	public class NewEntitiesCollection implements IEntities
 	{
+		private var _allocationSize:int;
+		private var _content:Vector.<IEntity>;
+		/**
+		 * Hash map of collection indexes.
+		 * Key = Id of entity
+		 * Value = Index in content list of entity
+		 */
+		private var _hashMap:Dictionary = new Dictionary(true);
 
-		private var _head:CollectionNode;
-		private var _tail:CollectionNode;
-		private var _cursor:CollectionNode;
+		private var _splits:Vector.<int>;
 
+		private var _cursor:int;
+		private var _length:int;
 		private var _bits:uint;
 		/**
-		 * Hash map of collection nodes.
-		 * Key = Id of entity
-		 * Value = CollectionNode that contains entity
+		 * Flag for indication that this instance depended to other one
 		 */
-		private var _hashMap:Dictionary;
-		/**
-		 * Flag for indication of copied instance
-		 */
-		private var _isCopy:Boolean;
+		private var _isDepended:Boolean;
 		//======================================================================================================================
 //{region											PUBLIC METHODS
 		/**
 		 * Constructor
+		 * @param allocationSize Size of intial allocations
 		 */
-		public function EntitiesCollection()
+		public function NewEntitiesCollection(allocationSize:int = 1024)
 		{
-			this.clear();
+			_allocationSize = allocationSize;
+			_content = new <IEntity>[];
+			_splits = new <int>[];
+			_hashMap = new Dictionary(true);
+			_cursor = 0;
+			this.increaseSize();
 		}
-
 		/**
 		 * @inheritDoc
 		 */
-		public function copy():IEntities
+		public function dependedClone():IEntities
 		{
-			var copy:EntitiesCollection = new EntitiesCollection();
-			copy._isCopy = true;
-			copy._hashMap = _hashMap;
-			copy._head = _head;
-			copy._tail = _tail;
-			return copy;
+			this.defragContent();
+			var clone:NewEntitiesCollection = new NewEntitiesCollection(0);
+			clone._allocationSize = _allocationSize;
+			clone._content = _content;
+			clone._hashMap = _hashMap;
+			clone._length = length;
+			clone._isDepended = true;
+			return clone;
 		}
 
 		/**
@@ -71,19 +75,10 @@ package org.gimmick.collections
 			//Add new entity only in case if it was not added previously
 			if(_hashMap[entity.id] == null)
 			{
-				var node:CollectionNode = CollectionNode.allocateNode();
-				node.entity = entity;
-				//add to linked list
-				if(_head == null)
-					_head = node;
-				else
-				{
-					node.prev = _tail;
-					_tail.next = node;
-				}
-				_tail = node;
-				//add to hash map
-				_hashMap[entity.id] = node;
+				if(_length == _content.length)
+					this.increaseSize();
+				_hashMap[entity.id] = _length;//set index of entity in content list
+				_content[_length++] = entity;//add to content list
 			}
 			//if node was already added do nothing
 		}
@@ -94,17 +89,18 @@ package org.gimmick.collections
 		[Inline]
 		public final function pop(entity:IEntity):void
 		{
-			var node:CollectionNode = _hashMap[entity.id];
 			//Remove entity only in case if it was added previously
-			if(node != null)
+			if(_hashMap[entity.id] != null)
 			{
-				var next:CollectionNode = node.next;
-				var prev:CollectionNode = node.prev;
-				if(next != null)//set previous link to next node
-					next.prev = prev;
-				if(prev != null)//set next node link to previous node
-					prev.next = next;
-				CollectionNode.freeNode(node);
+				var index:int = _hashMap[entity.id];
+				_content[index] = null;//delete instance of content
+				if(_cursor > index)//save index for future content defragmentation
+					_splits.push(index);
+				else
+				{
+					//get content from end of list and push it to empty place
+					_content[index] = _content[--_length];
+				}
 				//remove from has map
 				_hashMap[entity.id] = null;
 			}
@@ -128,41 +124,32 @@ package org.gimmick.collections
 		{
 			return _hashMap[entity.id] != null;
 		}
-
 		/**
 		 * @inheritDoc
 		 */
 		[Inline]
 		public final function getById(entityId:String):IEntity
 		{
-			var node:CollectionNode = _hashMap[entityId];
-			return node != null ? node.entity : null;
+			var entity:IEntity;
+			if(_hashMap[entityId] != null)
+			{
+				var index:int = _hashMap[entityId];
+				entity = _content[index];
+			}
+			return entity;
 		}
-
 		/**
 		 * @inheritDoc
 		 */
 		public function clear():void
 		{
 			_hashMap = new Dictionary(true);
-			if(!_isCopy)
-			{
-				//free all nodes
-				var next:CollectionNode;
-				var node:CollectionNode = _head;
-				while(node != null)
-				{
-					next = node.next;
-					CollectionNode.freeNode(node);
-					node = next;
-				}
-			}
-			//clean links
-			_cursor = null;
-			_head = null;
-			_tail = null;
+			if(!_isDepended)
+				this.increaseSize(true);
+			_splits.length = 0;
+			_cursor = 0;
+			_length = 0;
 		}
-
 		/**
 		 * @inheritDoc
 		 */
@@ -170,18 +157,21 @@ package org.gimmick.collections
 		{
 			this.clear();
 			_hashMap = null;
+			_content = null;
+			_splits = null;
 		}
-		//internal iterator implementation
+
 		/**
 		 * @inheritDoc
 		 */
 		[Inline]
 		public final function begin():ICollectionIterator
 		{
-			_cursor = _head;
+			this.defragContent();
+			_cursor = 0;
 			if(_bits > 0x0)
-				while(_cursor != null && !(_cursor.entity.bits & _bits))
-					_cursor = _cursor.next;
+				while(_cursor < _length && !(_content[_cursor].bits & _bits))
+					_cursor++;
 			return this;
 		}
 
@@ -191,7 +181,7 @@ package org.gimmick.collections
 		[Inline]
 		public final function end():Boolean
 		{
-			return _cursor == null;
+			return _cursor >= _length;
 		}
 
 		/**
@@ -202,15 +192,33 @@ package org.gimmick.collections
 		{
 			if(_bits > 0x0)
 			{
-				do _cursor = _cursor.next;
-				while(_cursor != null && !(_cursor.entity.bits & _bits));
+				do _cursor++;
+				while(_cursor < _length && !(_content[_cursor].bits & _bits));
 			}else
-				_cursor = _cursor.next;
+				_cursor++;
+
 		}
+
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
+		private function increaseSize(fromClean:Boolean = false):void
+		{
+			_content.fixed = false;
+			if(fromClean)
+				_content.length = 0;
+			_content.length = _content.length + _allocationSize;
+			_content.fixed = true;
+		}
 
+		private function defragContent():void
+		{
+			while(_splits.length > 0)
+			{
+				var index:int = _splits.pop();
+				_content[index] = _content[--_length];
+			}
+		}
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS
@@ -218,18 +226,18 @@ package org.gimmick.collections
 		 * @inheritDoc
 		 */
 		[Inline]
-		public final function get current():IEntity
+		public final function set bits(value:uint):void
 		{
-			return _cursor != null ? _cursor.entity : null;
+			_bits = value;
 		}
 
 		/**
 		 * @inheritDoc
 		 */
 		[Inline]
-		public final function set bits(value:uint):void
+		public final function get current():IEntity
 		{
-			_bits = value;
+			return _content[_cursor];
 		}
 
 //} endregion GETTERS/SETTERS ==========================================================================================

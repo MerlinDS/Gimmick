@@ -22,7 +22,7 @@ package org.gimmick.collections
 	{
 		private var _bits:uint;
 		private var _entities:Vector.<IEntity>;
-		private var _iterator:EntitiesCollection;
+		private var _iterator:NewEntitiesCollection;
 		//======================================================================================================================
 //{region											PUBLIC METHODS
 		public function CollectionIteratorTest()
@@ -44,7 +44,7 @@ package org.gimmick.collections
 				new TestEntity(_bits),
 				new TestEntity(_bits << 1)
 			];
-			_iterator = new EntitiesCollection();
+			_iterator = new NewEntitiesCollection();
 			for(var i:int = 0; i < _entities.length; i++)
 				_iterator.push(_entities[i]);
 

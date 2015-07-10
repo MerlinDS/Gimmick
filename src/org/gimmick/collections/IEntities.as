@@ -21,7 +21,7 @@ package org.gimmick.collections
 		 * Created copy will works with parent content, but asses of disposing of content will be denied.
 		 * @return Instance of new copy.
 		 */
-		function copy():IEntities;
+		function dependedClone():IEntities;
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS

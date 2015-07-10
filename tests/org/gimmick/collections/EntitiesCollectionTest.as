@@ -34,8 +34,8 @@ package org.gimmick.collections
 		public function setUp():void
 		{
 			_entity = new TestEntity();
-			_collection = new EntitiesCollection();
-			_copy = (_collection as IEntities).copy();
+			_collection = new NewEntitiesCollection();
+			_copy = (_collection as IEntities).dependedClone();
 		}
 
 		[After]
