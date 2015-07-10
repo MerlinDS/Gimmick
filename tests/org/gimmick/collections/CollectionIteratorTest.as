@@ -44,7 +44,7 @@ package org.gimmick.collections
 				new TestEntity(_bits),
 				new TestEntity(_bits << 1)
 			];
-			_iterator = new EntitiesCollection();
+			_iterator = new EntitiesCollection(5);//for size increasing test
 			for(var i:int = 0; i < _entities.length; i++)
 				_iterator.push(_entities[i]);
 
@@ -53,6 +53,7 @@ package org.gimmick.collections
 		[After]
 		public function tearDown():void
 		{
+			_iterator.bits = 0x0;
 			_entities.length = 0;
 			_entities = null;
 		}
@@ -87,6 +88,52 @@ package org.gimmick.collections
 				Assert.assertEquals(entities[i++], _iterator.current);
 			}
 			Assert.assertEquals(entities.length, i);
+		}
+
+		[Test(description="iterate collection with under cursor deleting")]
+		public function testIterationWithD1():void
+		{
+			var i:int = _entities.length;
+			for(_iterator.begin(); !_iterator.end(); _iterator.next())
+			{
+				_iterator.pop(_iterator.current);
+//				Assert.assertNotNull(_iterator.current); Inplement this in need
+				i--;
+			}
+			Assert.assertEquals(0, i);
+		}
+
+		[Test(description="iterate collection with deleting last component")]
+		public function testIterationWithD2():void
+		{
+			var i:int = _entities.length;
+			for(_iterator.begin(); !_iterator.end(); _iterator.next())
+			{
+				_iterator.pop(_entities[--i]);
+				Assert.assertNotNull(_iterator.current);
+			}
+			Assert.assertEquals(_entities.length / 2 , i);
+		}
+
+		[Test(description="iterate collection with deleting after cursor")]
+		public function testIterationWithD3():void
+		{
+			var i:int = 0;
+			for(_iterator.begin(); !_iterator.end(); _iterator.next())
+			{
+				Assert.assertNotNull(_iterator.current);
+				if(i > 0)
+					_iterator.pop(_entities[i - 1]);
+				i++;
+			}
+			Assert.assertEquals(_entities.length, i);
+			i = 1;
+			for(_iterator.begin(); !_iterator.end(); _iterator.next())
+			{
+				Assert.assertNotNull(_iterator.current);
+				i--;
+			}
+			Assert.assertEquals(0, i);
 		}
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================

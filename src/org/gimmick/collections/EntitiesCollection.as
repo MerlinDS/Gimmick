@@ -16,6 +16,10 @@ package org.gimmick.collections
 
 	import org.gimmick.core.IEntity;
 
+	/**
+	 * Collection of entities.
+	 * Do not provide sorted entities list
+	 */
 	public class EntitiesCollection implements IEntities, IEntitiesCollection
 	{
 		private var _allocationSize:int;
@@ -42,7 +46,7 @@ package org.gimmick.collections
 		 * Constructor
 		 * @param allocationSize Size of intial allocations
 		 */
-		public function EntitiesCollection(allocationSize:int = 1024)
+		public function EntitiesCollection(allocationSize:int = 100)
 		{
 			_allocationSize = allocationSize;
 			_content = new <IEntity>[];
@@ -94,12 +98,14 @@ package org.gimmick.collections
 			{
 				var index:int = _hashMap[entity.id];
 				_content[index] = null;//delete instance of content
-				if(_cursor > index)//save index for future content defragmentation
+				if(index <= _cursor)//save index for future content defragmentation
 					_splits.push(index);
 				else
 				{
 					//get content from end of list and push it to empty place
-					_content[index] = _content[--_length];
+					var lastIndex:int = --_length;
+					_content[index] = _content[lastIndex];
+					_content[lastIndex] = null;
 				}
 				//remove from has map
 				_hashMap[entity.id] = null;
@@ -215,8 +221,9 @@ package org.gimmick.collections
 		{
 			while(_splits.length > 0)
 			{
-				var index:int = _splits.pop();
-				_content[index] = _content[--_length];
+				var lastIndex:int = --_length;
+				_content[_splits.pop()] = _content[lastIndex];
+				_content[lastIndex] = null;
 			}
 		}
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
