@@ -34,27 +34,6 @@ package org.gimmick.collections
 		 * @param entity Instance of entity
 		 */
 		function pop(entity:IEntity):void;
-
-		/**
-		 * Check if collection contains entity with id
-		 * @param entityId Entity Id
-		 * @return True if collection contains such entity. False in other case
-		 */
-		function hasId(entityId:String):Boolean;
-
-		/**
-		 * Check if collection contains entity
-		 * @param entity Instance of entity
-		 * @return True if collection contains such entity. False in other case
-		 */
-		function hasEntity(entity:IEntity):Boolean;
-		/**
-		 * Get entity from collection by id
-		 * @param entityId Entity Id
-		 * @return Instance of entity if collection contains such entity. Null in other case
-		 */
-		function getById(entityId:String):IEntity;
-
 		/**
 		 * Clear collection for new usage
 		 */

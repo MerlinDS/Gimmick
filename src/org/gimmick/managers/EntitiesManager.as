@@ -113,7 +113,7 @@ package org.gimmick.managers
 		 */
 		public function dispose():void
 		{
-			for each(var collection:IEntities in _collectionsMap)
+			for each(var collection:NewEntitiesCollection in _collectionsMap)
 				collection.dispose();
 			_collectionsMap = null;
 		}

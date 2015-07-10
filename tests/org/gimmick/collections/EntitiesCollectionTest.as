@@ -22,8 +22,8 @@ package org.gimmick.collections
 	{
 
 		private var _entity:IEntity;
-		private var _collection:IEntitiesCollection;
-		private var _copy:IEntitiesCollection;
+		private var _collection:NewEntitiesCollection;
+		private var _copy:NewEntitiesCollection;
 		//======================================================================================================================
 //{region											PUBLIC METHODS
 		public function EntitiesCollectionTest()
@@ -35,7 +35,7 @@ package org.gimmick.collections
 		{
 			_entity = new TestEntity();
 			_collection = new NewEntitiesCollection();
-			_copy = (_collection as IEntities).dependedClone();
+			_copy = _collection.dependedClone() as NewEntitiesCollection;
 		}
 
 		[After]

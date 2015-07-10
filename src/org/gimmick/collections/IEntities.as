@@ -12,7 +12,9 @@
 package org.gimmick.collections
 {
 
-	public interface IEntities extends IEntitiesCollection, ICollectionIterator
+	import org.gimmick.core.IEntity;
+
+	public interface IEntities extends ICollectionIterator
 	{
 		//======================================================================================================================
 //{region											PUBLIC METHODS
@@ -22,6 +24,25 @@ package org.gimmick.collections
 		 * @return Instance of new copy.
 		 */
 		function dependedClone():IEntities;
+		/**
+		 * Check if collection contains entity with id
+		 * @param entityId Entity Id
+		 * @return True if collection contains such entity. False in other case
+		 */
+		function hasId(entityId:String):Boolean;
+
+		/**
+		 * Check if collection contains entity
+		 * @param entity Instance of entity
+		 * @return True if collection contains such entity. False in other case
+		 */
+		function hasEntity(entity:IEntity):Boolean;
+		/**
+		 * Get entity from collection by id
+		 * @param entityId Entity Id
+		 * @return Instance of entity if collection contains such entity. Null in other case
+		 */
+		function getById(entityId:String):IEntity;
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS

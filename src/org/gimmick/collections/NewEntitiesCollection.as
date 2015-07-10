@@ -16,7 +16,7 @@ package org.gimmick.collections
 
 	import org.gimmick.core.IEntity;
 
-	public class NewEntitiesCollection implements IEntities
+	public class NewEntitiesCollection implements IEntities, IEntitiesCollection
 	{
 		private var _allocationSize:int;
 		private var _content:Vector.<IEntity>;
