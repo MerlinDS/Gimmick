@@ -16,7 +16,7 @@ package org.gimmick.collections
 
 	import org.gimmick.core.IEntity;
 
-	public class NewEntitiesCollection implements IEntities, IEntitiesCollection
+	public class EntitiesCollection implements IEntities, IEntitiesCollection
 	{
 		private var _allocationSize:int;
 		private var _content:Vector.<IEntity>;
@@ -42,7 +42,7 @@ package org.gimmick.collections
 		 * Constructor
 		 * @param allocationSize Size of intial allocations
 		 */
-		public function NewEntitiesCollection(allocationSize:int = 1024)
+		public function EntitiesCollection(allocationSize:int = 1024)
 		{
 			_allocationSize = allocationSize;
 			_content = new <IEntity>[];
@@ -57,7 +57,7 @@ package org.gimmick.collections
 		public function dependedClone():IEntities
 		{
 			this.defragContent();
-			var clone:NewEntitiesCollection = new NewEntitiesCollection(0);
+			var clone:EntitiesCollection = new EntitiesCollection(0);
 			clone._allocationSize = _allocationSize;
 			clone._content = _content;
 			clone._hashMap = _hashMap;

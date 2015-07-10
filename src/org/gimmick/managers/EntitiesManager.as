@@ -15,7 +15,7 @@ package org.gimmick.managers
 
 	import flash.utils.Dictionary;
 
-	import org.gimmick.collections.NewEntitiesCollection;
+	import org.gimmick.collections.EntitiesCollection;
 
 	import org.gimmick.collections.IEntities;
 	import org.gimmick.core.ComponentType;
@@ -50,7 +50,7 @@ package org.gimmick.managers
 		{
 			_collectionsMap = new Dictionary(true);
 			//initialize base collection without any filltration (contains all entities)
-			_collectionsMap[0x0] = new NewEntitiesCollection();
+			_collectionsMap[0x0] = new EntitiesCollection();
 		}
 
 		/**
@@ -113,7 +113,7 @@ package org.gimmick.managers
 		 */
 		public function dispose():void
 		{
-			for each(var collection:NewEntitiesCollection in _collectionsMap)
+			for each(var collection:EntitiesCollection in _collectionsMap)
 				collection.dispose();
 			_collectionsMap = null;
 		}
