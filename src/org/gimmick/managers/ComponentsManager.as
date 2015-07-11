@@ -13,12 +13,18 @@
 package org.gimmick.managers
 {
 
+	import flash.utils.Dictionary;
+
+	import org.gimmick.collections.ComponentsCollection;
+	import org.gimmick.core.Component;
 	import org.gimmick.core.ComponentType;
 	import org.gimmick.core.IEntity;
 
 	internal class ComponentsManager implements IComponentsManager
 	{
 
+		private var _allocationSize:int;
+		private var _components:Vector.<ComponentsCollection>;
 //======================================================================================================================
 //{region											PUBLIC METHODS
 		public function ComponentsManager()
@@ -28,9 +34,31 @@ package org.gimmick.managers
 		/**
 		 * @inheritDoc
 		 */
-		public function addComponent(entity:IEntity, componentType:ComponentType, component:Object):void
+		public function initialize(allocationSize:int = 1):void
 		{
+			_allocationSize = allocationSize;
+			_components = new <ComponentsCollection>[];
+		}
 
+		/**
+		 * @inheritDoc
+		 */
+		public function addComponent(entity:IEntity, componentType:ComponentType, component:Component):void
+		{
+			if(_components.length <= componentType.index)
+			{
+				//increase components list size
+				_components.length = componentType.index + 1;
+			}
+			//get component list
+			var collection:ComponentsCollection = _components[componentType.index];
+			if(collection == null)
+			{
+				collection = new ComponentsCollection(_allocationSize);
+				_components[componentType.index] = collection;
+			}
+			//add component to collection
+			collection.push(entity.id, component);
 		}
 
 		/**
@@ -38,7 +66,8 @@ package org.gimmick.managers
 		 */
 		public function removeComponent(entity:IEntity, componentType:ComponentType):void
 		{
-
+			if(_components.length > componentType.index)
+				_components[componentType.index].remove(entity.id);
 		}
 
 		/**
@@ -46,7 +75,8 @@ package org.gimmick.managers
 		 */
 		public function getComponent(entity:IEntity, componentType:ComponentType):*
 		{
-			return null;
+			if(_components.length <= componentType.index)return null;
+			return _components[componentType.index].get(entity.id);
 		}
 
 		/**
@@ -54,7 +84,15 @@ package org.gimmick.managers
 		 */
 		public function getComponents(entity:IEntity):Array
 		{
-			return null;
+			var array:Array = [];
+			var n:int = _components.length;
+			for(var i:int = 0; i < n; i++)
+			{
+				var collection:ComponentsCollection = _components[i];
+				if(collection.has(entity.id))
+					array.push(collection.get(entity.id));
+			}
+			return array;
 		}
 
 		/**
@@ -62,22 +100,26 @@ package org.gimmick.managers
 		 */
 		public function removeComponents(entity:IEntity):void
 		{
-
-		}
-
-		/**
-		 * @inheritDoc
-		 */
-		public function initialize(allocationSize:int = 1):void
-		{
-
+			var n:int = _components.length;
+			for(var i:int = 0; i < n; i++)
+			{
+				var collection:ComponentsCollection = _components[i];
+				if(collection.has(entity.id))
+					collection.remove(entity.id);
+			}
 		}
 		/**
 		 * @inheritDoc
 		 */
 		public function dispose():void
 		{
-
+			while(_components.length > 0)
+			{
+				var collection:ComponentsCollection = _components[_components.length - 1];
+				collection.dispose();
+				_components.length--;
+			}
+			_components = null;
 		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================

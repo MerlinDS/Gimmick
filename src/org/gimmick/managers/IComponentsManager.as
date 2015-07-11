@@ -13,9 +13,9 @@
 package org.gimmick.managers
 {
 
+	import org.gimmick.core.Component;
 	import org.gimmick.core.ComponentType;
 	import org.gimmick.core.IEntity;
-	import org.gimmick.managers.IGimmickManager;
 
 	/**
 	 * Interface for component managers
@@ -30,7 +30,7 @@ package org.gimmick.managers
 		 * @param componentType ComponentType of component
 		 * @param component Instance of the component
 		 */
-		function addComponent(entity:IEntity, componentType:ComponentType, component:Object):void;
+		function addComponent(entity:IEntity, componentType:ComponentType, component:Component):void;
 		/**
 		 * Remove link of component from entity
 		 * @param entity Instance of the entity

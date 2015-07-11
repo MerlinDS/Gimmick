@@ -155,7 +155,7 @@ class TestComponentsManager implements IComponentsManager
 		return _testComponent;
 	}
 
-	public function addComponent(entity:IEntity, componentType:ComponentType, component:Object):void
+	public function addComponent(entity:IEntity, componentType:ComponentType, component:Component):void
 	{
 		Assert.assertEquals(_testComponent, component);
 	}

@@ -64,7 +64,7 @@ class TestSystemManager implements ISystemManager
 class TestComponentManager implements IComponentsManager
 {
 
-	public function addComponent(entity:IEntity, componentType:ComponentType, component:Object):void{}
+	public function addComponent(entity:IEntity, componentType:ComponentType, component:Component):void {}
 	public function removeComponent(entity:IEntity, componentType:ComponentType):void{}
 	public function getComponent(entity:IEntity, componentType:ComponentType):*{}
 	public function getComponents(entity:IEntity):Array{return null;}
