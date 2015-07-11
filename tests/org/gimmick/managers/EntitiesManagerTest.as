@@ -82,7 +82,7 @@ package org.gimmick.managers
 		}
 
 		[Test]
-		public function testAddComponent2EmptyEntity():void
+		public function testAddComponent2EmptyEntities():void
 		{
 			for(var i:int = 0; i < _entities.length; i++)
 			{
