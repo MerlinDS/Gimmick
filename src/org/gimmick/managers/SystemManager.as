@@ -68,6 +68,8 @@ package org.gimmick.managers
 			{
 				node.collection = (system as IProcessingSystem).targetEntities as EntitiesCollection;
 				node.forEach = true;
+				if(node.collection == null)
+					throw new ArgumentError('TargetCollection for processing was not added to system!');
 			}
 			_systemsTypes[type] = node;
 			//all was done nornaly, lets initialize system

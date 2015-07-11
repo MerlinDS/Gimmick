@@ -15,6 +15,11 @@ package org.gimmick.managers
 
 	import flexunit.framework.Assert;
 
+	import org.gimmick.collections.EntitiesCollection;
+
+	import org.gimmick.collections.IEntities;
+	import org.gimmick.utils.TestEntity;
+
 	import org.gimmick.utils.getInstanceClass;
 
 	/**
@@ -23,7 +28,9 @@ package org.gimmick.managers
 	public class SystemManagerTest
 	{
 
+		private var _entities:EntitiesCollection;
 		private var _testSystem:TestSystem;
+		private var _processingSystem:TestProcessingSystem;
 		private var _systemManager:SystemManager;
 		//======================================================================================================================
 //{region											PUBLIC METHODS
@@ -34,6 +41,10 @@ package org.gimmick.managers
 		[Before]
 		public function setUp():void
 		{
+			_entities = new EntitiesCollection(2);
+			_entities.push(new TestEntity());
+			_entities.push(new TestEntity());
+			_processingSystem = new TestProcessingSystem(_entities);
 			_testSystem = new TestSystem();
 			_systemManager = new SystemManager();
 			_systemManager.initialize(4);
@@ -45,6 +56,9 @@ package org.gimmick.managers
 			while(TestSystem.EXECUTION_ORDER.length > 0)
 				TestSystem.EXECUTION_ORDER.pop();
 			_systemManager.dispose();
+			_entities.dispose();
+			_entities = null;
+			_processingSystem = null;
 			_systemManager = null;
 		}
 
@@ -53,6 +67,7 @@ package org.gimmick.managers
 		public function testAddSystem():void
 		{
 			_systemManager.addSystem(_testSystem, 1);
+			_systemManager.addSystem(_processingSystem, 2);
 		}
 
 		[Test]
@@ -70,7 +85,8 @@ package org.gimmick.managers
 			var systems:Array = [
 				new ThirdSystem(), 3,
 				new FirstSystem(), 1,
-				new SecondSystem(), 2
+				new SecondSystem(), 2,
+				new TestProcessingSystem(_entities), 4
 			];
 			for(var i:int = 0; i < systems.length / 2; i++)
 			{
@@ -91,6 +107,9 @@ package org.gimmick.managers
 			_systemManager.removeSystem(TestSystem);
 			Assert.assertFalse(_testSystem.activated);
 			Assert.assertFalse(_testSystem.initialized);
+			_systemManager.removeSystem(TestProcessingSystem);
+			Assert.assertFalse(_processingSystem.activated);
+			Assert.assertFalse(_processingSystem.initialized);
 		}
 
 		[Test]
@@ -100,6 +119,9 @@ package org.gimmick.managers
 			Assert.assertFalse(_testSystem.activated);
 			_systemManager.activateSystem(TestSystem);
 			Assert.assertTrue(_testSystem.activated);
+			Assert.assertFalse(_processingSystem.activated);
+			_systemManager.activateSystem(TestProcessingSystem);
+			Assert.assertTrue(_processingSystem.activated);
 		}
 
 		[Test]
@@ -108,6 +130,8 @@ package org.gimmick.managers
 			this.testActivateSystem();
 			_systemManager.deactivateSystem(TestSystem);
 			Assert.assertFalse(_testSystem.activated);
+			_systemManager.deactivateSystem(TestProcessingSystem);
+			Assert.assertFalse(_processingSystem.activated);
 		}
 
 		[Test]
@@ -117,6 +141,15 @@ package org.gimmick.managers
 			Assert.assertEquals(0, _testSystem.ticksCount);
 			_systemManager.tick(0);
 			Assert.assertEquals(1, _testSystem.ticksCount);
+		}
+
+		[Test]
+		public function testProcess():void
+		{
+			this.testActivateSystem();
+			Assert.assertEquals(0, _processingSystem.ticksCount);
+			_systemManager.tick(0);
+			Assert.assertEquals(2, _processingSystem.ticksCount);
 		}
 
 		//error tests
@@ -138,6 +171,13 @@ package org.gimmick.managers
 		{
 			_systemManager.deactivateSystem(TestSystem);
 		}
+
+		[Test(expects="ArgumentError")]
+		public function testAddProcessingError():void
+		{
+			var badSystem:TestProcessingSystem = new TestProcessingSystem(null);
+			_systemManager.addSystem(badSystem);
+		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
@@ -150,7 +190,11 @@ package org.gimmick.managers
 	}
 }
 
+import org.flexunit.Assert;
+import org.gimmick.collections.IEntities;
+import org.gimmick.core.IEntity;
 import org.gimmick.core.IEntitySystem;
+import org.gimmick.core.IProcessingSystem;
 
 class TestSystem implements IEntitySystem
 {
@@ -167,7 +211,6 @@ class TestSystem implements IEntitySystem
 			ticksCount++;
 			EXECUTION_ORDER.push(this);
 		}
-
 	}
 
 	public function initialize():void
@@ -188,6 +231,31 @@ class TestSystem implements IEntitySystem
 	public function deactivate():void
 	{
 		this.activated = false;
+	}
+}
+
+class TestProcessingSystem extends TestSystem implements IProcessingSystem
+{
+
+	private var _entities:IEntities;
+
+	public function TestProcessingSystem(entities:IEntities)
+	{
+		_entities = entities;
+	}
+
+	public function process(entity:IEntity, entities:IEntities):void
+	{
+		Assert.assertEquals(_entities, entities);
+		_entities.hasEntity(entity);
+		this.ticksCount++;
+		if(EXECUTION_ORDER.indexOf(this) < 0)
+			EXECUTION_ORDER.push(this);
+	}
+
+	public function get targetEntities():IEntities
+	{
+		return _entities;
 	}
 }
 
