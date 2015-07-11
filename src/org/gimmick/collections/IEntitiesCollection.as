@@ -30,10 +30,10 @@ package org.gimmick.collections
 		function push(entity:IEntity):void;
 
 		/**
-		 * Pop Entity from collection
+		 * Remove Entity from collection
 		 * @param entity Instance of entity
 		 */
-		function pop(entity:IEntity):void;
+		function remove(entity:IEntity):void;
 		/**
 		 * Clear collection for new usage
 		 */

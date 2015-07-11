@@ -96,7 +96,7 @@ package org.gimmick.collections
 			var i:int = _entities.length;
 			for(_iterator.begin(); !_iterator.end(); _iterator.next())
 			{
-				_iterator.pop(_iterator.current);
+				_iterator.remove(_iterator.current);
 //				Assert.assertNotNull(_iterator.current); Inplement this in need
 				i--;
 			}
@@ -109,7 +109,7 @@ package org.gimmick.collections
 			var i:int = _entities.length;
 			for(_iterator.begin(); !_iterator.end(); _iterator.next())
 			{
-				_iterator.pop(_entities[--i]);
+				_iterator.remove(_entities[--i]);
 				Assert.assertNotNull(_iterator.current);
 			}
 			Assert.assertEquals(_entities.length / 2 , i);
@@ -123,7 +123,7 @@ package org.gimmick.collections
 			{
 				Assert.assertNotNull(_iterator.current);
 				if(i > 0)
-					_iterator.pop(_entities[i - 1]);
+					_iterator.remove(_entities[i - 1]);
 				i++;
 			}
 			Assert.assertEquals(_entities.length, i);

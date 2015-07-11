@@ -91,7 +91,7 @@ package org.gimmick.collections
 		 * @inheritDoc
 		 */
 		[Inline]
-		public final function pop(entity:IEntity):void
+		public final function remove(entity:IEntity):void
 		{
 			//Remove entity only in case if it was added previously
 			if(_hashMap[entity.id] != null)

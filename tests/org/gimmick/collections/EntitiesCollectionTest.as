@@ -89,7 +89,7 @@ package org.gimmick.collections
 		public function testPop():void
 		{
 			this.testPush();
-			_collection.pop(_entity);
+			_collection.remove(_entity);
 			//also entity must be removed from copy
 			Assert.assertFalse(_collection.hasEntity(_entity));
 			Assert.assertFalse(_copy.hasEntity(_entity));
