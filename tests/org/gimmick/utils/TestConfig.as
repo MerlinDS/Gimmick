@@ -42,7 +42,9 @@ package org.gimmick.utils
 }
 
 import org.gimmick.collections.IEntities;
+import org.gimmick.core.Component;
 import org.gimmick.core.ComponentType;
+import org.gimmick.core.IBaseSystem;
 import org.gimmick.core.IEntity;
 import org.gimmick.core.IEntitySystem;
 import org.gimmick.managers.IComponentsManager;
@@ -52,8 +54,8 @@ import org.gimmick.managers.ISystemManager;
 class TestSystemManager implements ISystemManager
 {
 
-	public function addSystem(system:IEntitySystem, priority:int = 1):IEntitySystem{return null;}
-	public function removeSystem(systemType:Class):IEntitySystem{return null;}
+	public function addSystem(system:IBaseSystem, priority:int = 1):IBaseSystem{return null;}
+	public function removeSystem(systemType:Class):IBaseSystem{return null;}
 	public function activateSystem(systemType:Class):void{}
 	public function deactivateSystem(systemType:Class):void{}
 	public function tick(time:Number):void{}

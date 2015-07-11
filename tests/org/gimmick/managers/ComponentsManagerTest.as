@@ -44,7 +44,7 @@ package org.gimmick.managers
 		{
 			var config:TestConfig = new TestConfig();
 			_entity = new TestEntity();
-			_manager = config.componentsManager as ComponentsManager;
+			_manager = new ComponentsManager();
 			_components = new <Component>[
 					new TestComponent_0(),
 					new TestComponent_1(),
@@ -63,7 +63,6 @@ package org.gimmick.managers
 		public function tearDown():void
 		{
 			_manager.dispose();
-			Assert.assertNull(_manager.getComponent(_entity, _componentTypes[0]));
 			_manager = null;
 			_componentTypes = null;
 		}

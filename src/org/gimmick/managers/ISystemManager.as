@@ -13,6 +13,7 @@
 package org.gimmick.managers
 {
 
+	import org.gimmick.core.IBaseSystem;
 	import org.gimmick.core.IEntitySystem;
 
 	/**
@@ -20,7 +21,7 @@ package org.gimmick.managers
 	 */
 	public interface ISystemManager extends IGimmickManager
 	{
-		//======================================================================================================================
+//======================================================================================================================
 //{region											PUBLIC METHODS
 		/**
 		 * Add instance of the system to Gimmick engine.
@@ -33,8 +34,11 @@ package org.gimmick.managers
 		 * var someSystem:SomeSystem = Gimmick.addSystem( new SomeSystem() );
 		 * ...
 		 * </listing>
+		 *
+		 * @see org.gimmick.core.IEntitySystem Implenet IEntitySystem to create concreet class of system
+		 * @see org.gimmick.core.IProcessingSystem Implenet IProcessingSystem to create concreet class of processing system
 		 */
-		function addSystem(system:IEntitySystem, priority:int = 1):IEntitySystem;
+		function addSystem(system:IBaseSystem, priority:int = 1):IBaseSystem;
 		/**
 		 * Remove system from Gimmick engine.
 		 * @param systemType Type of the system that was added to Gimmick previously
@@ -49,10 +53,11 @@ package org.gimmick.managers
 		 * var someSystem:SomeSystem = Gimmick.removeSystem( SomeSystem );
 		 * </listing>
 		 */
-		function removeSystem(systemType:Class):IEntitySystem;
+		function removeSystem(systemType:Class):IBaseSystem;
 		/**
 		 * Activate and add system to Gimmick scope. <br />
-		 * After adding system to scope <code>IEntitySystem.tick()</code> method will be executed
+		 * After adding system to scope <code>IEntitySystem.tick()</code> or
+		 * <code>IProcessingSystem#process()</code> method will be executed
 		 * for each tick (enter frame, or else loop).
 		 *
 		 * @param systemType Type of the system that was added to Gimmick previously
@@ -60,13 +65,15 @@ package org.gimmick.managers
 		 * @throws ArgumentError System was not added to Gimmick previously
 		 *
 		 * @see org.gimmick.core.IEntitySystem#tick() IEntitySystem.tick() loop method of the system
+		 * @see org.gimmick.core.IProcessingSystem#process() IProcessingSystem#process() loop method of the system
 		 * @see org.gimmick.core.GimmickEngine#addSystem() Adding system instance to Gimmick engine
 		 * @see org.gimmick.core.Gimmick#tick() Main looping method of Gimmick framework
 		 */
 		function activateSystem(systemType:Class):void;
 		/**
 		 * Deactivate and remove system from scope, but not from Gimmick.
-		 * After removing system from scope method <code>IEntitySystem.tick()</code> will not be executed any more.
+		 * After removing system from scope method <code>IEntitySystem.tick()</code>
+		 * or <code>IProcessingSystem#process()</code> will not be executed any more.
 		 * <br />
 		 * For totally removing system from Gimmick use <code>removeSystem()</code> method instead.
 		 *
@@ -75,6 +82,7 @@ package org.gimmick.managers
 		 * @throws ArgumentError System was not added to Gimmick previously
 		 *
 		 * @see org.gimmick.core.IEntitySystem#tick() IEntitySystem.tick() loop method of the system
+		 * @see org.gimmick.core.IProcessingSystem#process() IProcessingSystem#process() loop method of the system
 		 * @see org.gimmick.core.GimmickEngine#removeSystem() Removing system instance from Gimmick engine
 		 * @see org.gimmick.core.GimmickEngine#addSystem() Adding system instance to Gimmick engine
 		 * @see org.gimmick.core.Gimmick#tick() Main looping method of Gimmick framework

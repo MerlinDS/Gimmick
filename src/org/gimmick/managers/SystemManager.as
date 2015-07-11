@@ -15,7 +15,10 @@ package org.gimmick.managers
 
 	import flash.utils.Dictionary;
 
+	import org.gimmick.collections.EntitiesCollection;
+	import org.gimmick.core.IBaseSystem;
 	import org.gimmick.core.IEntitySystem;
+	import org.gimmick.core.IProcessingSystem;
 	import org.gimmick.utils.getInstanceClass;
 
 	/**
@@ -53,14 +56,20 @@ package org.gimmick.managers
 		/**
 		 * @inheritDoc
 		 */
-		public function addSystem(system:IEntitySystem, priority:int = 1):IEntitySystem
+		public function addSystem(system:IBaseSystem, priority:int = 1):IBaseSystem
 		{
 			var type:Class = getInstanceClass(system);
 			//remove old system from manager
 			if(_systemsTypes[type] != null)//Do not use hasOwnProperty, cause this method is very slow
 				this.removeSystem(type);
 			//save new systemType to map and to linked list
-			_systemsTypes[type] = new Node(system, priority);
+			var node:Node = new Node(system, priority);
+			if(system is IProcessingSystem)
+			{
+				node.collection = (system as IProcessingSystem).targetEntities as EntitiesCollection;
+				node.forEach = true;
+			}
+			_systemsTypes[type] = node;
 			//all was done nornaly, lets initialize system
 			system.initialize();
 			return system;
@@ -69,7 +78,7 @@ package org.gimmick.managers
 		/**
 		 * @inheritDoc
 		 */
-		public function removeSystem(systemType:Class):IEntitySystem
+		public function removeSystem(systemType:Class):IBaseSystem
 		{
 			var node:Node = _systemsTypes[systemType];
 			if(node == null)
@@ -77,6 +86,8 @@ package org.gimmick.managers
 			if(node.active)
 				this.deactivateSystem(systemType);
 			_systemsTypes[systemType] = null;
+//			if(node.forEach)
+//				node.collection.dispose();//can be used for other system
 			node.system.dispose();
 			node.dispose();
 			return node.system;
@@ -161,7 +172,10 @@ package org.gimmick.managers
 			for (var cursor:Node = _head; cursor != null; cursor = cursor.next)
 			{
 				//update only active systems
-				cursor.system.tick(time);
+				if(cursor.forEach)
+					cursor.collection.forEach((cursor.system as IProcessingSystem).process);
+				else
+					(cursor.system as IEntitySystem).tick(time);
 			}
 		}
 
@@ -198,7 +212,8 @@ package org.gimmick.managers
 	}
 }
 
-import org.gimmick.core.IEntitySystem;
+import org.gimmick.collections.EntitiesCollection;
+import org.gimmick.core.IBaseSystem;
 
 /**
  * Linked list node - helper
@@ -208,9 +223,11 @@ class Node{
 	public var next:Node;
 	public var priority:int;
 	public var active:Boolean;
-	public var system:IEntitySystem;
+	public var system:IBaseSystem;
+	public var collection:EntitiesCollection;
+	public var forEach:Boolean;
 
-	public function Node(system:IEntitySystem, priority:int)
+	public function Node(system:IBaseSystem, priority:int)
 	{
 		this.priority = priority;
 		this.system = system;
@@ -221,7 +238,9 @@ class Node{
 		prev = null;
 		next = null;
 		system = null;
+		collection = null;
 		priority = 0;
 		active = false;
+		forEach = false;
 	}
 }

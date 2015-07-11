@@ -177,7 +177,7 @@ package org.gimmick.core
 		/**
 		 * @copy org.gimmick.managers.SystemManager#addSystem()
 		 */
-		public function addSystem(system:IEntitySystem, priority:int = 1):IEntitySystem
+		public function addSystem(system:IBaseSystem, priority:int = 1):IBaseSystem
 		{
 			return _systemsManager.addSystem(system, priority);
 		}
@@ -185,7 +185,7 @@ package org.gimmick.core
 		/**
 		 * @copy org.gimmick.managers.SystemManager#removeSystem()
 		 */
-		public function removeSystem(systemType:Class):IEntitySystem
+		public function removeSystem(systemType:Class):IBaseSystem
 		{
 			return _systemsManager.removeSystem(systemType);
 		}

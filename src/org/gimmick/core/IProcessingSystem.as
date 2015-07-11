@@ -13,22 +13,24 @@
 package org.gimmick.core
 {
 
+	import org.gimmick.collections.IEntities;
+
 	/**
-	 * Interface of systems in Gimmick.
-	 * Implement this interface to create concreet system class.
-	 *
+	 * Interface of processing systems in Gimmick.
+	 * Implement this interface to create concreet processing system class.
 	 */
-	public interface IEntitySystem extends IBaseSystem
+	public interface IProcessingSystem extends IBaseSystem
 	{
 //======================================================================================================================
 //{region											PUBLIC METHODS
 		/**
-		 * Method for system looping
-		 * @param time Time from the previous tick in microseconds
+		 * Loop method for Processing System.
+		 * Will be executed automaticaly for each entity in target collection.
 		 *
-		 * @see org.gimmick.core.GimmickEngine.tick() Gimmick.tick() looping method
+		 * @param entity Entity for processing
+		 * @param entities Collection
 		 */
-		function tick(time:Number):void;
+		function process(entity:IEntity, entities:IEntities):void;
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
@@ -36,6 +38,10 @@ package org.gimmick.core
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS
+		/**
+		 * Must return collection for processing!
+		 */
+		function get targetEntities():IEntities;
 //} endregion GETTERS/SETTERS ==========================================================================================
 	}
 }
