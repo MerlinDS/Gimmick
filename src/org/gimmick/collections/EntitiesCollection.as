@@ -208,6 +208,10 @@ package org.gimmick.collections
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
+		/**
+		 * Increase size of collection
+		 * @param fromClean If this flag quels true, clear content and insrease collection as new.
+		 */
 		private function increaseSize(fromClean:Boolean = false):void
 		{
 			_content.fixed = false;
@@ -217,6 +221,9 @@ package org.gimmick.collections
 			_content.fixed = true;
 		}
 
+		/**
+		 * Defragmentation of the collection
+		 */
 		private function defragContent():void
 		{
 			while(_splits.length > 0)

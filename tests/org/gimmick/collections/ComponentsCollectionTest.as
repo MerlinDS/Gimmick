@@ -10,112 +10,97 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package org.gimmick.utils
+package org.gimmick.collections
 {
 
-	import flexunit.framework.Assert;
+	import flash.utils.Dictionary;
 
-	/**
-	 * Test case for Key List
-	 */
-	public class SetListTest
+	import org.flexunit.Assert;
+	import org.gimmick.core.Component;
+	import org.gimmick.utils.getUniqueId;
+
+	public class ComponentsCollectionTest
 	{
-
-		private var _values:Object;
-		private var _length:int;
-		private var _setList:SetList;
+		private var _values:Dictionary;
+		private var _collection:ComponentsCollection;
 		//======================================================================================================================
 //{region											PUBLIC METHODS
-		public function SetListTest()
+		public function ComponentsCollectionTest()
 		{
 		}
 
 		[Before]
 		public function setUp():void
 		{
-			_length = 0;
-			_values = {
-				1:new TestComponent(1),
-				2:new TestComponent(2),
-				3:new TestComponent(3)
-			};
-			_setList = new SetList();
+			_values = new Dictionary(true);
+			_values[getUniqueId()] = new TestComponent(1);
+			_values[getUniqueId()] = new TestComponent(2);
+			_values[getUniqueId()] = new TestComponent(3);
+			_collection = new ComponentsCollection(2);
 		}
 
 		[After]
 		public function tearDown():void
 		{
-			_length = 0;
 			_values = null;
-			_setList.dispose();
-			_setList = null;
+			_collection.dispose();
+			_collection = null;
 		}
 
-		[Test(order=1)]
-		public function testAdd():void
+		[Test]
+		public function testPush():void
 		{
-
-			Assert.assertEquals("Length not equals", _length, _setList.length);
 			for(var key:String in _values)
-			{
-				_setList.addValue(key, _values[key]);
-				_length++;
-			}
-			Assert.assertEquals("Length not equals after adding", _length, _setList.length);
-			//set adding to same key
-			_setList.addValue("1", new TestComponent(_length));
-			Assert.assertEquals("Length not equals after replacing", _length, _setList.length);
-			_setList.addValue("1", _values[1]);//return ald value for else tests
+				_collection.push(key, _values[key]);
 		}
 
-		[Test(order=2)]
+		[Test]
+		public function testHas():void
+		{
+			this.testPush();
+			for(var id:String in _values)
+			{
+				Assert.assertTrue(_collection.has(id));
+			}
+			Assert.assertFalse(_collection.has("EMPTY"));
+		}
+
+		[Test]
 		public function testGet():void
 		{
-			this.testAdd();
-			for(var key:String in _values)
+			this.testPush();
+			for(var id:String in _values)
 			{
-				var result:Object = _setList.getValue(key);
-				Assert.assertNotNull("Value is null for key" + key, result);
-				Assert.assertEquals("Value not equals for key" + key, _values[key], result);
+				var result:TestComponent = _collection.get(id) as TestComponent;
+				Assert.assertNotNull("Value is null for id" + id, result);
+				Assert.assertEquals("Value not equals for id" + id, _values[id], result);
 			}
-			Assert.assertNull("Value must be a null for int.MAX_VALUE", _setList.getValue("EMPTY"));
+			Assert.assertNull("Value must be a null", _collection.get("EMPTY"));
 		}
 
-		[Test(order=3)]
+		[Test]
 		public function testRemove():void
 		{
-			this.testAdd();
-			Assert.assertEquals("Length not equals before removing", _length, _setList.length);
-			for(var key:String in _values)
+			this.testPush();
+			for(var id:String in _values)
 			{
-				_setList.removeValue(key);
-				_length--;
-				var result:Object = _setList.getValue(key);
-				Assert.assertNull("Value must be a null for key" + key, result);
-				Assert.assertEquals("Length not equals", _length, _setList.length);
+				_collection.remove(id);
+				var result:TestComponent = _collection.get(id) as TestComponent;
+				Assert.assertNull("Value must be a null for id" + id, result);
+				Assert.assertFalse(_collection.has(id));
 			}
-			_length = 0;
-			Assert.assertEquals("Length not equals after removing all", _length, _setList.length);
 		}
 
-		[Test(order=4)]
-		public function testAddAfterRemove():void
-		{
-			this.testRemove();
-			for(var key:String in _values)
-			{
-				_setList.addValue(key, _values[key]);
-				_length++;
-			}
-			Assert.assertEquals("Length not equals after adding", _length, _setList.length);
-		}
-
-		[Test(order=5)]
+		[Test]
 		public function testClear():void
 		{
-			this.testAdd();
-			_setList.clear();
-			Assert.assertEquals("Length not equals after removing all", 0, _setList.length);
+			this.testPush();
+			_collection.clear();
+			for(var id:String in _values)
+			{
+				Assert.assertFalse(_collection.has(id));
+				Assert.assertNull(_collection.get(id));
+			}
 		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
@@ -126,9 +111,9 @@ package org.gimmick.utils
 //{region											GETTERS/SETTERS
 
 //} endregion GETTERS/SETTERS ==========================================================================================
+
 	}
 }
-
 import org.gimmick.core.Component;
 
 class TestComponent extends Component
