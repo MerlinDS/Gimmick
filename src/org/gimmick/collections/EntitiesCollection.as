@@ -58,16 +58,21 @@ package org.gimmick.collections
 		/**
 		 * @inheritDoc
 		 */
-		public function dependedClone():IEntities
+		public function dependedClone(clone:IEntities = null):IEntities
 		{
 			this.defragContent();
-			var clone:EntitiesCollection = new EntitiesCollection(0);
-			clone._allocationSize = _allocationSize;
-			clone._content = _content;
-			clone._hashMap = _hashMap;
-			clone._length = length;
-			clone._isDepended = true;
-			return clone;
+			var c:EntitiesCollection = clone as EntitiesCollection;
+			if(c == null)
+			{
+				//create new clone based on current data
+				c = new EntitiesCollection(0);
+			}
+			c._allocationSize = _allocationSize;
+			c._content = _content;
+			c._hashMap = _hashMap;
+			c._length = _length;
+			c._isDepended = true;
+			return c;
 		}
 
 		/**

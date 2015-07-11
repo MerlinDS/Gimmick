@@ -21,9 +21,10 @@ package org.gimmick.collections
 		/**
 		 * Crate copy of IEntities.
 		 * Created copy will works with parent content, but asses of disposing of content will be denied.
+		 * @param clone Precreated instance of the clone
 		 * @return Instance of new copy.
 		 */
-		function dependedClone():IEntities;
+		function dependedClone(clone:IEntities = null):IEntities;
 		/**
 		 * Check if collection contains entity with id
 		 * @param entityId Entity Id

@@ -23,7 +23,8 @@ package org.gimmick.collections
 
 		private var _entity:IEntity;
 		private var _collection:EntitiesCollection;
-		private var _copy:EntitiesCollection;
+		private var _internalClone:EntitiesCollection;
+		private var _externalClone:EntitiesCollection;
 		//======================================================================================================================
 //{region											PUBLIC METHODS
 		public function EntitiesCollectionTest()
@@ -35,23 +36,27 @@ package org.gimmick.collections
 		{
 			_entity = new TestEntity();
 			_collection = new EntitiesCollection();
-			_copy = _collection.dependedClone() as EntitiesCollection;
+			_internalClone = _collection.dependedClone() as EntitiesCollection;
+			_externalClone = new EntitiesCollection(0);
+			_collection.dependedClone(_externalClone);
 		}
 
 		[After]
 		public function tearDown():void
 		{
-			_copy.dispose();
+			_externalClone.dispose();
+			_internalClone.dispose();
 			_collection.dispose();
 			_collection = null;
-			_copy = null;
+			_internalClone = null;
+			_externalClone = null;
 		}
 
 		[Test]
 		public function testPush():void
 		{
 			_collection.push(_entity);
-			//also entity must be added to copy
+			//also entity must be added to clones
 		}
 
 		[Test]
@@ -60,8 +65,10 @@ package org.gimmick.collections
 			this.testPush();
 			Assert.assertTrue(_collection.hasId(_entity.id));
 			Assert.assertFalse(_collection.hasId('bad id'));
-			Assert.assertTrue(_copy.hasId(_entity.id));
-			Assert.assertFalse(_copy.hasId('bad id'));
+			Assert.assertTrue(_internalClone.hasId(_entity.id));
+			Assert.assertFalse(_internalClone.hasId('bad id'));
+			Assert.assertTrue(_externalClone.hasId(_entity.id));
+			Assert.assertFalse(_externalClone.hasId('bad id'));
 		}
 
 		[Test]
@@ -69,10 +76,12 @@ package org.gimmick.collections
 		{
 			this.testPush();
 			Assert.assertTrue(_collection.hasEntity(_entity));
-			Assert.assertTrue(_copy.hasEntity(_entity));
+			Assert.assertTrue(_internalClone.hasEntity(_entity));
+			Assert.assertTrue(_externalClone.hasEntity(_entity));
 			var entity:TestEntity = new TestEntity();
 			Assert.assertFalse(_collection.hasEntity(entity));
-			Assert.assertFalse(_copy.hasEntity(entity));
+			Assert.assertFalse(_internalClone.hasEntity(entity));
+			Assert.assertFalse(_externalClone.hasEntity(entity));
 		}
 
 		[Test]
@@ -81,8 +90,10 @@ package org.gimmick.collections
 			this.testPush();
 			Assert.assertNotNull(_collection.getById(_entity.id));
 			Assert.assertNull(_collection.getById('bad id'));
-			Assert.assertNotNull(_copy.getById(_entity.id));
-			Assert.assertNull(_copy.getById('bad id'));
+			Assert.assertNotNull(_internalClone.getById(_entity.id));
+			Assert.assertNull(_internalClone.getById('bad id'));
+			Assert.assertNotNull(_externalClone.getById(_entity.id));
+			Assert.assertNull(_externalClone.getById('bad id'));
 		}
 
 		[Test]
@@ -92,22 +103,26 @@ package org.gimmick.collections
 			_collection.remove(_entity);
 			//also entity must be removed from copy
 			Assert.assertFalse(_collection.hasEntity(_entity));
-			Assert.assertFalse(_copy.hasEntity(_entity));
+			Assert.assertFalse(_internalClone.hasEntity(_entity));
+			Assert.assertFalse(_externalClone.hasEntity(_entity));
 		}
 
 		[Test]
 		public function testClear():void
 		{
 			this.testPush();
-			_copy.clear();
-			Assert.assertFalse(_copy.hasEntity(_entity));
+			_internalClone.clear();
+			_externalClone.clear();
+			Assert.assertFalse(_externalClone.hasEntity(_entity));
+			Assert.assertFalse(_internalClone.hasEntity(_entity));
 			//copy does not dispose parent content
 			Assert.assertTrue(_collection.hasEntity(_entity));
 			this.testPush();
 			_collection.clear();
 			//also must clear all copies
 			Assert.assertFalse(_collection.hasEntity(_entity));
-			Assert.assertFalse(_copy.hasEntity(_entity));
+			Assert.assertFalse(_internalClone.hasEntity(_entity));
+			Assert.assertFalse(_externalClone.hasEntity(_entity));
 		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
