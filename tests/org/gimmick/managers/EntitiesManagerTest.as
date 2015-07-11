@@ -21,6 +21,9 @@ package org.gimmick.managers
 	import org.gimmick.core.ComponentType;
 
 	import org.gimmick.core.IEntity;
+	import org.gimmick.utils.TestComponent_0;
+	import org.gimmick.utils.TestComponent_1;
+	import org.gimmick.utils.TestComponent_2;
 	import org.gimmick.utils.TestConfig;
 	import org.gimmick.utils.TestEntity;
 
@@ -29,17 +32,11 @@ package org.gimmick.managers
 	{
 
 		[Parameters]
-		public static var testData:Array = [
-			[ [/**Entities*/[/**Components*/], [], []], [/**PreInit collection**/], [/**PostInit collection**/] ],
-			[ [[TestComponent0, TestComponent1]], [TestComponent1], [TestComponent0] ]
-		];
-
+		public static var testData:Array = _testData;
 
 		private var _entities:Array;
 		private var _preinit:Array;
 		private var _postinit:Array;
-
-		private var _preinitCollection:IEntities;
 
 		private var _componentTypeManager:ComponentTypeManager;
 		private var _entitiesManager:EntitiesManager;
@@ -60,8 +57,17 @@ package org.gimmick.managers
 			_entitiesManager = new EntitiesManager();
 			_entitiesManager.initialize(testConfig.maxEntities);
 			//initialize collection befor start of looping
-			_preinitCollection = _entitiesManager.getEntities(_preinit);
 			_entitiesManager.tick(0);
+			var i:int, n:int;
+			n = _entities.length;
+			for(i = 0; i < n; i++)
+				_entities[i] = this.getType(_entities[i]);
+			n = _postinit.length;
+			for(i = 0; i < n; i++)
+				_postinit[i] = this.getType(_postinit[i]);
+			n = _preinit.length;
+			for(i = 0; i < n; i++)
+				_preinit[i] = this.getType(_preinit[i]);
 		}
 
 		[After]
@@ -73,54 +79,54 @@ package org.gimmick.managers
 			_entitiesManager = null;
 		}
 
-		[Test]
-		public function testAddNewEntity():void
-		{
-			for(var i:int = 0; i < _entities.length; i++)
-				_entitiesManager.addEntity(new TestEntity());
 
-		}
-
-		[Test]
-		public function preinitializeCollections():void
-		{
-			for(var i:int = 0; i < _preinit.length; i++)
-			{
-				var entities:IEntities = _entitiesManager.getEntities(_preinit[i]);
-				Assert.assertNotNull(entities);
-			}
-		}
-
-		[Test]
-		public function testAddComponent2EmptyEntities():void
-		{
-			for(var i:int = 0; i < _entities.length; i++)
-			{
-				var components:Array = _entities[i];
-				var entity:IEntity = new TestEntity();
-				_entitiesManager.addEntity(entity);
-				for(var j:int = 0; j < components.length; j++)
-				{
-					if(components[j] == null)continue;
-					var componentType:ComponentType = _componentTypeManager.getType( components[j] );
-					_entitiesManager.addEntity(entity, componentType);
-				}
-			}
-		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
-
+		private function getType(types:Array):Array
+		{
+			if(types != null)
+			{
+				var n:int = types.length;
+				for(var i:int = 0; i < n; i++)
+				{
+					types[i] = _componentTypeManager.getType(types[i]);
+				}
+			}
+			return types;
+		}
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS
-
+		public static function get _testData():Array
+		{
+			var array:Array = [];
+			var entities:Array = [/**Entities*/[/**Components*/], [], []];
+			var preinit:Array = [/**PreInit collections**/[/**Components*/]];
+			var postinit:Array = [/**PreInit collections**/[/**Components*/]];
+			array.push([entities, preinit, postinit]);
+			//-----
+			entities = [[TestComponent_0, TestComponent_1] /* - one entity*/];
+			preinit = [[TestComponent_1]/* - one collection */];
+			postinit = [[TestComponent_0]/* - one collection */];
+			array.push([entities, preinit, postinit]);
+			//-----
+			entities = [[TestComponent_0],[TestComponent_1],[TestComponent_0, TestComponent_1]];
+			preinit = [[TestComponent_1, TestComponent_0], [TestComponent_1]];
+			postinit = [[TestComponent_0]/* - one collection */];
+			array.push([entities, preinit, postinit]);
+			//-----
+			entities = [[TestComponent_0],[TestComponent_1],[TestComponent_0, TestComponent_2],[TestComponent_1, TestComponent_2]];
+			preinit = [[TestComponent_1, TestComponent_0], [TestComponent_1, TestComponent_2], [TestComponent_0]];
+			postinit = [[TestComponent_0], [TestComponent_1, TestComponent_0], [TestComponent_1, TestComponent_2]];
+			array.push([entities, preinit, postinit]);
+			//-----
+			entities = [[TestComponent_0],[TestComponent_1],[],[TestComponent_1, TestComponent_2]];
+			preinit = [[TestComponent_1, TestComponent_0], [TestComponent_1, TestComponent_2], [TestComponent_0]];
+			postinit = [[TestComponent_0], [TestComponent_1, TestComponent_0], []];
+			array.push([entities, preinit, postinit]);
+			return array;
+		}
 //} endregion GETTERS/SETTERS ==========================================================================================
 	}
 }
-
-import org.gimmick.core.Component;
-import org.gimmick.utils.TestEntity;
-
-class TestComponent0 extends Component{}
-class TestComponent1 extends Component{}
