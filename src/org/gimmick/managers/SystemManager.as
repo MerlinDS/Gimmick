@@ -24,10 +24,18 @@ package org.gimmick.managers
 	internal class SystemManager implements ISystemManager
 	{
 
+		/**
+		 * Head of linked list
+		 */
+		private var _head:Node;
+		/**
+		 * Tail of linked list
+		 */
+		private var _tail:Node;
+		/**
+		 * All nodes, passive and active
+		 */
 		private var _systemsTypes:Dictionary;
-		private var _passiveSystems:Vector.<IEntitySystem>;
-		private var _activeSystems:Vector.<IEntitySystem>;
-		private var _activeLength:int;
 //======================================================================================================================
 //{region											PUBLIC METHODS
 		public function SystemManager()
@@ -40,23 +48,20 @@ package org.gimmick.managers
 		public function initialize():void
 		{
 			//TODO Data consistency #10
-			_activeSystems = new <IEntitySystem>[];
-			_passiveSystems = new <IEntitySystem>[];
 			_systemsTypes = new Dictionary(true);
 		}
 
 		/**
 		 * @inheritDoc
 		 */
-		public function addSystem(system:IEntitySystem):IEntitySystem
+		public function addSystem(system:IEntitySystem, priority:int = 1):IEntitySystem
 		{
 			var type:Class = getInstanceClass(system);
 			//remove old system from manager
 			if(_systemsTypes[type] != null)//Do not use hasOwnProperty, cause this method is very slow
 				this.removeSystem(type);
-			//save new systemType to map
-			_passiveSystems[_passiveSystems.length] = system;
-			_systemsTypes[type] = system;
+			//save new systemType to map and to linked list
+			_systemsTypes[type] = new Node(system, priority);
 			//all was done nornaly, lets initialize system
 			system.initialize();
 			return system;
@@ -67,35 +72,15 @@ package org.gimmick.managers
 		 */
 		public function removeSystem(systemType:Class):IEntitySystem
 		{
-			var index:int;
-			var system:IEntitySystem;
-			var list:Vector.<IEntitySystem>;
-			system = _systemsTypes[systemType];
-			if(system == null)
+			var node:Node = _systemsTypes[systemType];
+			if(node == null)
 				throw new ArgumentError('IEntitySystem was not added to Gimmick previously!');
-			//trying to find system, do not use getSystemByType cause index and list of system will be need
-			if(_systemsTypes[systemType] != null)
-			{
-				//in normal behavior system will be olready deactivated
-				list = _passiveSystems;
-				index = list.indexOf(system);
-				if(index < 0)//system is not deactivated yet :(
-				{
-					list = _activeSystems;
-					index = list.indexOf(system);
-					//if system was not found in both list, something goes wrong!
-					if(index < 0)
-						throw new Error('System was not found nor in active systems neither in passive!');
-					system.deactivate();
-					_activeLength--;
-				}
-			}
-			//remove system from list and map
+			if(node.active)
+				this.deactivateSystem(systemType);
 			_systemsTypes[systemType] = null;
-			list.splice(index, 1);//No needs in fast method
-			//all was done nornaly, lets dispose system
-			system.dispose();
-			return system;
+			node.system.dispose();
+			node.dispose();
+			return node.system;
 		}
 
 		/**
@@ -103,15 +88,47 @@ package org.gimmick.managers
 		 */
 		public function activateSystem(systemType:Class):void
 		{
-			var system:IEntitySystem = _systemsTypes[systemType];
-			if(system == null)
+			var node:Node = _systemsTypes[systemType];
+			if(node == null)
 				throw new ArgumentError('IEntitySystem was not added to Gimmick previously!');
-			var indes:int = _passiveSystems.indexOf(system);
-			if(indes >= 0)//in other case system was already activated
+			if(!node.active)
 			{
-				_passiveSystems.splice(indes, 1);//!!! slow, with redundant allocations
-				_activeSystems[_activeLength++] = system;
-				system.activate();
+				if(_head == null)
+				{
+					_head = node;
+					_tail = node;
+				}
+				else
+				{
+					var target:Node;
+					//check node priority
+					if(_tail.priority > node.priority)
+					{
+						//find place for node by it's priority
+						target = _tail;
+						do target = target.prev;
+						while(target != null && target.priority > node.priority);
+					}
+					else
+						target = _tail;
+					//add node to linked list
+					if(target != null)
+					{
+						node.next = target.next;
+						node.prev = target;
+						target.next = node;
+					}else
+					{
+						/*
+						 * If target is null, then current node
+						 * becomes a head of linked list
+						 */
+						node.next = _head;
+						if(_head)_head.prev = node;
+					}
+				}
+				node.system.activate();
+				node.active = true;
 			}
 		}
 
@@ -120,16 +137,19 @@ package org.gimmick.managers
 		 */
 		public function deactivateSystem(systemType:Class):void
 		{
-			var system:IEntitySystem = _systemsTypes[systemType];
-			if(system == null)
+			var node:Node = _systemsTypes[systemType];
+			if(node == null)
 				throw new ArgumentError('IEntitySystem was not added to Gimmick previously!');
-			var indes:int = _activeSystems.indexOf(system);
-			if(indes >= 0)//in other case was olready deactivated
+			if(node.active)
 			{
-				_activeSystems.splice(indes, 1);//!!! slow, with redundant allocations
-				_passiveSystems[_passiveSystems.length] = system;
-				_activeLength--;
-				system.deactivate();
+				//delete node from linked list
+				var next:Node = node.next;
+				var prev:Node = node.prev;
+				if(prev != null)prev.next = next;
+				if(next != null)next.prev = prev;
+				//deactivate system and node
+				node.system.deactivate();
+				node.active = false;
 			}
 		}
 
@@ -138,10 +158,10 @@ package org.gimmick.managers
 		 */
 		public function tick(time:Number):void
 		{
-			for(var i:int = 0; i < _activeLength; ++i)
+			for (var cursor:Node = _head; cursor != null; cursor = cursor.next)
 			{
 				//update only active systems
-				_activeSystems[i].tick(time);
+				cursor.system.tick(time);
 			}
 		}
 
@@ -150,20 +170,22 @@ package org.gimmick.managers
 		 */
 		public function dispose():void
 		{
-			//deactivate and dispose active systems
-			while(_activeSystems.length > 0)
+			var cursor:Node;
+			for (var type:Class in _systemsTypes)
 			{
-				_activeSystems[_activeSystems.length - 1].deactivate();
-				_activeSystems.pop().dispose();
+				cursor = _systemsTypes[type];
+				if(cursor != null)//system can be already removed manualy
+				{
+					if (cursor.active)cursor.system.deactivate();
+					cursor.system.dispose();
+					cursor.dispose();
+				}
+				delete _systemsTypes[type];
 			}
-			//dispose passive systems
-			while(_passiveSystems.length > 0)
-				_passiveSystems.pop().dispose();
-			//clean manager from systems
 			_systemsTypes = null;
-			_passiveSystems = null;
-			_activeSystems = null;
-			_activeLength = 0;
+			cursor = null;
+			_tail = null;
+			_head = null;
 		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
@@ -173,5 +195,33 @@ package org.gimmick.managers
 //{region											GETTERS/SETTERS
 
 //} endregion GETTERS/SETTERS ==========================================================================================
+	}
+}
+
+import org.gimmick.core.IEntitySystem;
+
+/**
+ * Linked list node - helper
+ */
+class Node{
+	public var prev:Node;
+	public var next:Node;
+	public var priority:int;
+	public var active:Boolean;
+	public var system:IEntitySystem;
+
+	public function Node(system:IEntitySystem, priority:int)
+	{
+		this.priority = priority;
+		this.system = system;
+	}
+
+	public function dispose():void
+	{
+		prev = null;
+		next = null;
+		system = null;
+		priority = 0;
+		active = false;
 	}
 }

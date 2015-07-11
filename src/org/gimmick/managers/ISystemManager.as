@@ -25,6 +25,7 @@ package org.gimmick.managers
 		/**
 		 * Add instance of the system to Gimmick engine.
 		 * @param system Instance of the system, must implement <code>IEntitySystem</code> interface.
+		 * @param priority System priority
 		 * @return Instance of the system
 		 *
 		 * @example Adding system with code chaining:
@@ -33,7 +34,7 @@ package org.gimmick.managers
 		 * ...
 		 * </listing>
 		 */
-		function addSystem(system:IEntitySystem):IEntitySystem;
+		function addSystem(system:IEntitySystem, priority:int = 1):IEntitySystem;
 		/**
 		 * Remove system from Gimmick engine.
 		 * @param systemType Type of the system that was added to Gimmick previously

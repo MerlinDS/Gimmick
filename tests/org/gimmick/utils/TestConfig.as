@@ -52,7 +52,7 @@ import org.gimmick.managers.ISystemManager;
 class TestSystemManager implements ISystemManager
 {
 
-	public function addSystem(system:IEntitySystem):IEntitySystem{return null;}
+	public function addSystem(system:IEntitySystem, priority:int = 1):IEntitySystem{return null;}
 	public function removeSystem(systemType:Class):IEntitySystem{return null;}
 	public function activateSystem(systemType:Class):void{}
 	public function deactivateSystem(systemType:Class):void{}

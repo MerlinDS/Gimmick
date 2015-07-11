@@ -48,7 +48,7 @@ package org.gimmick.managers
 		[Test]
 		public function testAddSystem():void
 		{
-			_systemManager.addSystem(_testSystem);
+			_systemManager.addSystem(_testSystem, 1);
 		}
 
 		[Test]
@@ -56,7 +56,7 @@ package org.gimmick.managers
 		{
 			this.testActivateSystem();//system need to be initialized and activated
 			var newSystem:TestSystem = new TestSystem();
-			_systemManager.addSystem(newSystem);
+			_systemManager.addSystem(newSystem, 1);
 			Assert.assertFalse(_testSystem.activated);
 		}
 

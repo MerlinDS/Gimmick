@@ -179,7 +179,7 @@ package org.gimmick.core
 		 */
 		public function addSystem(system:IEntitySystem):IEntitySystem
 		{
-			return _systemsManager.addSystem(system);
+			return _systemsManager.addSystem(system, 1);
 		}
 
 		/**
