@@ -125,6 +125,7 @@ package org.gimmick.managers
 						 */
 						node.next = _head;
 						if(_head)_head.prev = node;
+						_head = node;
 					}
 				}
 				node.system.activate();

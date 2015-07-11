@@ -15,6 +15,8 @@ package org.gimmick.managers
 
 	import flexunit.framework.Assert;
 
+	import org.gimmick.utils.getInstanceClass;
+
 	/**
 	 * Unit test for SystemManager
 	 */
@@ -40,6 +42,8 @@ package org.gimmick.managers
 		[After]
 		public function tearDown():void
 		{
+			while(TestSystem.EXECUTION_ORDER.length > 0)
+				TestSystem.EXECUTION_ORDER.pop();
 			_systemManager.dispose();
 			_systemManager = null;
 		}
@@ -58,6 +62,26 @@ package org.gimmick.managers
 			var newSystem:TestSystem = new TestSystem();
 			_systemManager.addSystem(newSystem, 1);
 			Assert.assertFalse(_testSystem.activated);
+		}
+
+		[Test]
+		public function testAddingSystemsWithPriority():void
+		{
+			var systems:Array = [
+				new ThirdSystem(), 3,
+				new FirstSystem(), 1,
+				new SecondSystem(), 2
+			];
+			for(var i:int = 0; i < systems.length / 2; i++)
+			{
+				_systemManager.addSystem(systems[i * 2], systems[i * 2 + 1]);
+				_systemManager.activateSystem(getInstanceClass(systems[i * 2]));
+			}
+			_systemManager.tick(0);
+			for(i = 0; i < systems.length / 2; i++)
+			{
+				Assert.assertEquals(systems[i * 2], TestSystem.EXECUTION_ORDER[ systems[i * 2 + 1] - 1 ]);
+			}
 		}
 
 		[Test]
@@ -131,6 +155,7 @@ import org.gimmick.core.IEntitySystem;
 class TestSystem implements IEntitySystem
 {
 
+	public static const EXECUTION_ORDER:Vector.<TestSystem> = new <TestSystem>[];
 	public var ticksCount:int;
 	public var initialized:Boolean;
 	public var activated:Boolean;
@@ -138,7 +163,11 @@ class TestSystem implements IEntitySystem
 	public function tick(time:Number):void
 	{
 		if(this.initialized && this.activated)
+		{
 			ticksCount++;
+			EXECUTION_ORDER.push(this);
+		}
+
 	}
 
 	public function initialize():void
@@ -161,3 +190,7 @@ class TestSystem implements IEntitySystem
 		this.activated = false;
 	}
 }
+
+class FirstSystem extends TestSystem{}
+class SecondSystem extends TestSystem{}
+class ThirdSystem extends TestSystem{}
