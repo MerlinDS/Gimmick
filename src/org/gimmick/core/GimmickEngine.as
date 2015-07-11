@@ -177,9 +177,9 @@ package org.gimmick.core
 		/**
 		 * @copy org.gimmick.managers.SystemManager#addSystem()
 		 */
-		public function addSystem(system:IEntitySystem):IEntitySystem
+		public function addSystem(system:IEntitySystem, priority:int = 1):IEntitySystem
 		{
-			return _systemsManager.addSystem(system, 1);
+			return _systemsManager.addSystem(system, priority);
 		}
 
 		/**
