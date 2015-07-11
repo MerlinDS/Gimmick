@@ -82,6 +82,16 @@ package org.gimmick.managers
 		}
 
 		[Test]
+		public function preinitializeCollections():void
+		{
+			for(var i:int = 0; i < _preinit.length; i++)
+			{
+				var entities:IEntities = _entitiesManager.getEntities(_preinit[i]);
+				Assert.assertNotNull(entities);
+			}
+		}
+
+		[Test]
 		public function testAddComponent2EmptyEntities():void
 		{
 			for(var i:int = 0; i < _entities.length; i++)
