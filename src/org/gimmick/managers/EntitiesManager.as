@@ -19,19 +19,25 @@ package org.gimmick.managers
 	import org.gimmick.collections.IEntities;
 	import org.gimmick.core.ComponentType;
 	import org.gimmick.core.IEntity;
+	import org.hamcrest.core.both;
 
 	/**
 	 * Manager for controlling of entities
 	 */
 	internal class EntitiesManager implements IEntitiesManager
 	{
+
 		/**
-		 * Comtaince all collections of entities.
+		 * Dict of base collections.
 		 * key - bits of collection mask
-		 * value - vector of one type collections,
-		 * where firts element is collection and other one is it's depended clones
+		 * value - base collection linked to this mask
 		 */
-		private var _collectionsMap:Dictionary;
+		private var _baseCollections:Dictionary;
+		private var _allocatedClones:Vector.<EntitiesCollection>;
+		private var _freeClones:Vector.<EntitiesCollection>;
+
+		private var _initialized:Boolean;
+		private var _allocationSize:int;
 //======================================================================================================================
 //{region											PUBLIC METHODS
 		/**
@@ -47,9 +53,12 @@ package org.gimmick.managers
 		 */
 		public function initialize(allocationSize:int = 1):void
 		{
-			_collectionsMap = new Dictionary(true);
-			//initialize base collection without any filltration (contains all entities)
-			_collectionsMap[0x0] = new EntitiesCollection(allocationSize);
+			_allocationSize = allocationSize;
+			_baseCollections = new Dictionary(true);
+			_allocatedClones = new <EntitiesCollection>[];
+			_freeClones = new <EntitiesCollection>[];
+			//initialize base collection without any filltration, that contains all entities
+			this.getEntities([]);
 		}
 
 		/**
@@ -62,7 +71,7 @@ package org.gimmick.managers
 			{
 				//add to base collection
 				bits = entity.bits;
-				_collectionsMap[0x0].push(entity);
+				_baseCollections[0x0].push(entity);
 			}else
 				bits = componentType.bit;
 			this.updateCollections(entity, bits, true);
@@ -78,7 +87,7 @@ package org.gimmick.managers
 			{
 				//remove from all collection
 				bits = entity.bits;
-				_collectionsMap[0x0].pop(entity);
+				_baseCollections[0x0].remove(entity);
 			}else
 				bits = componentType.bit;
 			this.updateCollections(entity, bits, false);
@@ -90,13 +99,18 @@ package org.gimmick.managers
 		 */
 		public function getEntities(types:Array):IEntities
 		{
-			var bits:uint = 0x0;
-			while(types.length > 0)bits |= types.pop();
-			var collection:IEntities = _collectionsMap[bits];
-			if(collection == null)
+			//get bitwis mask for new collection
+			var bits:uint = getBits(types);
+			var collection:IEntities;
+			if(!_initialized)
 			{
-				collection = _collectionsMap[0x0];
+				if (_baseCollections[bits] == null)
+					_baseCollections[bits] = new EntitiesCollection(_allocationSize);
+				collection = _baseCollections[bits];
 			}
+			else
+				collection = this.clonedCollection(bits);
+
 			return collection;
 		}
 
@@ -105,6 +119,16 @@ package org.gimmick.managers
 		 */
 		public function tick(time:Number):void
 		{
+			if(!_initialized)
+				_initialized = true;
+			//free all allocated collections
+			while(_allocatedClones.length > 0)
+			{
+				var collection:EntitiesCollection = _allocatedClones[_allocatedClones.length-1];
+				collection.clear();
+				_freeClones[_freeClones.length] = collection;
+				_allocatedClones.length--;
+			}
 		}
 
 		/**
@@ -112,9 +136,25 @@ package org.gimmick.managers
 		 */
 		public function dispose():void
 		{
-			for each(var collection:EntitiesCollection in _collectionsMap)
+			for each(var collection:EntitiesCollection in _baseCollections)
 				collection.dispose();
-			_collectionsMap = null;
+			while(_allocatedClones.length > 0)
+			{
+				collection = _allocatedClones[_allocatedClones.length - 1];
+				collection.dispose();
+				_allocatedClones.length--;
+			}
+			while(_freeClones.length > 0)
+			{
+				collection = _freeClones[_freeClones.length - 1];
+				collection.dispose();
+				_freeClones.length--;
+			}
+
+			_allocatedClones = null;
+			_baseCollections = null;
+			_freeClones = null;
+			_initialized = false;
 		}
 
 //} endregion PUBLIC METHODS ===========================================================================================
@@ -123,7 +163,7 @@ package org.gimmick.managers
 		[Inline]
 		private final function updateCollections(entity:IEntity, bits:uint, push:Boolean):void
 		{
-			for (var collectionBits:uint in _collectionsMap)
+			for (var collectionBits:uint in _baseCollections)
 			{
 				//collection included current entity
 				if (bits & collectionBits)
@@ -133,13 +173,50 @@ package org.gimmick.managers
 				  	 * depeneded clones are also will updated
 				  	*/
 					if(push)
-						_collectionsMap[collectionBits].push(entity);
+						_baseCollections[collectionBits].push(entity);
 					else
-						_collectionsMap[collectionBits].pop(entity);
+						_baseCollections[collectionBits].remove(entity);
 				}
 			}
 		}
 
+		[Inline]
+		private final function getBits(types:Array):uint
+		{
+			var bits:uint = 0x0;
+			while (types.length > 0)
+			{
+				//types must contains ComponentType
+				var componentType:ComponentType = types[types.length - 1];
+				bits |= componentType.bit;
+				types.length--;//delete last element
+			}
+			return bits;
+		}
+
+		private function clonedCollection(bits:uint):EntitiesCollection
+		{
+			var collection:EntitiesCollection;
+			var baseCollection:EntitiesCollection = _baseCollections[bits] != null ?
+					_baseCollections[bits] : _baseCollections [0x0];
+			//
+			if (_freeClones.length == 0)
+			{
+				//create new clone
+				collection = baseCollection.dependedClone() as EntitiesCollection;
+			}
+			else
+			{
+				//get existing clone
+				collection = _freeClones[_freeClones.length - 1];
+				_freeClones.length--;//delete from free clones
+				_baseCollections.dependedClone(collection);
+			}
+
+			_allocatedClones[_allocatedClones.length] = collection;
+			collection.bits = bits;
+			return collection;
+		}
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS
