@@ -38,6 +38,14 @@ package org.gimmick.collections
 		 * Method for iterations. Move internal cursor to next element of collection.
 		 */
 		function next():void;
+
+		/**
+		 * Iterate through each entity in collection
+		 * @param callback The function to run on each entity in collection.This function is invoked with two arguments:
+		 * the current entity from the collection, and the collection object:
+		 * @param thisObject (default=null) The object that the identifer this in the callback function refers to when the function is called.
+		 */
+		function forEach(callback:Function, thisObject:Object = null):void;
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS

@@ -23,6 +23,7 @@ package org.gimmick.collections
 		private var _bits:uint;
 		private var _entities:Vector.<IEntity>;
 		private var _iterator:EntitiesCollection;
+		private var _forEachCount:int;
 		//======================================================================================================================
 //{region											PUBLIC METHODS
 		public function CollectionIteratorTest()
@@ -135,9 +136,25 @@ package org.gimmick.collections
 			}
 			Assert.assertEquals(0, i);
 		}
+
+		[Test]
+		public function testForEach():void
+		{
+			_forEachCount = 0;
+			_iterator.bits = 0x0;
+			_iterator.forEach(this.forEachCallback, this);
+			Assert.assertEquals(_entities.length, _forEachCount);
+		}
+
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS
+		private function forEachCallback(entity:IEntity, entities:IEntities):void
+		{
+			Assert.assertNotNull(entity);
+			Assert.assertEquals(_iterator, entities);
+			_forEachCount++;
+		}
 
 //} endregion GETTERS/SETTERS ==========================================================================================
 

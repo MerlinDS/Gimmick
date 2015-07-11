@@ -210,6 +210,20 @@ package org.gimmick.collections
 
 		}
 
+		/**
+		 * @inheritDoc
+		 */
+		[Inline]
+		public final function forEach(callback:Function, thisObject:Object = null):void
+		{
+			this.defragContent();
+			for(_cursor = 0; _cursor < _length; _cursor++)
+			{
+				var entity:IEntity = _content[_cursor];
+				if(_bits > 0x0 && !(entity.bits & _bits))continue;
+				callback.call(thisObject, entity, this);
+			}
+		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
