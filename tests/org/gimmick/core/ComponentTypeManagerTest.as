@@ -36,7 +36,7 @@ package org.gimmick.core
 		public function setUp():void
 		{
 			_componentTypeManager = new GimmickConfig().componentTypeManager;
-			_componentTypeManager.initialize();
+			_componentTypeManager.initialize(30);
 		}
 
 		[After]

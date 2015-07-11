@@ -66,10 +66,10 @@ package org.gimmick.core
 			_componentsManager = config.componentsManager;
 			_componentTypeManagers = config.componentTypeManager;
 			//initializeManagers managers
-			_entitiesManager.initialize();
-			_systemsManager.initialize();
-			_componentsManager.initialize();
+			_entitiesManager.initialize(config.maxEntities);
+			_componentsManager.initialize(config.maxComponents);
 			_componentTypeManagers.initialize();
+			_systemsManager.initialize();
 			_lastTimestamp = 0;
 			_initialized = true;
 			if(autoStart)

@@ -23,8 +23,9 @@ package org.gimmick.managers
 //{region											PUBLIC METHODS
 		/**
 		 * Initialize manager.
+		 * @param allocationSize Size of collections need to be allocated
 		 */
-		function initialize():void
+		function initialize(allocationSize:int = 1):void
 
 		/**
 		 * Dispose manager.

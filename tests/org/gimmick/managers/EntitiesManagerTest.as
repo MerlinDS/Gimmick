@@ -58,7 +58,7 @@ package org.gimmick.managers
 			var testConfig:TestConfig = new TestConfig();
 			_componentTypeManager = testConfig.componentTypeManager;
 			_entitiesManager = new EntitiesManager();
-			_entitiesManager.initialize();
+			_entitiesManager.initialize(testConfig.maxEntities);
 			//initialize collection befor start of looping
 			_preinitCollection = _entitiesManager.getEntities(_preinit);
 			_entitiesManager.tick(0);

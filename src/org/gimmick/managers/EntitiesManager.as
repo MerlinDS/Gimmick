@@ -16,7 +16,6 @@ package org.gimmick.managers
 	import flash.utils.Dictionary;
 
 	import org.gimmick.collections.EntitiesCollection;
-
 	import org.gimmick.collections.IEntities;
 	import org.gimmick.core.ComponentType;
 	import org.gimmick.core.IEntity;
@@ -46,11 +45,11 @@ package org.gimmick.managers
 		/**
 		 * @inheritDoc
 		 */
-		public function initialize():void
+		public function initialize(allocationSize:int = 1):void
 		{
 			_collectionsMap = new Dictionary(true);
 			//initialize base collection without any filltration (contains all entities)
-			_collectionsMap[0x0] = new EntitiesCollection();
+			_collectionsMap[0x0] = new EntitiesCollection(allocationSize);
 		}
 
 		/**

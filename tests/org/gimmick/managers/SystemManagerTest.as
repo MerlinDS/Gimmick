@@ -36,7 +36,7 @@ package org.gimmick.managers
 		{
 			_testSystem = new TestSystem();
 			_systemManager = new SystemManager();
-			_systemManager.initialize();
+			_systemManager.initialize(4);
 		}
 
 		[After]

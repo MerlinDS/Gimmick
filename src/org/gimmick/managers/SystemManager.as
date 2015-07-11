@@ -45,7 +45,7 @@ package org.gimmick.managers
 		/**
 		 * @inheritDoc
 		 */
-		public function initialize():void
+		public function initialize(allocationSize:int = 1):void
 		{
 			//TODO Data consistency #10
 			_systemsTypes = new Dictionary(true);

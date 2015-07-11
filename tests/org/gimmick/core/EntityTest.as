@@ -15,7 +15,6 @@ package org.gimmick.core
 
 	import flexunit.framework.Assert;
 
-	import org.gimmick.managers.GimmickConfig;
 	import org.gimmick.utils.TestConfig;
 
 	/**
@@ -135,7 +134,6 @@ package org.gimmick.core
 import flexunit.framework.Assert;
 
 import org.gimmick.core.Component;
-
 import org.gimmick.core.ComponentType;
 import org.gimmick.core.IEntity;
 import org.gimmick.managers.IComponentsManager;
@@ -170,5 +168,5 @@ class TestComponentsManager implements IComponentsManager
 	public function removeComponent(entity:IEntity, componentType:ComponentType):void{}
 	public function removeComponents(entity:IEntity):void{}
 	public function dispose():void{}
-	public function initialize():void{}
+	public function initialize(allocationSize:int = 1):void {}
 }

@@ -24,6 +24,9 @@ package org.gimmick.managers
 		private var _componentsManager:IComponentsManager;
 		private var _entitiesManager:IEntitiesManager;
 		private var _componentTypeManager:ComponentTypeManager;
+
+		private var _maxEntities:int;
+		private var _maxComponents:int;
 //======================================================================================================================
 //{region											PUBLIC METHODS
 		/**
@@ -40,6 +43,9 @@ package org.gimmick.managers
 			_componentsManager = componentsManager == null ? new ComponentsManager() : componentsManager;
 			_entitiesManager = entityManager == null ? new EntitiesManager() : entityManager;
 			_componentTypeManager = new ComponentTypeManager();
+			//
+			_maxEntities = 100;
+			_maxComponents = 100;
 		}
 
 //} endregion PUBLIC METHODS ===========================================================================================
@@ -72,6 +78,55 @@ package org.gimmick.managers
 		public final function get componentTypeManager():ComponentTypeManager
 		{
 			return _componentTypeManager;
+		}
+		//allocations configuration
+		/**
+		 * @private
+		 */
+		[Inline]
+		public final function get maxEntities():int
+		{
+			return _maxEntities;
+		}
+
+		/**
+		 * Presumably maximum count of entities in application.
+		 * Used to allocate memory for entities collection.
+		 * This is not flag of a limitation!
+		 * In case when count of entities will be bigger than allocated size,
+		 * collection will allocate additional memory for new entities.
+		 *
+		 * @deafult 100
+		 * @see org.gimmick.collections.EntitiesCollection EntitiesCollection
+		 */
+		[Inline]
+		public final function set maxEntities(value:int):void
+		{
+			_maxEntities = value;
+		}
+
+		/**
+		 * @private
+		 */
+		[Inline]
+		public final function get maxComponents():int
+		{
+			return _maxComponents;
+		}
+		/**
+		 * Presumably maximum count of components (one type of components!) in application.
+		 * Used to allocate memory for components collection.
+		 * This is not flag of a limitation!
+		 * In case when count of components will be bigger than allocated size,
+		 * collection will allocate additional memory for new entities.
+		 *
+		 * @deafult 100
+		 * @see org.gimmick.collections.ComponentsCollection ComponentsCollection
+		 */
+		[Inline]
+		public final function set maxComponents(value:int):void
+		{
+			_maxComponents = value;
 		}
 
 //} endregion GETTERS/SETTERS ==========================================================================================

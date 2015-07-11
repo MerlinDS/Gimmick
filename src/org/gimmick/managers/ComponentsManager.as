@@ -68,7 +68,7 @@ package org.gimmick.managers
 		/**
 		 * @inheritDoc
 		 */
-		public function initialize():void
+		public function initialize(allocationSize:int = 1):void
 		{
 
 		}

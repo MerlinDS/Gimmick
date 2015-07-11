@@ -36,7 +36,7 @@ package org.gimmick.managers
 		/**
 		 * @inheritDoc
 		 */
-		public function initialize():void
+		public function initialize(allocationSize:int = 1):void
 		{
 			_nextBit = 0x1;
 			_componentTypes = new Dictionary(true);

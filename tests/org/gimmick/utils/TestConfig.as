@@ -24,9 +24,9 @@ package org.gimmick.utils
 		{
 			super (new TestSystemManager(), new TestComponentManager(), new TestEntityManager());
 			this.systemManager.initialize();
-			this.componentsManager.initialize();
+			this.entitiesManager.initialize(this.maxEntities);
+			this.componentsManager.initialize(this.maxComponents);
 			this.componentTypeManager.initialize();
-			this.entitiesManager.initialize();
 		}
 
 //} endregion PUBLIC METHODS ===========================================================================================
@@ -58,7 +58,7 @@ class TestSystemManager implements ISystemManager
 	public function deactivateSystem(systemType:Class):void{}
 	public function tick(time:Number):void{}
 	public function dispose():void{}
-	public function initialize():void{}
+	public function initialize(allocationSize:int = 1):void {}
 }
 
 class TestComponentManager implements IComponentsManager
@@ -70,7 +70,7 @@ class TestComponentManager implements IComponentsManager
 	public function getComponents(entity:IEntity):Array{return null;}
 	public function removeComponents(entity:IEntity):void{}
 	public function dispose():void{}
-	public function initialize():void{}
+	public function initialize(allocationSize:int = 1):void {}
 }
 
 class TestEntityManager implements IEntitiesManager
@@ -78,7 +78,7 @@ class TestEntityManager implements IEntitiesManager
 	public function addEntity(entity:IEntity, componentType:ComponentType = null):void {}
 	public function removeEntity(entity:IEntity, componentType:ComponentType = null):void {}
 	public function dispose():void{}
-	public function initialize():void{}
+	public function initialize(allocationSize:int = 1):void {}
 	public function getEntities(types:Array):IEntities{return null;}
 	public function tick(time:Number):void {}
 }
