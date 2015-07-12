@@ -40,15 +40,19 @@ package org.gimmick.collections
 		 * Flag for indication that this instance depended to other one
 		 */
 		private var _isDepended:Boolean;
+		private var _disposingCallback:Function;
 		//======================================================================================================================
 //{region											PUBLIC METHODS
 		/**
 		 * Constructor
 		 * @param allocationSize Size of intial allocations
+		 * @param disposingCallback Will be executed after collection disposing
 		 */
-		public function EntitiesCollection(allocationSize:int = 100)
+		public function EntitiesCollection(allocationSize:int = 100, disposingCallback:Function = null)
 		{
 			_allocationSize = allocationSize;
+			_disposingCallback = disposingCallback;
+
 			_content = new <IEntity>[];
 			_splits = new <int>[];
 			_hashMap = new Dictionary(true);
@@ -68,6 +72,7 @@ package org.gimmick.collections
 				c = new EntitiesCollection(0);
 			}
 			c._allocationSize = _allocationSize;
+			c._disposingCallback = _disposingCallback;
 			c._content = _content;
 			c._hashMap = _hashMap;
 			c._length = _length;
@@ -170,6 +175,10 @@ package org.gimmick.collections
 			_hashMap = null;
 			_content = null;
 			_splits = null;
+			//execute callback
+			if(_disposingCallback is Function)
+				_disposingCallback.call(null, this);
+			_disposingCallback = null;
 		}
 
 		/**

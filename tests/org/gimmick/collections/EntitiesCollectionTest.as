@@ -25,6 +25,8 @@ package org.gimmick.collections
 		private var _collection:EntitiesCollection;
 		private var _internalClone:EntitiesCollection;
 		private var _externalClone:EntitiesCollection;
+
+		private var _disposeCount:int;
 		//======================================================================================================================
 //{region											PUBLIC METHODS
 		public function EntitiesCollectionTest()
@@ -35,7 +37,7 @@ package org.gimmick.collections
 		public function setUp():void
 		{
 			_entity = new TestEntity();
-			_collection = new EntitiesCollection();
+			_collection = new EntitiesCollection(10, this.disposingCallback);
 			_internalClone = _collection.dependedClone() as EntitiesCollection;
 			_externalClone = new EntitiesCollection(0);
 			_collection.dependedClone(_externalClone);
@@ -47,6 +49,8 @@ package org.gimmick.collections
 			_externalClone.dispose();
 			_internalClone.dispose();
 			_collection.dispose();
+			Assert.assertEquals(3, _disposeCount);
+			_disposeCount = 0;
 			_collection = null;
 			_internalClone = null;
 			_externalClone = null;
@@ -128,6 +132,11 @@ package org.gimmick.collections
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
 
+		private function disposingCallback(collection:IEntities):void
+		{
+			Assert.assertNotNull(collection);
+			_disposeCount++;
+		}
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS
