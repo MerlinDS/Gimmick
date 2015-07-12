@@ -73,6 +73,7 @@ package org.gimmick.collections
 			}
 			c._allocationSize = _allocationSize;
 			c._disposingCallback = _disposingCallback;
+			c._splits = new <int>[];
 			c._content = _content;
 			c._hashMap = _hashMap;
 			c._length = _length;
@@ -171,7 +172,8 @@ package org.gimmick.collections
 		 */
 		public function dispose():void
 		{
-			this.clear();
+			if(_splits != null && _hashMap != null)
+				this.clear();
 			_hashMap = null;
 			_content = null;
 			_splits = null;

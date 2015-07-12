@@ -44,6 +44,10 @@ package org.gimmick.collections
 		 * @return Instance of entity if collection contains such entity. Null in other case
 		 */
 		function getById(entityId:String):IEntity;
+		/**
+		 * Dispose collection and prepare it for GC
+		 */
+		function dispose():void;
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS

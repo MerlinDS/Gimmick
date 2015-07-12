@@ -38,11 +38,6 @@ package org.gimmick.collections
 		 * Clear collection for new usage
 		 */
 		function clear():void;
-
-		/**
-		 * Dispose collection and prepare it for GC
-		 */
-		function dispose():void;
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS

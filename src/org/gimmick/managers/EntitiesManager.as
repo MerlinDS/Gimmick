@@ -110,7 +110,8 @@ package org.gimmick.managers
 			if(!_initialized)
 			{
 				if (_baseCollections[bits] == null)
-					_baseCollections[bits] = new EntitiesCollection(_allocationSize);
+					_baseCollections[bits] = new EntitiesCollection(_allocationSize,
+																this.collectionDisposed);
 				collection = _baseCollections[bits];
 				//must return only depended clones!
 				collection = collection.dependedClone() as EntitiesCollection;
@@ -145,6 +146,7 @@ package org.gimmick.managers
 		 */
 		public function dispose():void
 		{
+			_initialized = false;
 			for each(var collection:EntitiesCollection in _baseCollections)
 				collection.dispose();
 			while(_allocatedClones.length > 0)
@@ -163,7 +165,6 @@ package org.gimmick.managers
 			_allocatedClones = null;
 			_baseCollections = null;
 			_freeClones = null;
-			_initialized = false;
 		}
 
 //} endregion PUBLIC METHODS ===========================================================================================
@@ -227,6 +228,24 @@ package org.gimmick.managers
 			_allocatedClones[_allocatedClones.length] = collection;
 			collection.bits = bits;
 			return collection;
+		}
+
+		private function collectionDisposed(collection:EntitiesCollection):void
+		{
+			if(!_initialized)return;//
+			//check in fixed
+			var index:int = _fixedCollections.indexOf(collection);
+			if(index > -1)
+				_fixedCollections.splice(index, 1);
+			else
+			{
+				//check in allocated
+				index = _allocatedClones.indexOf(collection);
+				_allocatedClones.splice(index, 1);
+			}
+			//save collection to new once
+			_freeClones[_freeClones.length] = collection;
+			//in other cases do not do anything
 		}
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================

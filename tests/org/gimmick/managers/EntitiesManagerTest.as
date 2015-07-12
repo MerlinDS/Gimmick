@@ -149,6 +149,16 @@ package org.gimmick.managers
 		}
 
 		[Test(order=5)]
+		public function disposeEntitiesCollections():void
+		{
+			this.updateEntities();
+			for each(var entities:IEntities in _preinitedCollections)
+			{
+				entities.dispose();
+			}
+		}
+
+		[Test(order=6)]
 		public function testRemoveEntity():void
 		{
 			this.updateEntities();
