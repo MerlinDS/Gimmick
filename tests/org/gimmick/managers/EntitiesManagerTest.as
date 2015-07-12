@@ -114,8 +114,8 @@ package org.gimmick.managers
 				for(var j:int = 0; j < components.length; j++)
 				{
 					var componentType:ComponentType = components[j];
-					_entitiesManager.addEntity(entity, componentType);
 					entity.bits |= componentType.bit;
+					_entitiesManager.addEntity(entity, componentType);
 				}
 				var entities:IEntities = _preinitedCollections[entity.bits];
 				Assert.assertNotNull(entities);

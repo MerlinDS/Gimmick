@@ -181,7 +181,7 @@ package org.gimmick.collections
 			this.defragContent();
 			_cursor = 0;
 			if(_bits > 0x0)
-				while(_cursor < _length && !(_content[_cursor].bits & _bits))
+				while(_cursor < _length && (_content[_cursor].bits & _bits) != _bits)
 					_cursor++;
 			return this;
 		}
@@ -204,7 +204,7 @@ package org.gimmick.collections
 			if(_bits > 0x0)
 			{
 				do _cursor++;
-				while(_cursor < _length && !(_content[_cursor].bits & _bits));
+				while(_cursor < _length && (_content[_cursor].bits & _bits) != _bits);
 			}else
 				_cursor++;
 
@@ -220,7 +220,7 @@ package org.gimmick.collections
 			for(_cursor = 0; _cursor < _length; _cursor++)
 			{
 				var entity:IEntity = _content[_cursor];
-				if(_bits > 0x0 && !(entity.bits & _bits))continue;
+				if(_bits > 0x0 && (entity.bits & _bits) != _bits)continue;
 				callback.call(thisObject, entity, this);
 			}
 		}

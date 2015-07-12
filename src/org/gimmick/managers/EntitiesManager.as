@@ -33,6 +33,11 @@ package org.gimmick.managers
 		 * value - base collection linked to this mask
 		 */
 		private var _baseCollections:Dictionary;
+		/**
+		 * Pre initialized collecctions.
+		 * Can be disposed manualy only.
+		 */
+		private var _fixedCollections:Vector.<EntitiesCollection>;
 		private var _allocatedClones:Vector.<EntitiesCollection>;
 		private var _freeClones:Vector.<EntitiesCollection>;
 
@@ -55,6 +60,7 @@ package org.gimmick.managers
 		{
 			_allocationSize = allocationSize;
 			_baseCollections = new Dictionary(true);
+			_fixedCollections = new <EntitiesCollection>[];
 			_allocatedClones = new <EntitiesCollection>[];
 			_freeClones = new <EntitiesCollection>[];
 			//initialize base collection without any filltration, that contains all entities
@@ -70,10 +76,9 @@ package org.gimmick.managers
 			if(componentType == null)
 			{
 				//add to base collection
-				bits = entity.bits;
 				_baseCollections[0x0].push(entity);
 			}else
-				bits = componentType.bit;
+				bits = entity.bits | componentType.bit;
 			this.updateCollections(entity, bits, true);
 		}
 		/**
@@ -89,7 +94,7 @@ package org.gimmick.managers
 				bits = entity.bits;
 				_baseCollections[0x0].remove(entity);
 			}else
-				bits = componentType.bit;
+				bits = entity.bits | componentType.bit;
 			this.updateCollections(entity, bits, false);
 		}
 
@@ -101,12 +106,16 @@ package org.gimmick.managers
 		{
 			//get bitwis mask for new collection
 			var bits:uint = getBits(types);
-			var collection:IEntities;
+			var collection:EntitiesCollection;
 			if(!_initialized)
 			{
 				if (_baseCollections[bits] == null)
 					_baseCollections[bits] = new EntitiesCollection(_allocationSize);
 				collection = _baseCollections[bits];
+				//must return only depended clones!
+				collection = collection.dependedClone() as EntitiesCollection;
+				//add clone to fixed list for manualy disposing
+				_fixedCollections[_fixedCollections.length] = collection;
 			}
 			else
 				collection = this.clonedCollection(bits);
@@ -165,8 +174,10 @@ package org.gimmick.managers
 		{
 			for (var collectionBits:uint in _baseCollections)
 			{
-				//collection included current entity
-				if (bits & collectionBits)
+				//base collection updates by caller
+				if(collectionBits == 0x0)continue;
+				//entities bits contains all of collection bits
+				if ((bits & collectionBits) == collectionBits)
 				{
 					/*
 				  	 * If entities [removes from]/[added to] base collection,
