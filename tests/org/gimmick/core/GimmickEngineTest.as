@@ -39,7 +39,8 @@ package org.gimmick.core
 		{
 			_scene = new Sprite();
 			_entities = [
-				{position:new Point(100, 100), velocity:new Velocity(1, -1), display:new Display(new Sprite())}
+				{position:new Point(100, 100), velocity:new Velocity(1, -1), display:new Display(new Sprite())},
+				{position:new Point(100, 100), display:new Display(new Sprite())}
 			];
 		}
 
@@ -67,7 +68,8 @@ package org.gimmick.core
 				var entity:IEntity = Gimmick.createEntity('testEntity' + i);
 				var data:Object = _entities[i];
 				var p:Point = data.position;
-				entity.add(data.velocity);
+				if(data.velocity != null)
+					entity.add(data.velocity);
 				entity.add(data.display);
 				entity.add(new Position(p.x, p.y));
 				data.entityId = entity.id;
@@ -84,9 +86,14 @@ package org.gimmick.core
 				Assert.assertEquals(data.display, display);
 				Assert.assertEquals(_scene, display.view.parent);
 				var position:Position = entity.get(Position);
-				var velocity:Velocity = entity.get(Velocity);
-				Assert.assertEquals(p.x + velocity.x, position.x);
-				Assert.assertEquals(p.y + velocity.y, position.y);
+				if(data.velocity != null)
+				{
+					var velocity:Velocity = entity.get(Velocity);
+					Assert.assertEquals(p.x + velocity.x, position.x);
+					Assert.assertEquals(p.y + velocity.y, position.y);
+				}
+				Assert.assertEquals(position.x, display.view.x);
+				Assert.assertEquals(position.y, display.view.y);
 			}
 
 

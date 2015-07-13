@@ -173,7 +173,6 @@ package org.gimmick.managers
 		[Inline]
 		private final function updateCollections(entity:IEntity, bits:uint, push:Boolean):void
 		{
-			trace("stop");
 			for (var collectionBits:uint in _baseCollections)
 			{
 				//base collection updates by caller
