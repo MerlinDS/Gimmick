@@ -150,7 +150,7 @@ package org.gimmick.core
 		public function disposeEntity(entity:IEntity):void
 		{
 			//TODO Entity disposing #9
-			_componentsManager.removeComponents(entity as Entity);
+//			_componentsManager.removeComponents(entity as Entity);
 			_entitiesManager.removeEntity(entity as Entity, null);
 		}
 
