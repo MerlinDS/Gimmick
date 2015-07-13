@@ -52,7 +52,7 @@ package org.gimmick.core
 		 *     var component:SomeComponent = entity.add(new SomeComponent());
 		 * </listing>
 		 */
-		function add(component:Component):Component;
+		function add(component:Component):*;
 
 		/**
 		 * Check if component was linked to Entity
@@ -69,7 +69,7 @@ package org.gimmick.core
 		 *
 		 * @see org.gimmick.core.Component Abstract Component super class
 		 */
-		function get(component:Class):Component;
+		function get(component:Class):*;
 
 		/**
 		 * Remove component from Entity.

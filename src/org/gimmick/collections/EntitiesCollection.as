@@ -291,7 +291,6 @@ package org.gimmick.collections
 //} endregion GETTERS/SETTERS ==========================================================================================
 	}
 }
-//TODO add shareble length
 class BindableLength{
 	public var value:int;
 }

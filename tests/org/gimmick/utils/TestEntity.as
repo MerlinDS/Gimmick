@@ -29,7 +29,7 @@ package org.gimmick.utils
 			_bits = bits;
 		}
 
-		public function add(component:Component):Component
+		public function add(component:Component):*
 		{
 			return null;
 		}
@@ -39,7 +39,7 @@ package org.gimmick.utils
 			return false;
 		}
 
-		public function get(component:Class):Component
+		public function get(component:Class):*
 		{
 			return null;
 		}

@@ -167,7 +167,7 @@ package org.gimmick.core
 				var n:int = types.length;
 				for(var i:int = 0; i < n; i++)
 				{
-					types[0] = _componentTypeManagers.getType(types[i]);
+					types[i] = _componentTypeManagers.getType(types[i]);
 				}
 			}
 			return _entitiesManager.getEntities(types);
