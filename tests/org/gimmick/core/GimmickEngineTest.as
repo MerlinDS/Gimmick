@@ -28,6 +28,7 @@ package org.gimmick.core
 
 		private var _scene:Sprite;
 		private var _entities:Array;
+		private var _displaySystems:DisplaySystem;
 		//======================================================================================================================
 //{region											PUBLIC METHODS
 		public function GimmickEngineTest()
@@ -53,13 +54,13 @@ package org.gimmick.core
 		}
 
 		[Test]
-		public function createEngine():void
+		public function creationTest():void
 		{
 			var i:int;
 			Gimmick.initialize();
 			//systems
 			Gimmick.addSystem(new MovementSystem());
-			Gimmick.addSystem(new DisplaySystem(_scene), 2);
+			_displaySystems = Gimmick.addSystem(new DisplaySystem(_scene), 2);
 			Gimmick.activateSystem(MovementSystem);
 			Gimmick.activateSystem(DisplaySystem);
 			//add entities
@@ -95,8 +96,31 @@ package org.gimmick.core
 				Assert.assertEquals(position.x, display.view.x);
 				Assert.assertEquals(position.y, display.view.y);
 			}
+			Assert.assertEquals(1, _displaySystems.ticksCount);
+		}
 
+		[Test]
+		public function pauseResumeTest():void
+		{
+			this.creationTest();
+			Gimmick.pause();
+			Gimmick.tick();
+			Assert.assertEquals(1, _displaySystems.ticksCount);
+			Gimmick.resume();
+			Gimmick.tick();
+			Assert.assertEquals(2, _displaySystems.ticksCount);
+		}
 
+		[Test]
+		public function systemActivateDeactivate():void
+		{
+			this.creationTest();
+			Gimmick.deactivateSystem(DisplaySystem);
+			Gimmick.tick();
+			Assert.assertEquals(1, _displaySystems.ticksCount);
+			Gimmick.activateSystem(DisplaySystem);
+			Gimmick.tick();
+			Assert.assertEquals(2, _displaySystems.ticksCount);
 		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
@@ -126,6 +150,7 @@ class DisplaySystem implements IEntitySystem
 
 	private var _entities:IEntities;
 	private var _scene:DisplayObjectContainer;
+	public var ticksCount:int;
 
 	public function DisplaySystem(scene:DisplayObjectContainer)
 	{
@@ -134,6 +159,7 @@ class DisplaySystem implements IEntitySystem
 
 	public function tick(time:Number):void
 	{
+		this.ticksCount++;
 		for(_entities.begin(); !_entities.end(); _entities.next())
 		{
 			var entity:IEntity = _entities.current;

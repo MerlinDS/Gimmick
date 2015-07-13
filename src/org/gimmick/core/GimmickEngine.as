@@ -177,7 +177,7 @@ package org.gimmick.core
 		/**
 		 * @copy org.gimmick.managers.SystemManager#addSystem()
 		 */
-		public function addSystem(system:IBaseSystem, priority:int = 1):IBaseSystem
+		public function addSystem(system:IBaseSystem, priority:int = 1):*
 		{
 			return _systemsManager.addSystem(system, priority);
 		}
