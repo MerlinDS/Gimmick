@@ -33,8 +33,8 @@ package org.gimmick.collections
 
 		private var _splits:Vector.<int>;
 
+		private var _length:BindableLength;
 		private var _cursor:int;
-		private var _length:int;
 		private var _bits:uint;
 		/**
 		 * Flag for indication that this instance depended to other one
@@ -53,6 +53,7 @@ package org.gimmick.collections
 			_allocationSize = allocationSize;
 			_disposingCallback = disposingCallback;
 
+			_length = new BindableLength();
 			_content = new <IEntity>[];
 			_splits = new <int>[];
 			_hashMap = new Dictionary(true);
@@ -90,10 +91,10 @@ package org.gimmick.collections
 			//Add new entity only in case if it was not added previously
 			if(_hashMap[entity.id] == null)
 			{
-				if(_length == _content.length)
+				if(_length.value == _content.length)
 					this.increaseSize();
-				_hashMap[entity.id] = _length;//set index of entity in content list
-				_content[_length++] = entity;//add to content list
+				_hashMap[entity.id] = _length.value;//set index of entity in content list
+				_content[_length.value++] = entity;//add to content list
 			}
 			//if node was already added do nothing
 		}
@@ -114,7 +115,7 @@ package org.gimmick.collections
 				else
 				{
 					//get content from end of list and push it to empty place
-					var lastIndex:int = --_length;
+					var lastIndex:int = --_length.value;
 					_content[index] = _content[lastIndex];
 					_content[lastIndex] = null;
 				}
@@ -162,10 +163,12 @@ package org.gimmick.collections
 		{
 			_hashMap = new Dictionary(true);
 			if(!_isDepended)
+			{
 				this.increaseSize(true);
+				_length.value = 0;
+			}
 			_splits.length = 0;
 			_cursor = 0;
-			_length = 0;
 		}
 		/**
 		 * @inheritDoc
@@ -177,6 +180,7 @@ package org.gimmick.collections
 			_hashMap = null;
 			_content = null;
 			_splits = null;
+			_length = null;
 			//execute callback
 			if(_disposingCallback is Function)
 				_disposingCallback.call(null, this);
@@ -192,7 +196,7 @@ package org.gimmick.collections
 			this.defragContent();
 			_cursor = 0;
 			if(_bits > 0x0)
-				while(_cursor < _length && (_content[_cursor].bits & _bits) != _bits)
+				while(_cursor < _length.value && (_content[_cursor].bits & _bits) != _bits)
 					_cursor++;
 			return this;
 		}
@@ -203,7 +207,7 @@ package org.gimmick.collections
 		[Inline]
 		public final function end():Boolean
 		{
-			return _cursor >= _length;
+			return _cursor >= _length.value;
 		}
 
 		/**
@@ -215,7 +219,7 @@ package org.gimmick.collections
 			if(_bits > 0x0)
 			{
 				do _cursor++;
-				while(_cursor < _length && (_content[_cursor].bits & _bits) != _bits);
+				while(_cursor < _length.value && (_content[_cursor].bits & _bits) != _bits);
 			}else
 				_cursor++;
 
@@ -228,7 +232,7 @@ package org.gimmick.collections
 		public final function forEach(callback:Function, thisObject:Object = null):void
 		{
 			this.defragContent();
-			for(_cursor = 0; _cursor < _length; _cursor++)
+			for(_cursor = 0; _cursor < _length.value; _cursor++)
 			{
 				var entity:IEntity = _content[_cursor];
 				if(_bits > 0x0 && (entity.bits & _bits) != _bits)continue;
@@ -258,7 +262,7 @@ package org.gimmick.collections
 		{
 			while(_splits.length > 0)
 			{
-				var lastIndex:int = --_length;
+				var lastIndex:int = --_length.value;
 				_content[_splits.pop()] = _content[lastIndex];
 				_content[lastIndex] = null;
 			}
@@ -286,4 +290,8 @@ package org.gimmick.collections
 
 //} endregion GETTERS/SETTERS ==========================================================================================
 	}
+}
+//TODO add shareble length
+class BindableLength{
+	public var value:int;
 }

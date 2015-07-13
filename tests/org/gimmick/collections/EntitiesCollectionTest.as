@@ -61,6 +61,19 @@ package org.gimmick.collections
 		{
 			_collection.push(_entity);
 			//also entity must be added to clones
+			//test new length
+			var lenght:int = 0;
+			for(_collection.begin(); !_collection.end(); _collection.next())
+				lenght++;
+			Assert.assertEquals(1, lenght);
+			lenght = 0;
+			for(_internalClone.begin(); !_internalClone.end(); _internalClone.next())
+				lenght++;
+			Assert.assertEquals("_internalClone", 1, lenght);
+			lenght = 0;
+			for(_externalClone.begin(); !_externalClone.end(); _externalClone.next())
+				lenght++;
+			Assert.assertEquals("_externalClone", 1, lenght);
 		}
 
 		[Test]
@@ -101,7 +114,7 @@ package org.gimmick.collections
 		}
 
 		[Test]
-		public function testPop():void
+		public function testRemove():void
 		{
 			this.testPush();
 			_collection.remove(_entity);
