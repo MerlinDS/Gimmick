@@ -16,7 +16,7 @@ package org.gimmick.managers
 	import flash.utils.Dictionary;
 
 	import org.gimmick.collections.EntitiesCollection;
-	import org.gimmick.core.IBaseSystem;
+	import org.gimmick.core.IIdelSystem;
 	import org.gimmick.core.IEntitySystem;
 	import org.gimmick.core.IProcessingSystem;
 	import org.gimmick.utils.getInstanceClass;
@@ -56,7 +56,7 @@ package org.gimmick.managers
 		/**
 		 * @inheritDoc
 		 */
-		public function addSystem(system:IBaseSystem, priority:int = 1):IBaseSystem
+		public function addSystem(system:IIdelSystem, priority:int = 1):IIdelSystem
 		{
 			var type:Class = getInstanceClass(system);
 			//remove old system from manager
@@ -80,7 +80,7 @@ package org.gimmick.managers
 		/**
 		 * @inheritDoc
 		 */
-		public function removeSystem(systemType:Class):IBaseSystem
+		public function removeSystem(systemType:Class):IIdelSystem
 		{
 			var node:Node = _systemsTypes[systemType];
 			if(node == null)
@@ -215,7 +215,7 @@ package org.gimmick.managers
 }
 
 import org.gimmick.collections.EntitiesCollection;
-import org.gimmick.core.IBaseSystem;
+import org.gimmick.core.IIdelSystem;
 
 /**
  * Linked list node - helper
@@ -225,11 +225,11 @@ class Node{
 	public var next:Node;
 	public var priority:int;
 	public var active:Boolean;
-	public var system:IBaseSystem;
+	public var system:IIdelSystem;
 	public var collection:EntitiesCollection;
 	public var forEach:Boolean;
 
-	public function Node(system:IBaseSystem, priority:int)
+	public function Node(system:IIdelSystem, priority:int)
 	{
 		this.priority = priority;
 		this.system = system;

@@ -18,7 +18,7 @@ package org.gimmick.core
 	 * Implement this interface to create concreet system class.
 	 *
 	 */
-	public interface IEntitySystem extends IBaseSystem
+	public interface IEntitySystem extends IIdelSystem
 	{
 //======================================================================================================================
 //{region											PUBLIC METHODS

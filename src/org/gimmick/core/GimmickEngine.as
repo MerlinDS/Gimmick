@@ -213,7 +213,7 @@ package org.gimmick.core
 		/**
 		 * @copy org.gimmick.managers.SystemManager#addSystem()
 		 */
-		public function addSystem(system:IBaseSystem, priority:int = 1):*
+		public function addSystem(system:IIdelSystem, priority:int = 1):*
 		{
 			return _systemsManager.addSystem(system, priority);
 		}
@@ -221,7 +221,7 @@ package org.gimmick.core
 		/**
 		 * @copy org.gimmick.managers.SystemManager#removeSystem()
 		 */
-		public function removeSystem(systemType:Class):IBaseSystem
+		public function removeSystem(systemType:Class):IIdelSystem
 		{
 			return _systemsManager.removeSystem(systemType);
 		}

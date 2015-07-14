@@ -19,7 +19,7 @@ package org.gimmick.core
 	 * Interface of processing systems in Gimmick.
 	 * Implement this interface to create concreet processing system class.
 	 */
-	public interface IProcessingSystem extends IBaseSystem
+	public interface IProcessingSystem extends IIdelSystem
 	{
 //======================================================================================================================
 //{region											PUBLIC METHODS

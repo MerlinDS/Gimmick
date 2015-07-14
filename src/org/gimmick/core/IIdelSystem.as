@@ -15,13 +15,13 @@ package org.gimmick.core
 
 	/**
 	 * Base interfaces for all systems in Gimmick.
-	 * Do not implement this interface for creating concreet system!
-	 * Implement IEntitySystem and IProcessingSystem instead
+	 * Implement this interface only when you need idle system, System that not reat on tick, but can be active.
+	 * In other cases implement IEntitySystem and IProcessingSystem instead
 	 *
 	 * @see org.gimmick.core.IEntitySystem IEntitySystem
 	 * @see org.gimmick.core.IProcessingSystem IProcessingSystem
 	 */
-	public interface IBaseSystem
+	public interface IIdelSystem
 	{
 		//======================================================================================================================
 //{region											PUBLIC METHODS

@@ -13,7 +13,7 @@
 package org.gimmick.managers
 {
 
-	import org.gimmick.core.IBaseSystem;
+	import org.gimmick.core.IIdelSystem;
 	import org.gimmick.core.IEntitySystem;
 
 	/**
@@ -38,7 +38,7 @@ package org.gimmick.managers
 		 * @see org.gimmick.core.IEntitySystem Implenet IEntitySystem to create concreet class of system
 		 * @see org.gimmick.core.IProcessingSystem Implenet IProcessingSystem to create concreet class of processing system
 		 */
-		function addSystem(system:IBaseSystem, priority:int = 1):IBaseSystem;
+		function addSystem(system:IIdelSystem, priority:int = 1):IIdelSystem;
 		/**
 		 * Remove system from Gimmick engine.
 		 * @param systemType Type of the system that was added to Gimmick previously
@@ -53,7 +53,7 @@ package org.gimmick.managers
 		 * var someSystem:SomeSystem = Gimmick.removeSystem( SomeSystem );
 		 * </listing>
 		 */
-		function removeSystem(systemType:Class):IBaseSystem;
+		function removeSystem(systemType:Class):IIdelSystem;
 		/**
 		 * Activate and add system to Gimmick scope. <br />
 		 * After adding system to scope <code>IEntitySystem.tick()</code> or
