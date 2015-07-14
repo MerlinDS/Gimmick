@@ -14,7 +14,7 @@ package org.gimmick.collections
 
 	import org.gimmick.core.IEntity;
 
-	public interface IEntities extends ICollectionIterator
+	public interface IEntities
 	{
 		//======================================================================================================================
 //{region											PUBLIC METHODS
@@ -48,6 +48,31 @@ package org.gimmick.collections
 		 * Dispose collection and prepare it for GC
 		 */
 		function dispose():void;
+		//iterator
+		/**
+		 * Method for iterations. Move internal cursor to first element of collection.
+		 * @return Current collection
+		 */
+		function begin():IEntities;
+
+		/**
+		 * Method for iterations. Flag of the end of collection that indicate end of iteration.
+		 * @return True if internal cursor points to last element of collection. In other return false.
+		 */
+		function end():Boolean;
+
+		/**
+		 * Method for iterations. Move internal cursor to next element of collection.
+		 */
+		function next():void;
+
+		/**
+		 * Iterate through each entity in collection
+		 * @param callback The function to run on each entity in collection.This function is invoked with two arguments:
+		 * the current entity from the collection, and the collection object:
+		 * @param thisObject (default=null) The object that the identifer this in the callback function refers to when the function is called.
+		 */
+		function forEach(callback:Function, thisObject:Object = null):void;
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
@@ -62,6 +87,22 @@ package org.gimmick.collections
 		 * @param value New filtration bitwise mask
 		 */
 		function set bits(value:uint):void;
+		/**
+		 * Return entity that under internal cursor.
+		 */
+		function get current():IEntity;
+
+		/**
+		 * Check for collection emptines.
+		 * If true - collection has not elements. In other case false
+		 */
+		function get empty():Boolean;
+
+		/**
+		 * True - collection was disposed, collection could not be used any more.
+		 * False - collection was not disposed.
+		 */
+		function get isDisposed():Boolean;
 //} endregion GETTERS/SETTERS ==========================================================================================
 	}
 }

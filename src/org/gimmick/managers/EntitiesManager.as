@@ -33,13 +33,8 @@ package org.gimmick.managers
 		 * value - base collection linked to this mask
 		 */
 		private var _baseCollections:Dictionary;
-		/**
-		 * Pre initialized collecctions.
-		 * Can be disposed manualy only.
-		 */
-		private var _fixedCollections:Vector.<EntitiesCollection>;
-		private var _allocatedClones:Vector.<EntitiesCollection>;
-		private var _freeClones:Vector.<EntitiesCollection>;
+		private var _depenededCollections:Vector.<EntitiesCollection>;
+		private var _depenededLength:int;
 
 		private var _initialized:Boolean;
 		private var _allocationSize:int;
@@ -60,9 +55,7 @@ package org.gimmick.managers
 		{
 			_allocationSize = allocationSize;
 			_baseCollections = new Dictionary(true);
-			_fixedCollections = new <EntitiesCollection>[];
-			_allocatedClones = new <EntitiesCollection>[];
-			_freeClones = new <EntitiesCollection>[];
+			_depenededCollections = new <EntitiesCollection>[];
 			//initialize base collection without any filltration, that contains all entities
 			this.getEntities([]);
 		}
@@ -111,16 +104,11 @@ package org.gimmick.managers
 			{
 				if (_baseCollections[bits] == null)
 					_baseCollections[bits] = new EntitiesCollection(_allocationSize,
-																this.collectionDisposed);
-				collection = _baseCollections[bits];
-				//must return only depended clones!
-				collection = collection.dependedClone() as EntitiesCollection;
-				//add clone to fixed list for manualy disposing
-				_fixedCollections[_fixedCollections.length] = collection;
+																this.collectionDisposing);
 			}
-			else
-				collection = this.clonedCollection(bits);
-
+			collection = _baseCollections[bits];
+			collection = collection.dependedClone() as EntitiesCollection;
+			_depenededCollections[_depenededLength++] = collection;
 			return collection;
 		}
 
@@ -131,14 +119,6 @@ package org.gimmick.managers
 		{
 			if(!_initialized)
 				_initialized = true;
-			//free all allocated collections
-			while(_allocatedClones.length > 0)
-			{
-				var collection:EntitiesCollection = _allocatedClones[_allocatedClones.length-1];
-				collection.clear();
-				_freeClones[_freeClones.length] = collection;
-				_allocatedClones.length--;
-			}
 		}
 
 		/**
@@ -149,22 +129,10 @@ package org.gimmick.managers
 			_initialized = false;
 			for each(var collection:EntitiesCollection in _baseCollections)
 				collection.dispose();
-			while(_allocatedClones.length > 0)
-			{
-				collection = _allocatedClones[_allocatedClones.length - 1];
-				collection.dispose();
-				_allocatedClones.length--;
-			}
-			while(_freeClones.length > 0)
-			{
-				collection = _freeClones[_freeClones.length - 1];
-				collection.dispose();
-				_freeClones.length--;
-			}
-
-			_allocatedClones = null;
+			while(_depenededLength > 0)
+				_depenededCollections[--_depenededLength].dispose();
+			_depenededCollections = null;
 			_baseCollections = null;
-			_freeClones = null;
 		}
 
 //} endregion PUBLIC METHODS ===========================================================================================
@@ -207,46 +175,12 @@ package org.gimmick.managers
 			return bits;
 		}
 
-		private function clonedCollection(bits:uint):EntitiesCollection
+		private function collectionDisposing(collection:EntitiesCollection):void
 		{
-			var collection:EntitiesCollection;
-			var baseCollection:EntitiesCollection = _baseCollections[bits] != null ?
-					_baseCollections[bits] : _baseCollections [0x0];
-			//
-			if (_freeClones.length == 0)
-			{
-				//create new clone
-				collection = baseCollection.dependedClone() as EntitiesCollection;
-			}
-			else
-			{
-				//get existing clone
-				collection = _freeClones[_freeClones.length - 1];
-				_freeClones.length--;//delete from free clones
-				_baseCollections.dependedClone(collection);
-			}
-
-			_allocatedClones[_allocatedClones.length] = collection;
-			collection.bits = bits;
-			return collection;
-		}
-
-		private function collectionDisposed(collection:EntitiesCollection):void
-		{
-			if(!_initialized)return;//
-			//check in fixed
-			var index:int = _fixedCollections.indexOf(collection);
-			if(index > -1)
-				_fixedCollections.splice(index, 1);
-			else
-			{
-				//check in allocated
-				index = _allocatedClones.indexOf(collection);
-				_allocatedClones.splice(index, 1);
-			}
-			//save collection to new once
-			_freeClones[_freeClones.length] = collection;
-			//in other cases do not do anything
+			if(!_initialized)return;
+			var index:int = _depenededCollections.indexOf(collection);
+			_depenededCollections.splice(index, 1);
+			_depenededLength--;
 		}
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================

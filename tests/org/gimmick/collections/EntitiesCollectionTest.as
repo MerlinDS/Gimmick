@@ -123,24 +123,6 @@ package org.gimmick.collections
 			Assert.assertFalse(_internalClone.hasEntity(_entity));
 			Assert.assertFalse(_externalClone.hasEntity(_entity));
 		}
-
-		[Test]
-		public function testClear():void
-		{
-			this.testPush();
-			_internalClone.clear();
-			_externalClone.clear();
-			Assert.assertFalse(_externalClone.hasEntity(_entity));
-			Assert.assertFalse(_internalClone.hasEntity(_entity));
-			//copy does not dispose parent content
-			Assert.assertTrue(_collection.hasEntity(_entity));
-			this.testPush();
-			_collection.clear();
-			//also must clear all copies
-			Assert.assertFalse(_collection.hasEntity(_entity));
-			Assert.assertFalse(_internalClone.hasEntity(_entity));
-			Assert.assertFalse(_externalClone.hasEntity(_entity));
-		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS

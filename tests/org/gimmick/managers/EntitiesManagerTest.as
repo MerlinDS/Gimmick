@@ -138,14 +138,6 @@ package org.gimmick.managers
 				Assert.assertTrue(entities.hasEntity(entity));
 				collections.push(entities);
 			}
-			//free depended collections
-			_entitiesManager.tick(0);
-			for(i = 0; i < collections.length; i++)
-			{
-				entities = collections[i];
-				for(entities.begin(); !entities.end(); entities.next())
-					Assert.fail('legth of collection must equals 0');
-			}
 		}
 
 		[Test(order=5)]
@@ -155,6 +147,7 @@ package org.gimmick.managers
 			for each(var entities:IEntities in _preinitedCollections)
 			{
 				entities.dispose();
+				Assert.assertTrue(entities.empty);
 			}
 		}
 

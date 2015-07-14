@@ -20,7 +20,7 @@ package org.gimmick.collections
 	 * Collection of entities.
 	 * Do not provide sorted entities list
 	 */
-	public class EntitiesCollection implements IEntities, IEntitiesCollection
+	public class EntitiesCollection implements IEntities
 	{
 		private var _allocationSize:int;
 		private var _content:Vector.<IEntity>;
@@ -83,7 +83,8 @@ package org.gimmick.collections
 		}
 
 		/**
-		 * @inheritDoc
+		 * Push Entity to collection
+		 * @param entity Instance of entity
 		 */
 		[Inline]
 		public final function push(entity:IEntity):void
@@ -100,7 +101,8 @@ package org.gimmick.collections
 		}
 
 		/**
-		 * @inheritDoc
+		 * Remove Entity from collection
+		 * @param entity Instance of entity
 		 */
 		[Inline]
 		public final function remove(entity:IEntity):void
@@ -159,28 +161,13 @@ package org.gimmick.collections
 		/**
 		 * @inheritDoc
 		 */
-		public function clear():void
-		{
-			_hashMap = new Dictionary(true);
-			if(!_isDepended)
-			{
-				this.increaseSize(true);
-				_length.value = 0;
-			}
-			_splits.length = 0;
-			_cursor = 0;
-		}
-		/**
-		 * @inheritDoc
-		 */
 		public function dispose():void
 		{
-			if(_splits != null && _hashMap != null)
-				this.clear();
 			_hashMap = null;
 			_content = null;
 			_splits = null;
 			_length = null;
+			_cursor = 0;
 			//execute callback
 			if(_disposingCallback is Function)
 				_disposingCallback.call(null, this);
@@ -191,7 +178,7 @@ package org.gimmick.collections
 		 * @inheritDoc
 		 */
 		[Inline]
-		public final function begin():ICollectionIterator
+		public final function begin():IEntities
 		{
 			this.defragContent();
 			_cursor = 0;
@@ -260,6 +247,7 @@ package org.gimmick.collections
 		 */
 		private function defragContent():void
 		{
+			if(_splits == null)return;//was disposed
 			while(_splits.length > 0)
 			{
 				var lastIndex:int = --_length.value;
@@ -286,6 +274,26 @@ package org.gimmick.collections
 		public final function get current():IEntity
 		{
 			return _content[_cursor];
+		}
+
+		/**
+		 * @inheritDoc
+		 */
+		[Inline]
+		public final function get empty():Boolean
+		{
+			if(_splits == null)return true;//collection was disposed
+			this.defragContent();
+			return _length.value == 0;
+		}
+
+		/**
+		 * @inheritDoc
+		 */
+		[Inline]
+		public final function get isDisposed():Boolean
+		{
+			return _splits != null;
 		}
 
 //} endregion GETTERS/SETTERS ==========================================================================================

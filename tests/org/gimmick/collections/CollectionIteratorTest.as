@@ -83,6 +83,7 @@ package org.gimmick.collections
 			}
 			i = 0;
 			_iterator.bits = _bits;
+			Assert.assertFalse(_iterator.empty);
 			for(_iterator.begin(); !_iterator.end(); _iterator.next())
 			{
 				Assert.assertNotNull(_iterator.current);
@@ -101,6 +102,7 @@ package org.gimmick.collections
 //				Assert.assertNotNull(_iterator.current); Inplement this in need
 				i--;
 			}
+			Assert.assertTrue(_iterator.empty);
 			Assert.assertEquals(0, i);
 		}
 
@@ -113,6 +115,7 @@ package org.gimmick.collections
 				_iterator.remove(_entities[--i]);
 				Assert.assertNotNull(_iterator.current);
 			}
+			Assert.assertFalse(_iterator.empty);
 			Assert.assertEquals(_entities.length / 2 , i);
 		}
 
