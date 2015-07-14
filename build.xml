@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<!--
+    The MIT License (MIT)
+
+    Copyright (c) 2015 Andrew Salomatin (MerlinDS)
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+  -->
+<project name="gimmick" basedir="." default="build">
+    <description>Gimmick SWC Assembler</description>
+    <!-- Load properties -->
+    <property file="build.properties" />
+    <property file="version.properties" />
+    <!-- -->
+    <echo message="Build ${project.name}.swc"/>
+    <echo message="Using SDK: ${FLEX_HOME} "/>
+    <taskdef resource="flexTasks.tasks" classpath="${FLEX_HOME}/ant/lib/flexTasks.jar" />
+    <!-- Init build phase -->
+    <target name="init">
+        <mkdir dir="${deploy.dir}" />
+        <tempfile property="temp.dir" destDir="${java.io.tmpdir}" prefix="${ant.project.name}-doc-xml-" />
+    </target>
+    <!-- Build SWC phase -->
+    <target name="build-swc" description="compile gimmick.swc">
+        <echo message="Debug = ${debug.flag}, inline= ${inline.flag}"/>
+        <compc output="${deploy.dir}/${project.name}-${project.version}.swc">
+            <include-sources dir="${src.dir}" includes="*" />
+            <!-- Try to keep this framework without dependencies -->
+            <!--But for some cases: <external-library-path dir="${libs.dir}" includes="*"/>-->
+            <debug>${debug.flag}</debug>
+            <inline>${inline.flag}</inline>
+            <incremental>false</incremental>
+            <headless-server>true</headless-server>
+        </compc>
+    </target>
+    <!-- ASDoc -->
+    <target name="asdoc">
+        <echo>Generating documentation</echo>
+        <tstamp>
+            <format property="docgen.time" pattern="MM/dd/yyyy hh:mm aa" unit="hour"/>
+        </tstamp>
+        <delete includeemptydirs="true" failonerror="false">
+            <fileset dir="${asdoc.dir}" defaultexcludes="false">
+                <include name="**/*" />
+            </fileset>
+        </delete>
+        <java jar="${FLEX_HOME}/lib/legacy/asdoc.jar" dir="${FLEX_HOME}/frameworks" fork="true" failonerror="true">
+            <arg line="-source-path ${src.dir}"/>
+            <!--<arg line="-external-library-path+=${libs.dir}"/>-->
+            <arg line="-doc-sources ${src.dir}"/>
+            <arg line="-output ${asdoc.dir}"/>
+            <arg value="-keep-xml=true"/>
+            <arg value="-skip-xsl=true"/>
+            <arg line="-window-title 'Gimmick ${project.version}'"/>
+            <arg line="-main-title 'Gimmick ${project.version}'"/>
+            <arg line="-footer 'Gestouch - http://github.com/Merlinds/Gimmick/ - Documentation generated at: ${docgen.time}'"/>
+            <arg line="-package org.gimmick.collections 'Collections'"/>
+        </java>
+        <echo>[asdoc] ASDOC documentation generated successfully</echo>
+    </target>
+    <!-- Post clean phase -->
+    <target name="post-clean" description="delete temporary data">
+        <delete dir="${temp.dir}" failonerror="false" includeEmptyDirs="true" />
+    </target>
+    <!-- Default build target -->
+    <target name="build" depends="init,build-swc,post-clean" description="Builds the library (.swc file)">
+        <echo message="${temp.dir}"/>
+    </target>
+</project>

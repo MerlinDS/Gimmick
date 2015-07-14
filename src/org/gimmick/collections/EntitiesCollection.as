@@ -215,7 +215,7 @@ package org.gimmick.collections
 		/**
 		 * @inheritDoc
 		 */
-//		[Inline] - could not be inline
+//		[Inline] //- could not be inline
 		public final function forEach(callback:Function, thisObject:Object = null):void
 		{
 			this.defragContent();
