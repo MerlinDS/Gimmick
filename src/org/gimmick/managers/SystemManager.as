@@ -128,6 +128,8 @@ package org.gimmick.managers
 						node.next = target.next;
 						node.prev = target;
 						target.next = node;
+						if(target == _tail)
+							_tail = node;
 					}else
 					{
 						/*
@@ -139,8 +141,8 @@ package org.gimmick.managers
 						_head = node;
 					}
 				}
-				node.system.activate();
 				node.active = true;
+				node.system.activate();
 			}
 		}
 
@@ -159,6 +161,9 @@ package org.gimmick.managers
 				var prev:SystemNode = node.prev;
 				if(prev != null)prev.next = next;
 				if(next != null)next.prev = prev;
+				if(_tail == node)_tail = prev;
+				if(_head == node)_head = next;
+
 				//deactivate system and node
 				node.system.deactivate();
 				node.active = false;

@@ -89,19 +89,20 @@ package org.gimmick.managers
 				new ThirdSystem(), 3,
 				new FirstSystem(), 1,
 				new SecondSystem(), 2,
-				new TestProcessingSystem(_entities), 4
+				new TestProcessingSystem(_entities), 1
 			];
 			for(var i:int = 0; i < systems.length / 2; i++)
 			{
 				_systemManager.addSystem(systems[i * 2], systems[i * 2 + 1]);
 				_systemManager.activateSystem(getInstanceClass(systems[i * 2]));
 			}
+			var l:* = TestIdleSystem.EXECUTION_ORDER;
 			_systemManager.tick(0);
-			for(i = 0; i < systems.length / 2; i++)
-			{
-				Assert.assertEquals(systems[i * 2], TestIdleSystem
-						.EXECUTION_ORDER[ systems[i * 2 + 1] - 1 ]);
-			}
+			Assert.assertEquals(systems[2], TestIdleSystem.EXECUTION_ORDER[ 0 ]);
+			Assert.assertEquals(systems[6], TestIdleSystem.EXECUTION_ORDER[ 1 ]);
+			Assert.assertEquals(systems[4], TestIdleSystem.EXECUTION_ORDER[ 2 ]);
+			Assert.assertEquals(systems[0], TestIdleSystem.EXECUTION_ORDER[ 3 ]);
+
 		}
 
 		[Test]

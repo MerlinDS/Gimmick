@@ -14,6 +14,7 @@ package org.gimmick.core
 {
 
 	import flash.display.DisplayObject;
+	import flash.display.DisplayObjectContainer;
 	import flash.display.Sprite;
 	import flash.geom.Point;
 
@@ -26,7 +27,6 @@ package org.gimmick.core
 	public class GimmickEngineTest
 	{
 
-		private var _scene:Sprite;
 		private var _entities:Array;
 		private var _displaySystems:DisplaySystem;
 		//======================================================================================================================
@@ -38,7 +38,6 @@ package org.gimmick.core
 		[Before]
 		public function setUp():void
 		{
-			_scene = new Sprite();
 			_entities = [
 				{position:new Point(100, 100), velocity:new Velocity(1, -1), display:new Display(new Sprite())},
 				{position:new Point(100, 100), display:new Display(new Sprite())}
@@ -48,9 +47,7 @@ package org.gimmick.core
 		[After]
 		public function tearDown():void
 		{
-			_scene.removeChildren();
 			Gimmick.dispose();
-			_scene = null;
 		}
 
 		[Test]
@@ -58,34 +55,27 @@ package org.gimmick.core
 		{
 			var i:int;
 			Gimmick.initialize();
-			//systems
-			Gimmick.addSystem(new MovementSystem());
-			_displaySystems = Gimmick.addSystem(new DisplaySystem(_scene), 2);
-			Gimmick.activateSystem(MovementSystem);
-			Gimmick.activateSystem(DisplaySystem);
-			//add entities
-			for(i = 0; i < _entities.length; i++)
-			{
-				var entity:IEntity = Gimmick.createEntity('testEntity' + i);
-				var data:Object = _entities[i];
-				var p:Point = data.position;
-				if(data.velocity != null)
-					entity.add(data.velocity);
-				entity.add(data.display);
-				entity.add(new Position(p.x, p.y));
-				data.entityId = entity.id;
-			}
+			/*
+			Create application with starting system
+			 */
+			var starter:StartingSystem = Gimmick.addSystem(new StartingSystem(_entities));
+			//get date for tests
+			_displaySystems = starter.displaySystem;
+			var scene:DisplayObjectContainer = starter.scene;
+			//crete application
+			Gimmick.activateSystem(StartingSystem);
+			Assert.assertTrue(starter.disposed);
 			//timer
 			Gimmick.tick();
 			var allEntities:IEntities = Gimmick.getEntities();
 			for(i = 0; i < _entities.length; i++)
 			{
-				data = _entities[i];
-				p = data.position;
-				entity = allEntities.getById(data.entityId);
+				var data:Object = _entities[i];
+				var p:Point = data.position;
+				var entity:IEntity = allEntities.getById(data.entityId);
 				var display:Display = entity.get(Display);
 				Assert.assertEquals(data.display, display);
-				Assert.assertEquals(_scene, display.view.parent);
+				Assert.assertEquals(scene, display.view.parent);
 				var position:Position = entity.get(Position);
 				if(data.velocity != null)
 				{
@@ -137,13 +127,83 @@ package org.gimmick.core
 
 import flash.display.DisplayObject;
 import flash.display.DisplayObjectContainer;
+import flash.display.Sprite;
+import flash.geom.Point;
 
 import org.gimmick.collections.IEntities;
 import org.gimmick.core.Component;
 import org.gimmick.core.Gimmick;
 import org.gimmick.core.IEntity;
 import org.gimmick.core.IEntitySystem;
+import org.gimmick.core.IIdelSystem;
 import org.gimmick.core.IProcessingSystem;
+
+class StartingSystem implements IIdelSystem
+{
+
+	public var disposed:Boolean;
+
+	private var _scene:DisplayObjectContainer;
+	private var _entitiesData:Array;
+	private var _displaySystem:DisplaySystem;
+
+	public function StartingSystem(entitiesData:Array)
+	{
+		_entitiesData = entitiesData;
+	}
+
+	public function initialize():void
+	{
+		_scene = new Sprite();
+		Gimmick.addSystem(new MovementSystem());
+		_displaySystem = Gimmick.addSystem(new DisplaySystem(_scene), 2);
+	}
+
+	public function dispose():void
+	{
+		this.disposed = true;
+		_entitiesData = null;
+		_scene = null;
+		_displaySystem = null;
+	}
+
+	public function activate():void
+	{
+		Gimmick.activateSystem(MovementSystem);
+		Gimmick.activateSystem(DisplaySystem);
+		this.createEntities();
+		/*
+		 This system create application and remove itself from engine
+		 */
+		Gimmick.removeSystem(StartingSystem);
+	}
+
+	public function deactivate():void
+	{
+	}
+
+	private function createEntities():void
+	{
+		for(var i:int = 0; i < _entitiesData.length; i++)
+		{
+			var entity:IEntity = Gimmick.createEntity('testEntity' + i);
+			var data:Object = _entitiesData[i];
+			var p:Point = data.position;
+			if(data.velocity != null)
+				entity.add(data.velocity);
+			entity.add(data.display);
+			entity.add(new Position(p.x, p.y));
+			data.entityId = entity.id;
+		}
+	}
+
+	public function get displaySystem():DisplaySystem {return _displaySystem;}
+
+	public function get scene():DisplayObjectContainer
+	{
+		return _scene;
+	}
+}
 
 class DisplaySystem implements IEntitySystem
 {
@@ -225,6 +285,8 @@ class MovementSystem implements IProcessingSystem
 	{
 	}
 }
+
+
 
 class Position extends Component
 {
