@@ -293,7 +293,7 @@ package org.gimmick.collections
 		[Inline]
 		public final function get isDisposed():Boolean
 		{
-			return _splits != null;
+			return _splits == null;
 		}
 
 //} endregion GETTERS/SETTERS ==========================================================================================

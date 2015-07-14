@@ -67,6 +67,7 @@ package org.gimmick.core
 			Assert.assertTrue(starter.disposed);
 			//timer
 			Gimmick.tick();
+			//
 			var allEntities:IEntities = Gimmick.getEntities();
 			for(i = 0; i < _entities.length; i++)
 			{
@@ -86,6 +87,8 @@ package org.gimmick.core
 				Assert.assertEquals(position.x, display.view.x);
 				Assert.assertEquals(position.y, display.view.y);
 			}
+			allEntities.dispose();
+			Assert.assertTrue(allEntities.isDisposed);
 			Assert.assertEquals(1, _displaySystems.ticksCount);
 		}
 
