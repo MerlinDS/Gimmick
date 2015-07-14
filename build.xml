@@ -69,7 +69,7 @@
             <arg line="-package org.gimmick.collections 'Contains collections of the framework'"/>
             <arg line="-package org.gimmick.managers 'Contains managers that framework will used '"/>
             <arg line="--strict=false"/>
-            <arg line="--output ${basedir}/html"/>
+            <arg line="--output ${asdoc.dir}"/>
             <arg line="-compiler.fonts.local-fonts-snapshot="/>
         </java>
     </target>
