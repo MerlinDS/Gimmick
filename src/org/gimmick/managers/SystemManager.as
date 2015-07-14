@@ -30,11 +30,11 @@ package org.gimmick.managers
 		/**
 		 * Head of linked list
 		 */
-		private var _head:Node;
+		private var _head:SystemNode;
 		/**
 		 * Tail of linked list
 		 */
-		private var _tail:Node;
+		private var _tail:SystemNode;
 		/**
 		 * All nodes, passive and active
 		 */
@@ -63,11 +63,10 @@ package org.gimmick.managers
 			if(_systemsTypes[type] != null)//Do not use hasOwnProperty, cause this method is very slow
 				this.removeSystem(type);
 			//save new systemType to map and to linked list
-			var node:Node = new Node(system, priority);
-			if(system is IProcessingSystem)
+			var node:SystemNode = new SystemNode(system, priority);
+			if(node.isProcessingSystem)
 			{
-				node.collection = (system as IProcessingSystem).targetEntities as EntitiesCollection;
-				node.forEach = true;
+				node.collection = node.processingSystem .targetEntities as EntitiesCollection;
 				if(node.collection == null)
 					throw new ArgumentError('TargetCollection for processing was not added to system!');
 			}
@@ -82,14 +81,14 @@ package org.gimmick.managers
 		 */
 		public function removeSystem(systemType:Class):IIdelSystem
 		{
-			var node:Node = _systemsTypes[systemType];
+			var node:SystemNode = _systemsTypes[systemType];
 			if(node == null)
 				throw new ArgumentError('IEntitySystem was not added to Gimmick previously!');
 			if(node.active)
 				this.deactivateSystem(systemType);
 			_systemsTypes[systemType] = null;
-//			if(node.forEach)
-//				node.collection.dispose();//can be used for other system
+			if(node.isProcessingSystem)
+				node.collection.dispose();
 			node.system.dispose();
 			node.dispose();
 			return node.system;
@@ -100,7 +99,7 @@ package org.gimmick.managers
 		 */
 		public function activateSystem(systemType:Class):void
 		{
-			var node:Node = _systemsTypes[systemType];
+			var node:SystemNode = _systemsTypes[systemType];
 			if(node == null)
 				throw new ArgumentError('IEntitySystem was not added to Gimmick previously!');
 			if(!node.active)
@@ -112,7 +111,7 @@ package org.gimmick.managers
 				}
 				else
 				{
-					var target:Node;
+					var target:SystemNode;
 					//check node priority
 					if(_tail.priority > node.priority)
 					{
@@ -150,14 +149,14 @@ package org.gimmick.managers
 		 */
 		public function deactivateSystem(systemType:Class):void
 		{
-			var node:Node = _systemsTypes[systemType];
+			var node:SystemNode = _systemsTypes[systemType];
 			if(node == null)
 				throw new ArgumentError('IEntitySystem was not added to Gimmick previously!');
 			if(node.active)
 			{
 				//delete node from linked list
-				var next:Node = node.next;
-				var prev:Node = node.prev;
+				var next:SystemNode = node.next;
+				var prev:SystemNode = node.prev;
 				if(prev != null)prev.next = next;
 				if(next != null)next.prev = prev;
 				//deactivate system and node
@@ -171,13 +170,14 @@ package org.gimmick.managers
 		 */
 		public function tick(time:Number):void
 		{
-			for (var cursor:Node = _head; cursor != null; cursor = cursor.next)
+			for (var cursor:SystemNode = _head; cursor != null; cursor = cursor.next)
 			{
 				//update only active systems
-				if(cursor.forEach)
-					cursor.collection.forEach((cursor.system as IProcessingSystem).process);
-				else
-					(cursor.system as IEntitySystem).tick(time);
+				if(cursor.isProcessingSystem)
+					cursor.collection.forEach(cursor.processingSystem.process);
+				else if( cursor.isEntitySystem)
+					cursor.entitySystem.tick(time);
+				//idle system will be ignored
 			}
 		}
 
@@ -186,7 +186,7 @@ package org.gimmick.managers
 		 */
 		public function dispose():void
 		{
-			var cursor:Node;
+			var cursor:SystemNode;
 			for (var type:Class in _systemsTypes)
 			{
 				cursor = _systemsTypes[type];
@@ -211,38 +211,5 @@ package org.gimmick.managers
 //{region											GETTERS/SETTERS
 
 //} endregion GETTERS/SETTERS ==========================================================================================
-	}
-}
-
-import org.gimmick.collections.EntitiesCollection;
-import org.gimmick.core.IIdelSystem;
-
-/**
- * Linked list node - helper
- */
-class Node{
-	public var prev:Node;
-	public var next:Node;
-	public var priority:int;
-	public var active:Boolean;
-	public var system:IIdelSystem;
-	public var collection:EntitiesCollection;
-	public var forEach:Boolean;
-
-	public function Node(system:IIdelSystem, priority:int)
-	{
-		this.priority = priority;
-		this.system = system;
-	}
-
-	public function dispose():void
-	{
-		prev = null;
-		next = null;
-		system = null;
-		collection = null;
-		priority = 0;
-		active = false;
-		forEach = false;
 	}
 }

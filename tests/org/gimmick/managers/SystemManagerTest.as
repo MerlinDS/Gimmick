@@ -29,8 +29,9 @@ package org.gimmick.managers
 	{
 
 		private var _entities:EntitiesCollection;
-		private var _testSystem:TestSystem;
+		private var _tickSystem:TestSystem;
 		private var _processingSystem:TestProcessingSystem;
+		private var _idleSystem:TestIdleSystem;
 		private var _systemManager:SystemManager;
 		//======================================================================================================================
 //{region											PUBLIC METHODS
@@ -45,7 +46,8 @@ package org.gimmick.managers
 			_entities.push(new TestEntity());
 			_entities.push(new TestEntity());
 			_processingSystem = new TestProcessingSystem(_entities);
-			_testSystem = new TestSystem();
+			_tickSystem = new TestSystem();
+			_idleSystem = new TestIdleSystem();
 			_systemManager = new SystemManager();
 			_systemManager.initialize(4);
 		}
@@ -53,8 +55,8 @@ package org.gimmick.managers
 		[After]
 		public function tearDown():void
 		{
-			while(TestSystem.EXECUTION_ORDER.length > 0)
-				TestSystem.EXECUTION_ORDER.pop();
+			while(TestIdleSystem.EXECUTION_ORDER.length > 0)
+				TestIdleSystem.EXECUTION_ORDER.pop();
 			_systemManager.dispose();
 			_entities.dispose();
 			_entities = null;
@@ -66,8 +68,9 @@ package org.gimmick.managers
 		[Test]
 		public function testAddSystem():void
 		{
-			_systemManager.addSystem(_testSystem, 1);
+			_systemManager.addSystem(_tickSystem, 1);
 			_systemManager.addSystem(_processingSystem, 2);
+			_systemManager.addSystem(_idleSystem, 3);
 		}
 
 		[Test]
@@ -76,7 +79,7 @@ package org.gimmick.managers
 			this.testActivateSystem();//system need to be initialized and activated
 			var newSystem:TestSystem = new TestSystem();
 			_systemManager.addSystem(newSystem, 1);
-			Assert.assertFalse(_testSystem.activated);
+			Assert.assertFalse(_tickSystem.activated);
 		}
 
 		[Test]
@@ -96,7 +99,8 @@ package org.gimmick.managers
 			_systemManager.tick(0);
 			for(i = 0; i < systems.length / 2; i++)
 			{
-				Assert.assertEquals(systems[i * 2], TestSystem.EXECUTION_ORDER[ systems[i * 2 + 1] - 1 ]);
+				Assert.assertEquals(systems[i * 2], TestIdleSystem
+						.EXECUTION_ORDER[ systems[i * 2 + 1] - 1 ]);
 			}
 		}
 
@@ -105,8 +109,8 @@ package org.gimmick.managers
 		{
 			this.testActivateSystem();
 			_systemManager.removeSystem(TestSystem);
-			Assert.assertFalse(_testSystem.activated);
-			Assert.assertFalse(_testSystem.initialized);
+			Assert.assertFalse(_tickSystem.activated);
+			Assert.assertFalse(_tickSystem.initialized);
 			_systemManager.removeSystem(TestProcessingSystem);
 			Assert.assertFalse(_processingSystem.activated);
 			Assert.assertFalse(_processingSystem.initialized);
@@ -116,9 +120,9 @@ package org.gimmick.managers
 		public function testActivateSystem():void
 		{
 			this.testAddSystem();
-			Assert.assertFalse(_testSystem.activated);
+			Assert.assertFalse(_tickSystem.activated);
 			_systemManager.activateSystem(TestSystem);
-			Assert.assertTrue(_testSystem.activated);
+			Assert.assertTrue(_tickSystem.activated);
 			Assert.assertFalse(_processingSystem.activated);
 			_systemManager.activateSystem(TestProcessingSystem);
 			Assert.assertTrue(_processingSystem.activated);
@@ -129,7 +133,7 @@ package org.gimmick.managers
 		{
 			this.testActivateSystem();
 			_systemManager.deactivateSystem(TestSystem);
-			Assert.assertFalse(_testSystem.activated);
+			Assert.assertFalse(_tickSystem.activated);
 			_systemManager.deactivateSystem(TestProcessingSystem);
 			Assert.assertFalse(_processingSystem.activated);
 		}
@@ -138,9 +142,9 @@ package org.gimmick.managers
 		public function testTick():void
 		{
 			this.testActivateSystem();
-			Assert.assertEquals(0, _testSystem.ticksCount);
+			Assert.assertEquals(0, _tickSystem.ticksCount);
 			_systemManager.tick(0);
-			Assert.assertEquals(1, _testSystem.ticksCount);
+			Assert.assertEquals(1, _tickSystem.ticksCount);
 		}
 
 		[Test]
@@ -194,24 +198,17 @@ import org.flexunit.Assert;
 import org.gimmick.collections.IEntities;
 import org.gimmick.core.IEntity;
 import org.gimmick.core.IEntitySystem;
+import org.gimmick.core.IIdelSystem;
 import org.gimmick.core.IProcessingSystem;
 
-class TestSystem implements IEntitySystem
+class TestIdleSystem implements IIdelSystem
 {
 
-	public static const EXECUTION_ORDER:Vector.<TestSystem> = new <TestSystem>[];
-	public var ticksCount:int;
+	public static const EXECUTION_ORDER:Vector.<IIdelSystem> = new <IIdelSystem>[];
+
 	public var initialized:Boolean;
 	public var activated:Boolean;
-
-	public function tick(time:Number):void
-	{
-		if(this.initialized && this.activated)
-		{
-			ticksCount++;
-			EXECUTION_ORDER.push(this);
-		}
-	}
+	public var ticksCount:int;
 
 	public function initialize():void
 	{
@@ -234,7 +231,19 @@ class TestSystem implements IEntitySystem
 	}
 }
 
-class TestProcessingSystem extends TestSystem implements IProcessingSystem
+class TestSystem extends TestIdleSystem implements IEntitySystem
+{
+	public function tick(time:Number):void
+	{
+		if(this.initialized && this.activated)
+		{
+			ticksCount++;
+			EXECUTION_ORDER.push(this);
+		}
+	}
+}
+
+class TestProcessingSystem extends TestIdleSystem implements IProcessingSystem
 {
 
 	private var _entities:IEntities;
