@@ -30,7 +30,7 @@ package org.gimmick.managers
 		private var _maxEntities:int;
 		private var _maxComponents:int;
 		//other configurations
-		private var _optinalFPS:int;
+		private var _optimalFPS:int;
 		private var _initCallback:Function;
 //======================================================================================================================
 //{region											PUBLIC METHODS
@@ -42,7 +42,7 @@ package org.gimmick.managers
 		public function GimmickConfig(optimalFPS:int = 60, initCallback:Function = null)
 		{
 			_componentTypeManager = new ComponentTypeManager();
-			_optinalFPS = optimalFPS;
+			_optimalFPS = optimalFPS;
 			_initCallback = initCallback;
 			//
 			_maxEntities = 100;
@@ -51,11 +51,11 @@ package org.gimmick.managers
 
 		/**
 		 * Prepare config object for GC. Reset links and data.
-		 * Will be executed automaticaly, by Gimmick, after initialization.
+		 * Will be executed automatically, by Gimmick, after initialization.
 		 */
 		public function dispose():void
 		{
-			_optinalFPS = 0;
+			_optimalFPS = 0;
 			_initCallback = null;
 			_maxEntities = 0;
 			_maxComponents = 0;
@@ -131,7 +131,7 @@ package org.gimmick.managers
 		 * In case when count of entities will be bigger than allocated size,
 		 * collection will allocate additional memory for new entities.
 		 *
-		 * @deafult 100
+		 * @default 100
 		 * @see org.gimmick.collections.EntitiesCollection EntitiesCollection
 		 */
 		[Inline]
@@ -155,7 +155,7 @@ package org.gimmick.managers
 		 * In case when count of components will be bigger than allocated size,
 		 * collection will allocate additional memory for new entities.
 		 *
-		 * @deafult 100
+		 * @default 100
 		 * @see org.gimmick.collections.ComponentsCollection ComponentsCollection
 		 */
 		[Inline]
@@ -165,9 +165,9 @@ package org.gimmick.managers
 		}
 
 		[Inline]
-		public final function get optinalFPS():int
+		public final function get optimalFPS():int
 		{
-			return _optinalFPS;
+			return _optimalFPS;
 		}
 
 		[Inline]

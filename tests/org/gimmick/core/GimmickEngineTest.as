@@ -141,10 +141,10 @@ import org.gimmick.core.Component;
 import org.gimmick.core.Gimmick;
 import org.gimmick.core.IEntity;
 import org.gimmick.core.IEntitySystem;
-import org.gimmick.core.IIdelSystem;
+import org.gimmick.core.IIdleSystem;
 import org.gimmick.core.IProcessingSystem;
 
-class StartingSystem implements IIdelSystem
+class StartingSystem implements IIdleSystem
 {
 
 	public var disposed:Boolean;

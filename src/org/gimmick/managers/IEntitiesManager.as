@@ -18,7 +18,7 @@ package org.gimmick.managers
 	import org.gimmick.core.IEntity;
 
 	/**
-	 * Manager for entites collections.
+	 * Manager for entities collections.
 	 */
 	public interface IEntitiesManager extends IGimmickManager
 	{

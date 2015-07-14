@@ -15,10 +15,10 @@ package org.gimmick.core
 
 	/**
 	 * Interface of systems in Gimmick.
-	 * Implement this interface to create concreet system class.
+	 * Implement this interface to create concrete system class.
 	 *
 	 */
-	public interface IEntitySystem extends IIdelSystem
+	public interface IEntitySystem extends IIdleSystem
 	{
 //======================================================================================================================
 //{region											PUBLIC METHODS

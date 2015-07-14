@@ -127,11 +127,12 @@ package org.gimmick.managers
 		public function testDependedEntities():void
 		{
 			this.updateEntities();
+			//noinspection JSMismatchedCollectionQueryUpdate
 			var collections:Vector.<IEntities> = new <IEntities>[];
 			for(var i:int = 0; i < _entities.length; i++)
 			{
 				var entity:TestEntity = _addedEntities[i];
-				//For on demand getting collection will return depended clon of the base collection
+				//For on demand getting collection will return depended clone of the base collection
 				var entities:IEntities = _entitiesManager.getEntities(_entities[i].concat());
 				Assert.assertNotNull(entities);
 				Assert.assertTrue(_preinitedCollections[entity.bits] != entities);
@@ -182,8 +183,8 @@ package org.gimmick.managers
 			{
 				if(mask & removedBit)
 				{
-					var entitis:IEntities = _preinitedCollections[mask];
-					Assert.assertFalse(entitis.hasEntity(entity));
+					var entities:IEntities = _preinitedCollections[mask];
+					Assert.assertFalse(entities.hasEntity(entity));
 				}
 			}
 		}

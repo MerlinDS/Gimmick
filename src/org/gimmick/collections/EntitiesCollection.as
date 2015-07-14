@@ -45,7 +45,7 @@ package org.gimmick.collections
 //{region											PUBLIC METHODS
 		/**
 		 * Constructor
-		 * @param allocationSize Size of intial allocations
+		 * @param allocationSize Size of initial allocations
 		 * @param disposingCallback Will be executed after collection disposing
 		 */
 		public function EntitiesCollection(allocationSize:int = 100, disposingCallback:Function = null)
@@ -147,7 +147,7 @@ package org.gimmick.collections
 		/**
 		 * @inheritDoc
 		 */
-		[Inline]
+		//[Inline]
 		public final function getById(entityId:String):IEntity
 		{
 			var entity:IEntity;
@@ -215,7 +215,7 @@ package org.gimmick.collections
 		/**
 		 * @inheritDoc
 		 */
-		[Inline]
+//		[Inline] - could not be inline
 		public final function forEach(callback:Function, thisObject:Object = null):void
 		{
 			this.defragContent();
@@ -231,7 +231,7 @@ package org.gimmick.collections
 //{region										PRIVATE\PROTECTED METHODS
 		/**
 		 * Increase size of collection
-		 * @param fromClean If this flag quels true, clear content and insrease collection as new.
+		 * @param fromClean If this flag equals true, clear content and increase collection as new.
 		 */
 		private function increaseSize(fromClean:Boolean = false):void
 		{
@@ -245,7 +245,7 @@ package org.gimmick.collections
 		/**
 		 * Defragmentation of the collection
 		 */
-		private function defragContent():void
+		private final function defragContent():void
 		{
 			if(_splits == null)return;//was disposed
 			while(_splits.length > 0)
@@ -299,6 +299,9 @@ package org.gimmick.collections
 //} endregion GETTERS/SETTERS ==========================================================================================
 	}
 }
+/**
+ * @private
+ */
 class BindableLength{
 	public var value:int;
 }

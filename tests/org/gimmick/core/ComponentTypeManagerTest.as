@@ -57,6 +57,7 @@ package org.gimmick.core
 			Assert.assertNotNull("ComponentType was not created", componentType);
 			Assert.assertEquals("ComponentType index is bad", 1, componentType.index);
 			Assert.assertEquals("ComponentType bit is bad", 0x2, componentType.bit);
+			Assert.assertEquals("Last bit is bad", 0x2, _componentTypeManager.lastBit);
 		}
 
 		[Test]

@@ -21,7 +21,7 @@ package org.gimmick.collections
 		/**
 		 * Crate copy of IEntities.
 		 * Created copy will works with parent content, but asses of disposing of content will be denied.
-		 * @param clone Precreated instance of the clone
+		 * @param clone Pre created instance of the clone
 		 * @return Instance of new copy.
 		 */
 		function dependedClone(clone:IEntities = null):IEntities;
@@ -70,7 +70,7 @@ package org.gimmick.collections
 		 * Iterate through each entity in collection
 		 * @param callback The function to run on each entity in collection.This function is invoked with two arguments:
 		 * the current entity from the collection, and the collection object:
-		 * @param thisObject (default=null) The object that the identifer this in the callback function refers to when the function is called.
+		 * @param thisObject (default=null) The object that the identifier this in the callback function refers to when the function is called.
 		 */
 		function forEach(callback:Function, thisObject:Object = null):void;
 //} endregion PUBLIC METHODS ===========================================================================================
@@ -93,7 +93,7 @@ package org.gimmick.collections
 		function get current():IEntity;
 
 		/**
-		 * Check for collection emptines.
+		 * Check for collection emptiness.
 		 * If true - collection has not elements. In other case false
 		 */
 		function get empty():Boolean;

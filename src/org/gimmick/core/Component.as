@@ -15,7 +15,7 @@ package org.gimmick.core
 
 	/**
 	 * Abstract super class for components.
-	 * All of ther components muste extends this class.
+	 * All of their components must extends this class.
 	 * It's made Gimmick's nature more strictly.
 	 */
 	public dynamic class Component
@@ -24,7 +24,7 @@ package org.gimmick.core
 //======================================================================================================================
 //{region											PUBLIC METHODS
 		/**
-		 * Constuctor.
+		 * Constructor.
 		 * Extends you components from this class.
 		 */
 		public function Component()

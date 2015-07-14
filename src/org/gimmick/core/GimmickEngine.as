@@ -12,7 +12,6 @@
 package org.gimmick.core
 {
 
-	import flash.debugger.enterDebugger;
 	import flash.errors.IllegalOperationError;
 	import flash.utils.getTimer;
 
@@ -34,8 +33,8 @@ package org.gimmick.core
 		private var _componentsManager:IComponentsManager;
 		private var _componentTypeManagers:IComponentTypeManager;
 		//FPS calculation
-		/** Optinal time of frame working. */
-		private var _fpsMidian:int;
+		/** Optimal time of frame working. */
+		private var _fpsMedian:int;
 		private var _fpsWidth:int;
 		private var _fpsOptimalWidth:int;
 		//entities pooling
@@ -44,9 +43,9 @@ package org.gimmick.core
 		/** candidates for disposing **/
 		private var _disposedEntities:Vector.<Entity>;
 		/** length of _freeEntities list **/
-		private var _freeLenght:int;//
+		private var _freeLength:int;//
 		/** length of _disposedEntities list **/
-		private var _disposedLenght:int;
+		private var _disposedLength:int;
 		//
 		private var _lastTimestamp:Number;
 		private var _initialized:Boolean;
@@ -85,7 +84,7 @@ package org.gimmick.core
 			_systemsManager.initialize();
 			//
 			_fpsOptimalWidth = 3;
-			_fpsMidian = 1000 / config.optinalFPS;
+			_fpsMedian = 1000 / config.optimalFPS;
 			//
 			_disposedEntities = new <Entity>[];
 			_freeEntities = new <Entity>[];
@@ -169,8 +168,8 @@ package org.gimmick.core
 			var entity:Entity;
 			if(_freeEntities.length > 0)
 			{
-				entity = _freeEntities[--_freeLenght];
-				_freeEntities.length = _freeLenght;
+				entity = _freeEntities[--_freeLength];
+				_freeEntities.length = _freeLength;
 			}else
 				entity = new Entity();
 			entity.componentTypeManager = _componentTypeManagers;
@@ -193,7 +192,7 @@ package org.gimmick.core
 			//remove entity from collections
 			_entitiesManager.removeEntity(entity as Entity, null);
 			//save entity for future disposing
-			_disposedEntities[_disposedLenght++] = entity as Entity;
+			_disposedEntities[_disposedLength++] = entity as Entity;
 		}
 
 		/**
@@ -219,7 +218,7 @@ package org.gimmick.core
 		/**
 		 * @copy org.gimmick.managers.SystemManager#addSystem()
 		 */
-		public function addSystem(system:IIdelSystem, priority:int = 1):*
+		public function addSystem(system:IIdleSystem, priority:int = 1):*
 		{
 			return _systemsManager.addSystem(system, priority);
 		}
@@ -227,7 +226,7 @@ package org.gimmick.core
 		/**
 		 * @copy org.gimmick.managers.SystemManager#removeSystem()
 		 */
-		public function removeSystem(systemType:Class):IIdelSystem
+		public function removeSystem(systemType:Class):IIdleSystem
 		{
 			return _systemsManager.removeSystem(systemType);
 		}
@@ -280,19 +279,19 @@ package org.gimmick.core
 		[Inline]
 		private final function freeMemory(time:Number):void
 		{
-			_fpsWidth += _fpsMidian < time ? -1 : 1;
+			_fpsWidth += _fpsMedian < time ? -1 : 1;
 			if(_fpsWidth >= _fpsOptimalWidth)
 			{
 				//free memory
 				var entity:Entity;
-				while(_disposedLenght > 0)
+				while(_disposedLength > 0)
 				{
-					entity = _disposedEntities[--_disposedLenght];
-					_disposedEntities.length = _disposedLenght;
+					entity = _disposedEntities[--_disposedLength];
+					_disposedEntities.length = _disposedLength;
 					_componentsManager.removeComponents(entity as Entity);
 					entity.dispose();
 					//add to pool
-					_freeEntities[_freeLenght++] = entity;
+					_freeEntities[_freeLength++] = entity;
 				}
 				_fpsWidth = 0;
 			}

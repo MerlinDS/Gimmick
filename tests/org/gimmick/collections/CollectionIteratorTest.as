@@ -99,7 +99,7 @@ package org.gimmick.collections
 			for(_iterator.begin(); !_iterator.end(); _iterator.next())
 			{
 				_iterator.remove(_iterator.current);
-//				Assert.assertNotNull(_iterator.current); Inplement this in need
+//				Assert.assertNotNull(_iterator.current); Implement this in need
 				i--;
 			}
 			Assert.assertTrue(_iterator.empty);

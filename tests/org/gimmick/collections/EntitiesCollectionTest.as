@@ -62,18 +62,18 @@ package org.gimmick.collections
 			_collection.push(_entity);
 			//also entity must be added to clones
 			//test new length
-			var lenght:int = 0;
+			var length:int = 0;
 			for(_collection.begin(); !_collection.end(); _collection.next())
-				lenght++;
-			Assert.assertEquals(1, lenght);
-			lenght = 0;
+				length++;
+			Assert.assertEquals(1, length);
+			length = 0;
 			for(_internalClone.begin(); !_internalClone.end(); _internalClone.next())
-				lenght++;
-			Assert.assertEquals("_internalClone", 1, lenght);
-			lenght = 0;
+				length++;
+			Assert.assertEquals("_internalClone", 1, length);
+			length = 0;
 			for(_externalClone.begin(); !_externalClone.end(); _externalClone.next())
-				lenght++;
-			Assert.assertEquals("_externalClone", 1, lenght);
+				length++;
+			Assert.assertEquals("_externalClone", 1, length);
 		}
 
 		[Test]

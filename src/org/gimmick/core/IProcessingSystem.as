@@ -17,15 +17,15 @@ package org.gimmick.core
 
 	/**
 	 * Interface of processing systems in Gimmick.
-	 * Implement this interface to create concreet processing system class.
+	 * Implement this interface to create concrete processing system class.
 	 */
-	public interface IProcessingSystem extends IIdelSystem
+	public interface IProcessingSystem extends IIdleSystem
 	{
 //======================================================================================================================
 //{region											PUBLIC METHODS
 		/**
 		 * Loop method for Processing System.
-		 * Will be executed automaticaly for each entity in target collection.
+		 * Will be executed automatically for each entity in target collection.
 		 *
 		 * @param entity Entity for processing
 		 * @param entities Collection

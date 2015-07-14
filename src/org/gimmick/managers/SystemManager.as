@@ -16,7 +16,7 @@ package org.gimmick.managers
 	import flash.utils.Dictionary;
 
 	import org.gimmick.collections.EntitiesCollection;
-	import org.gimmick.core.IIdelSystem;
+	import org.gimmick.core.IIdleSystem;
 	import org.gimmick.core.IEntitySystem;
 	import org.gimmick.core.IProcessingSystem;
 	import org.gimmick.utils.getInstanceClass;
@@ -56,7 +56,7 @@ package org.gimmick.managers
 		/**
 		 * @inheritDoc
 		 */
-		public function addSystem(system:IIdelSystem, priority:int = 1):IIdelSystem
+		public function addSystem(system:IIdleSystem, priority:int = 1):IIdleSystem
 		{
 			var type:Class = getInstanceClass(system);
 			//remove old system from manager
@@ -71,7 +71,7 @@ package org.gimmick.managers
 					throw new ArgumentError('TargetCollection for processing was not added to system!');
 			}
 			_systemsTypes[type] = node;
-			//all was done nornaly, lets initialize system
+			//all was done normally, lets initialize system
 			system.initialize();
 			return system;
 		}
@@ -79,7 +79,7 @@ package org.gimmick.managers
 		/**
 		 * @inheritDoc
 		 */
-		public function removeSystem(systemType:Class):IIdelSystem
+		public function removeSystem(systemType:Class):IIdleSystem
 		{
 			var node:SystemNode = _systemsTypes[systemType];
 			if(node == null)
@@ -195,7 +195,7 @@ package org.gimmick.managers
 			for (var type:Class in _systemsTypes)
 			{
 				cursor = _systemsTypes[type];
-				if(cursor != null)//system can be already removed manualy
+				if(cursor != null)//system can be already removed manually
 				{
 					if (cursor.active)cursor.system.deactivate();
 					cursor.system.dispose();

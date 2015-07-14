@@ -199,13 +199,13 @@ import org.flexunit.Assert;
 import org.gimmick.collections.IEntities;
 import org.gimmick.core.IEntity;
 import org.gimmick.core.IEntitySystem;
-import org.gimmick.core.IIdelSystem;
+import org.gimmick.core.IIdleSystem;
 import org.gimmick.core.IProcessingSystem;
 
-class TestIdleSystem implements IIdelSystem
+class TestIdleSystem implements IIdleSystem
 {
 
-	public static const EXECUTION_ORDER:Vector.<IIdelSystem> = new <IIdelSystem>[];
+	public static const EXECUTION_ORDER:Vector.<IIdleSystem> = new <IIdleSystem>[];
 
 	public var initialized:Boolean;
 	public var activated:Boolean;

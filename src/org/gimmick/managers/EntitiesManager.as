@@ -19,7 +19,6 @@ package org.gimmick.managers
 	import org.gimmick.collections.IEntities;
 	import org.gimmick.core.ComponentType;
 	import org.gimmick.core.IEntity;
-	import org.hamcrest.core.both;
 
 	/**
 	 * Manager for controlling of entities
@@ -33,8 +32,8 @@ package org.gimmick.managers
 		 * value - base collection linked to this mask
 		 */
 		private var _baseCollections:Dictionary;
-		private var _depenededCollections:Vector.<EntitiesCollection>;
-		private var _depenededLength:int;
+		private var _dependedCollections:Vector.<EntitiesCollection>;
+		private var _dependedLength:int;
 
 		private var _initialized:Boolean;
 		private var _allocationSize:int;
@@ -55,8 +54,8 @@ package org.gimmick.managers
 		{
 			_allocationSize = allocationSize;
 			_baseCollections = new Dictionary(true);
-			_depenededCollections = new <EntitiesCollection>[];
-			//initialize base collection without any filltration, that contains all entities
+			_dependedCollections = new <EntitiesCollection>[];
+			//initialize base collection without any filtration, that contains all entities
 			this.getEntities([]);
 		}
 
@@ -97,7 +96,7 @@ package org.gimmick.managers
 		 */
 		public function getEntities(types:Array):IEntities
 		{
-			//get bitwis mask for new collection
+			//get bitwise mask for new collection
 			var bits:uint = getBits(types);
 			var collection:EntitiesCollection;
 			if(!_initialized)
@@ -108,7 +107,7 @@ package org.gimmick.managers
 			}
 			collection = _baseCollections[bits];
 			collection = collection.dependedClone() as EntitiesCollection;
-			_depenededCollections[_depenededLength++] = collection;
+			_dependedCollections[_dependedLength++] = collection;
 			return collection;
 		}
 
@@ -129,9 +128,9 @@ package org.gimmick.managers
 			_initialized = false;
 			for each(var collection:EntitiesCollection in _baseCollections)
 				collection.dispose();
-			while(_depenededLength > 0)
-				_depenededCollections[--_depenededLength].dispose();
-			_depenededCollections = null;
+			while(_dependedLength > 0)
+				_dependedCollections[--_dependedLength].dispose();
+			_dependedCollections = null;
 			_baseCollections = null;
 		}
 
@@ -146,12 +145,11 @@ package org.gimmick.managers
 				//base collection updates by caller
 				if(collectionBits == 0x0)continue;
 				//entities bits contains all of collection bits
-				var n:uint = collectionBits & bits;
 				if ((bits & collectionBits) == collectionBits)
 				{
 					/*
 				  	 * If entities [removes from]/[added to] base collection,
-				  	 * depeneded clones are also will updated
+				  	 * depended clones are also will updated
 				  	*/
 					if(push)
 						_baseCollections[collectionBits].push(entity);
@@ -178,9 +176,9 @@ package org.gimmick.managers
 		private function collectionDisposing(collection:EntitiesCollection):void
 		{
 			if(!_initialized)return;
-			var index:int = _depenededCollections.indexOf(collection);
-			_depenededCollections.splice(index, 1);
-			_depenededLength--;
+			var index:int = _dependedCollections.indexOf(collection);
+			_dependedCollections.splice(index, 1);
+			_dependedLength--;
 		}
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================

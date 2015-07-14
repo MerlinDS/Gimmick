@@ -31,7 +31,7 @@ package org.gimmick.collections
 //{region											PUBLIC METHODS
 		/**
 		 * Constructor
-		 * @param allocationSize Size of intial allocations
+		 * @param allocationSize Size of initial allocations
 		 */
 		public function ComponentsCollection(allocationSize:int = 100)
 		{
@@ -126,7 +126,7 @@ package org.gimmick.collections
 //{region										PRIVATE\PROTECTED METHODS
 		/**
 		 * Increase size of collection
-		 * @param fromClean If this flag quels true, clear content and insrease collection as new.
+		 * @param fromClean If this flag equals true, clear content and increase collection as new.
 		 */
 		private function increaseSize(fromClean:Boolean = false):void
 		{

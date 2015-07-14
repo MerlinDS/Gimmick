@@ -19,14 +19,14 @@ package org.gimmick.managers
 
 	import org.gimmick.collections.EntitiesCollection;
 	import org.gimmick.core.IEntitySystem;
-	import org.gimmick.core.IIdelSystem;
+	import org.gimmick.core.IIdleSystem;
 	import org.gimmick.core.IProcessingSystem;
 
 	internal final class SystemNode
 	{
 		public var prev:SystemNode;
 		public var next:SystemNode;
-		public var system:IIdelSystem;
+		public var system:IIdleSystem;
 		public var priority:int;
 		public var active:Boolean;
 
@@ -39,7 +39,7 @@ package org.gimmick.managers
 		public var entitySystem:IEntitySystem;
 //======================================================================================================================
 //{region											PUBLIC METHODS
-		public function SystemNode(system:IIdelSystem, priority:int)
+		public function SystemNode(system:IIdleSystem, priority:int)
 		{
 			this.system = system;
 			this.priority = priority;
@@ -64,7 +64,7 @@ package org.gimmick.managers
 			this.priority = 0;
 			this.isProcessingSystem = false;
 			this.isEntitySystem = false;
-			//resest links
+			//reset links
 			this.prev = null;
 			this.next = null;
 			this.system = null;

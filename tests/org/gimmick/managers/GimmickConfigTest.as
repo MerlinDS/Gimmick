@@ -32,7 +32,7 @@ package org.gimmick.managers
 			var config:GimmickConfig = new GimmickConfig();
 			Assert.assertNotNull("Empty manager", config.entitiesManager);
 			Assert.assertNotNull("External manager", testConfig.entitiesManager);
-			Assert.assertEquals(testConfig.testEnitiesManager, testConfig.entitiesManager);
+			Assert.assertEquals(testConfig.testEntitiesManager, testConfig.entitiesManager);
 		}
 
 		[Test]
@@ -70,7 +70,7 @@ package org.gimmick.managers
 			config.maxComponents = 10;
 			config.maxEntities = 200;
 			Assert.assertEquals(config.initCallback, callback);
-			Assert.assertEquals(30, config.optinalFPS);
+			Assert.assertEquals(30, config.optimalFPS);
 			Assert.assertEquals(10, config.maxComponents);
 			Assert.assertEquals(200, config.maxEntities);
 			config.dispose();

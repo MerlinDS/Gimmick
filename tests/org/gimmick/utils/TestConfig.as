@@ -20,7 +20,7 @@ package org.gimmick.utils
 
 		public var testSystemManager:TestSystemManager;
 		public var testComponentManager:TestComponentManager;
-		public var testEnitiesManager:TestEntityManager;
+		public var testEntitiesManager:TestEntityManager;
 //======================================================================================================================
 //{region											PUBLIC METHODS
 		public function TestConfig()
@@ -28,7 +28,7 @@ package org.gimmick.utils
 			super ();
 			this.systemManager = this.testSystemManager =new TestSystemManager();
 			this.componentsManager = this.testComponentManager =  new TestComponentManager();
-			this.entitiesManager = this.testEnitiesManager = new TestEntityManager();
+			this.entitiesManager = this.testEntitiesManager = new TestEntityManager();
 			this.systemManager.initialize();
 			this.entitiesManager.initialize(this.maxEntities);
 			this.componentsManager.initialize(this.maxComponents);
@@ -50,7 +50,7 @@ package org.gimmick.utils
 import org.gimmick.collections.IEntities;
 import org.gimmick.core.Component;
 import org.gimmick.core.ComponentType;
-import org.gimmick.core.IIdelSystem;
+import org.gimmick.core.IIdleSystem;
 import org.gimmick.core.IEntity;
 import org.gimmick.core.IEntitySystem;
 import org.gimmick.managers.IComponentsManager;
@@ -60,8 +60,8 @@ import org.gimmick.managers.ISystemManager;
 class TestSystemManager implements ISystemManager
 {
 
-	public function addSystem(system:IIdelSystem, priority:int = 1):IIdelSystem{return null;}
-	public function removeSystem(systemType:Class):IIdelSystem{return null;}
+	public function addSystem(system:IIdleSystem, priority:int = 1):IIdleSystem{return null;}
+	public function removeSystem(systemType:Class):IIdleSystem{return null;}
 	public function activateSystem(systemType:Class):void{}
 	public function deactivateSystem(systemType:Class):void{}
 	public function tick(time:Number):void{}
