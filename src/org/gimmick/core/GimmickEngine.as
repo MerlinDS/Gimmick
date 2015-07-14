@@ -34,6 +34,7 @@ package org.gimmick.core
 		private var _componentsManager:IComponentsManager;
 		private var _componentTypeManagers:IComponentTypeManager;
 		//FPS calculation
+		/** Optinal time of frame working. */
 		private var _fpsMidian:int;
 		private var _fpsWidth:int;
 		private var _fpsOptimalWidth:int;
@@ -61,14 +62,12 @@ package org.gimmick.core
 		 *
 		 * @param config Configuration of Gimmick. Only for advanced usage
 		 * @param autoStart Start Gimmick automatically
-		 * @param fpsMedian Optimal FPS median for memory cleaning
 		 *
 		 * @throws flash.errors.IllegalOperationError Dispose Gimmick engine before new initialization
 		 *
 		 * @see org.gimmick.managers.GimmickConfig Gimmick configuration
 		 */
-		//TODO Gimmick initialization #7
-		public function initialize(config:GimmickConfig = null, autoStart:Boolean = true, fpsMedian:int = 16):void
+		public function initialize(config:GimmickConfig = null, autoStart:Boolean = true):void
 		{
 			if(_initialized)
 				throw new IllegalOperationError("Gimmick already initialized!");
@@ -86,13 +85,20 @@ package org.gimmick.core
 			_systemsManager.initialize();
 			//
 			_fpsOptimalWidth = 3;
-			_fpsMidian = fpsMedian;
+			_fpsMidian = 1000 / config.optinalFPS;
 			//
 			_disposedEntities = new <Entity>[];
 			_freeEntities = new <Entity>[];
 			//
 			_lastTimestamp = 0;
 			_initialized = true;
+			//execute initial callback
+			if(config.initCallback is Function)
+			{
+				config.initCallback.call(this);
+				config.dispose();
+			}
+			//resume gimmick
 			if(autoStart)
 				this.resume(true);
 		}

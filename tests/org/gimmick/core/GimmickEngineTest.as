@@ -54,17 +54,7 @@ package org.gimmick.core
 		public function creationTest():void
 		{
 			var i:int;
-			Gimmick.initialize();
-			/*
-			Create application with starting system
-			 */
-			var starter:StartingSystem = Gimmick.addSystem(new StartingSystem(_entities));
-			//get date for tests
-			_displaySystems = starter.displaySystem;
-			var scene:DisplayObjectContainer = starter.scene;
-			//crete application
-			Gimmick.activateSystem(StartingSystem);
-			Assert.assertTrue(starter.disposed);
+			Gimmick.initialize(new GimmickConfig(60, this.initCallback));
 			//timer
 			Gimmick.tick();
 			//
@@ -76,7 +66,6 @@ package org.gimmick.core
 				var entity:IEntity = allEntities.getById(data.entityId);
 				var display:Display = entity.get(Display);
 				Assert.assertEquals(data.display, display);
-				Assert.assertEquals(scene, display.view.parent);
 				var position:Position = entity.get(Position);
 				if(data.velocity != null)
 				{
@@ -90,6 +79,20 @@ package org.gimmick.core
 			allEntities.dispose();
 			Assert.assertTrue(allEntities.isDisposed);
 			Assert.assertEquals(1, _displaySystems.ticksCount);
+		}
+
+		private function initCallback():void
+		{
+			/*
+			  Create application with starting system
+			 */
+			var starter:StartingSystem = Gimmick.addSystem(new StartingSystem(_entities));
+			//get date for tests
+			_displaySystems = starter.displaySystem;
+			var scene:DisplayObjectContainer = starter.scene;
+			//crete application
+			Gimmick.activateSystem(StartingSystem);
+			Assert.assertTrue(starter.disposed);
 		}
 
 		[Test]

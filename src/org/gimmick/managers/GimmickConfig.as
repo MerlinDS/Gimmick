@@ -12,40 +12,57 @@
 
 package org.gimmick.managers
 {
-	//TODO Gimmick initialization #7
 	/**
 	 * Configuration for Gimmick engine.
+	 * Will be used only for Gimmick initialization.
+	 * After gimmick initialization will be disposed.
 	 * Constance managers classes and collections
 	 */
 	public class GimmickConfig
 	{
 
+		//managers
 		private var _systemManager:ISystemManager;
 		private var _componentsManager:IComponentsManager;
 		private var _entitiesManager:IEntitiesManager;
 		private var _componentTypeManager:ComponentTypeManager;
-
+		//allocations
 		private var _maxEntities:int;
 		private var _maxComponents:int;
+		//other configurations
+		private var _optinalFPS:int;
+		private var _initCallback:Function;
 //======================================================================================================================
 //{region											PUBLIC METHODS
 		/**
 		 * Constructor of config
-		 * @param systemManager Instance of external SystemManager
-		 * @param componentsManager Instance of external ComponentsManager
-		 * @param entityManager Instance of external EntityManager
+		 * @param optimalFPS - Optimal application fps. Used to calculate tick to free memory from disposed entities.
+		 * @param initCallback - Callback that will be executed after initialization
 		 */
-		public function GimmickConfig(systemManager:ISystemManager = null,
-									  componentsManager:IComponentsManager = null,
-									  entityManager:IEntitiesManager = null)
+		public function GimmickConfig(optimalFPS:int = 60, initCallback:Function = null)
 		{
-			_systemManager = systemManager == null ? new SystemManager() : systemManager;
-			_componentsManager = componentsManager == null ? new ComponentsManager() : componentsManager;
-			_entitiesManager = entityManager == null ? new EntitiesManager() : entityManager;
 			_componentTypeManager = new ComponentTypeManager();
+			_optinalFPS = optimalFPS;
+			_initCallback = initCallback;
 			//
 			_maxEntities = 100;
 			_maxComponents = 100;
+		}
+
+		/**
+		 * Prepare config object for GC. Reset links and data.
+		 * Will be executed automaticaly, by Gimmick, after initialization.
+		 */
+		public function dispose():void
+		{
+			_optinalFPS = 0;
+			_initCallback = null;
+			_maxEntities = 0;
+			_maxComponents = 0;
+			_componentsManager = null;
+			_componentTypeManager = null;
+			_entitiesManager = null;
+			_systemManager = null;
 		}
 
 //} endregion PUBLIC METHODS ===========================================================================================
@@ -57,21 +74,39 @@ package org.gimmick.managers
 //{region											GETTERS/SETTERS
 
 		[Inline]
+		public final function set systemManager(value:ISystemManager):void
+		{
+			_systemManager = value;
+		}
+
+		[Inline]
+		public final function set componentsManager(value:IComponentsManager):void
+		{
+			_componentsManager = value;
+		}
+
+		[Inline]
+		public final function set entitiesManager(value:IEntitiesManager):void
+		{
+			_entitiesManager = value;
+		}
+
+		[Inline]
 		public final function get systemManager():ISystemManager
 		{
-			return _systemManager;
+			return _systemManager || new SystemManager();
 		}
 
 		[Inline]
 		public final function get componentsManager():IComponentsManager
 		{
-			return _componentsManager;
+			return _componentsManager || new ComponentsManager();
 		}
 
 		[Inline]
 		public final function get entitiesManager():IEntitiesManager
 		{
-			return _entitiesManager;
+			return _entitiesManager || new EntitiesManager();
 		}
 
 		[Inline]
@@ -127,6 +162,18 @@ package org.gimmick.managers
 		public final function set maxComponents(value:int):void
 		{
 			_maxComponents = value;
+		}
+
+		[Inline]
+		public final function get optinalFPS():int
+		{
+			return _optinalFPS;
+		}
+
+		[Inline]
+		public final function get initCallback():Function
+		{
+			return _initCallback;
 		}
 
 //} endregion GETTERS/SETTERS ==========================================================================================

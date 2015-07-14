@@ -43,7 +43,10 @@ package org.gimmick.core
 			_timer.addEventListener(TimerEvent.TIMER, this.timerHandler);
 			_componentManager = new TestComponentManager();
 			_entitiesManager = new TestEntitiesManager();
-			Gimmick.initialize(new GimmickConfig(null, _componentManager, _entitiesManager), true, 40);
+			var gimmickConfig:GimmickConfig = new GimmickConfig(20);
+			gimmickConfig.componentsManager = _componentManager;
+			gimmickConfig.entitiesManager = _entitiesManager;
+			Gimmick.initialize(gimmickConfig);
 			_entity = Gimmick.createEntity();
 		}
 

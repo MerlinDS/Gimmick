@@ -32,6 +32,7 @@ package org.gimmick.managers
 			var config:GimmickConfig = new GimmickConfig();
 			Assert.assertNotNull("Empty manager", config.entitiesManager);
 			Assert.assertNotNull("External manager", testConfig.entitiesManager);
+			Assert.assertEquals(testConfig.testEnitiesManager, testConfig.entitiesManager);
 		}
 
 		[Test]
@@ -41,6 +42,7 @@ package org.gimmick.managers
 			var config:GimmickConfig = new GimmickConfig();
 			Assert.assertNotNull("Empty manager", config.systemManager);
 			Assert.assertNotNull("External manager", testConfig.systemManager);
+			Assert.assertEquals(testConfig.testSystemManager, testConfig.systemManager);
 		}
 
 		[Test]
@@ -50,6 +52,7 @@ package org.gimmick.managers
 			var testConfig:TestConfig = new TestConfig();
 			Assert.assertNotNull("Empty manager", config.componentsManager);
 			Assert.assertNotNull("External manager", testConfig.systemManager);
+			Assert.assertEquals(testConfig.testComponentManager, testConfig.componentsManager);
 		}
 
 		[Test]
@@ -57,6 +60,20 @@ package org.gimmick.managers
 		{
 			var config:GimmickConfig = new GimmickConfig();
 			Assert.assertNotNull("Empty manager", config.componentTypeManager);
+		}
+
+		[Test]
+		public function testOtherConfigs():void
+		{
+			var callback:Function = new Function();
+			var config:GimmickConfig = new GimmickConfig(30, callback);
+			config.maxComponents = 10;
+			config.maxEntities = 200;
+			Assert.assertEquals(config.initCallback, callback);
+			Assert.assertEquals(30, config.optinalFPS);
+			Assert.assertEquals(10, config.maxComponents);
+			Assert.assertEquals(200, config.maxEntities);
+			config.dispose();
 		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================

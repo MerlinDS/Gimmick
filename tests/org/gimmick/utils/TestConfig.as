@@ -18,11 +18,17 @@ package org.gimmick.utils
 	public class TestConfig extends GimmickConfig
 	{
 
+		public var testSystemManager:TestSystemManager;
+		public var testComponentManager:TestComponentManager;
+		public var testEnitiesManager:TestEntityManager;
 //======================================================================================================================
 //{region											PUBLIC METHODS
 		public function TestConfig()
 		{
-			super (new TestSystemManager(), new TestComponentManager(), new TestEntityManager());
+			super ();
+			this.systemManager = this.testSystemManager =new TestSystemManager();
+			this.componentsManager = this.testComponentManager =  new TestComponentManager();
+			this.entitiesManager = this.testEnitiesManager = new TestEntityManager();
 			this.systemManager.initialize();
 			this.entitiesManager.initialize(this.maxEntities);
 			this.componentsManager.initialize(this.maxComponents);
