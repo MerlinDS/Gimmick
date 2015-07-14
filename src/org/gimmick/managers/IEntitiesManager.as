@@ -27,21 +27,25 @@ package org.gimmick.managers
 		/**
 		 * Add entity to entities collections
 		 * @param entity Entity instance
-		 * @param componentType Type of the component
+		 * @param componentType (default = null) Type of the linked component.
+		 * If componentType field equals null, will added to base collection.
 		 */
 		function addEntity(entity:IEntity, componentType:ComponentType = null):void;
 
 		/**
-		 * Remove entity
+		 * Remove entity from collections
 		 * @param entity Instance of the entity
-		 * @param componentType
+		 * @param componentType (default = null) Type of the linked component.
+		 * If componentType field equals null, will removed entity from all collections.
 		 */
 		function removeEntity(entity:IEntity, componentType:ComponentType = null):void;
 
 		/**
-		 *
-		 * @return
+		 * Create entities collection.
 		 * @param types Bitwise mask for filtering entities collection
+		 * @return IEntities - New instance of entities collection
+		 *
+		 * @see org.gimmick.collections.IEntities EntitiesCollection
 		 */
 		function getEntities(types:Array):IEntities;
 
