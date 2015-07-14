@@ -24,8 +24,11 @@ package org.gimmick.core
 
 	/**
 	 * This class contains public interface of Gimmick framework.
+	 * Do not instansiate this class. Use <code>org.gimmick.core.Gimmick</code> instead.
+	 *
+	 * @see org.gimmick.core.Gimmick
 	 */
-	internal class GimmickEngine
+	public class GimmickEngine
 	{
 		//managers
 		private var _systemsManager:ISystemManager;
@@ -52,6 +55,10 @@ package org.gimmick.core
 		private var _onPause:Boolean;
 //======================================================================================================================
 //{region											PUBLIC METHODS
+		/**
+		 * Constructor.
+		 * Use <code>org.gimmick.core.Gimmick</code> instead.
+		 */
 		public function GimmickEngine()
 		{
 

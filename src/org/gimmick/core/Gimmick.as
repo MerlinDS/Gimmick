@@ -11,6 +11,6 @@
  */
 package org.gimmick.core
 {
-	//Create gimmick engine and give access to it
+	/*Create gimmick engine and give access to it*/
 	public var Gimmick:GimmickEngine = new GimmickEngine();
 }

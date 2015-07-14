@@ -17,8 +17,8 @@ package org.gimmick.core
 	 * Public interface of all Entities in Gimmick.
 	 * User can get only object with this interface but not an Entity directly.
 	 *
-	 * @see org.gimmick.core.GimmickEngine.createEntity() Use Gimmick.createEntity() method for creating new Entity
-	 * @see org.gimmick.core.GimmickEngine.disposeEntity() Use Gimmick.disposeEntity() method for disposing exist Entity
+	 * @see org.gimmick.core.GimmickEngine#createEntity() Use Gimmick.createEntity() method for creating new Entity
+	 * @see org.gimmick.core.GimmickEngine#disposeEntity() Use Gimmick.disposeEntity() method for disposing exist Entity
 	 *
 	 * @example
 	 * <listing version="3.0">

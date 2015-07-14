@@ -36,7 +36,7 @@
 # IntelliJ
 /out/
 /bin/
-/docs/
+/html/
 build.properties
 
 # mpeltonen/sbt-idea plugin
@@ -49,5 +49,6 @@ atlassian-ide-plugin.xml
 com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
+
 
 
