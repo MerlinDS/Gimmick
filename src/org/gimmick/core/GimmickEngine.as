@@ -12,18 +12,17 @@
 package org.gimmick.core
 {
 
+	import flash.debugger.enterDebugger;
 	import flash.errors.IllegalOperationError;
 	import flash.utils.getTimer;
 
 	import org.gimmick.collections.IEntities;
-
 	import org.gimmick.managers.GimmickConfig;
 	import org.gimmick.managers.IComponentTypeManager;
 	import org.gimmick.managers.IComponentsManager;
 	import org.gimmick.managers.IEntitiesManager;
 	import org.gimmick.managers.ISystemManager;
 
-	//TODO Unit test for GimmickEngine #6
 	/**
 	 * This class contains public interface of Gimmick framework.
 	 */
@@ -34,6 +33,19 @@ package org.gimmick.core
 		private var _entitiesManager:IEntitiesManager;
 		private var _componentsManager:IComponentsManager;
 		private var _componentTypeManagers:IComponentTypeManager;
+		//FPS calculation
+		private var _fpsMidian:int;
+		private var _fpsWidth:int;
+		private var _fpsOptimalWidth:int;
+		//entities pooling
+		/** pool for disposed entities **/
+		private var _freeEntities:Vector.<Entity>;
+		/** candidates for disposing **/
+		private var _disposedEntities:Vector.<Entity>;
+		/** length of _freeEntities list **/
+		private var _freeLenght:int;//
+		/** length of _disposedEntities list **/
+		private var _disposedLenght:int;
 		//
 		private var _lastTimestamp:Number;
 		private var _initialized:Boolean;
@@ -44,17 +56,19 @@ package org.gimmick.core
 		{
 
 		}
+
 		/**
 		 *
 		 * @param config Configuration of Gimmick. Only for advanced usage
 		 * @param autoStart Start Gimmick automatically
+		 * @param fpsMedian Optimal FPS median for memory cleaning
 		 *
 		 * @throws flash.errors.IllegalOperationError Dispose Gimmick engine before new initialization
 		 *
 		 * @see org.gimmick.managers.GimmickConfig Gimmick configuration
 		 */
 		//TODO Gimmick initialization #7
-		public function initialize(config:GimmickConfig = null, autoStart:Boolean = true):void
+		public function initialize(config:GimmickConfig = null, autoStart:Boolean = true, fpsMedian:int = 16):void
 		{
 			if(_initialized)
 				throw new IllegalOperationError("Gimmick already initialized!");
@@ -70,6 +84,13 @@ package org.gimmick.core
 			_componentsManager.initialize(config.maxComponents);
 			_componentTypeManagers.initialize();
 			_systemsManager.initialize();
+			//
+			_fpsOptimalWidth = 3;
+			_fpsMidian = fpsMedian;
+			//
+			_disposedEntities = new <Entity>[];
+			_freeEntities = new <Entity>[];
+			//
 			_lastTimestamp = 0;
 			_initialized = true;
 			if(autoStart)
@@ -111,10 +132,15 @@ package org.gimmick.core
 			_componentsManager.dispose();
 			_componentTypeManagers.dispose();
 
+			_freeEntities.length = 0;
+			_disposedEntities.length = 0;
+
 			_systemsManager = null;
 			_entitiesManager = null;
 			_componentsManager = null;
 			_componentTypeManagers = null;
+			_freeEntities = null;
+			_disposedEntities = null;
 			_initialized = false;
 		}
 		//delegates from entitiesManager
@@ -134,10 +160,19 @@ package org.gimmick.core
 		 */
 		public function createEntity(name:String = null):IEntity
 		{
-			var entity:Entity = new Entity(name);
+			var entity:Entity;
+			if(_freeEntities.length > 0)
+			{
+				entity = _freeEntities[--_freeLenght];
+				_freeEntities.length = _freeLenght;
+			}else
+				entity = new Entity();
 			entity.componentTypeManager = _componentTypeManagers;
 			entity.componentsManager = _componentsManager;
 			entity.entitiesManager = _entitiesManager;
+			entity.initialize(name);
+			//add to collections
+			_entitiesManager.addEntity(entity);
 			return entity;
 		}
 
@@ -149,9 +184,10 @@ package org.gimmick.core
 		 */
 		public function disposeEntity(entity:IEntity):void
 		{
-			//TODO Entity disposing #9
-//			_componentsManager.removeComponents(entity as Entity);
+			//remove entity from collections
 			_entitiesManager.removeEntity(entity as Entity, null);
+			//save entity for future disposing
+			_disposedEntities[_disposedLenght++] = entity as Entity;
 		}
 
 		/**
@@ -230,10 +266,31 @@ package org.gimmick.core
 			_lastTimestamp = now;
 			//update systems
 			_systemsManager.tick(passedTime);
+			this.freeMemory(passedTime);
 		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
+		[Inline]
+		private final function freeMemory(time:Number):void
+		{
+			_fpsWidth += _fpsMidian < time ? -1 : 1;
+			if(_fpsWidth >= _fpsOptimalWidth)
+			{
+				//free memory
+				var entity:Entity;
+				while(_disposedLenght > 0)
+				{
+					entity = _disposedEntities[--_disposedLenght];
+					_disposedEntities.length = _disposedLenght;
+					_componentsManager.removeComponents(entity as Entity);
+					entity.dispose();
+					//add to pool
+					_freeEntities[_freeLenght++] = entity;
+				}
+				_fpsWidth = 0;
+			}
+		}
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS

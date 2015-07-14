@@ -37,7 +37,8 @@ package org.gimmick.core
 		public function setUp():void
 		{
 			_entityName = "Test entity";
-			_entity = new Entity(_entityName);
+			_entity = new Entity();
+			_entity.initialize(_entityName);
 			_testComponent = new TestComponent();
 			//create managers
 			var config:TestConfig = new TestConfig();
@@ -50,6 +51,9 @@ package org.gimmick.core
 		public function tearDown():void
 		{
 			_entity.dispose();
+			Assert.assertNull(_entity.name);
+			Assert.assertNull(_entity.id);
+			Assert.assertEquals(0x0, _entity.bits);
 			_entity = null;
 
 		}

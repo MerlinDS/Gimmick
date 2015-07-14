@@ -15,23 +15,17 @@ package org.gimmick.core
 
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
-	import flash.utils.setTimeout;
+	import flash.events.TimerEvent;
+	import flash.utils.Timer;
 
 	import flexunit.framework.Assert;
 
 	import org.flexunit.async.Async;
-
 	import org.gimmick.managers.GimmickConfig;
 
-	[RunWith("org.flexunit.runners.Parameterized")]
 	public class DisposingEntitiesTest extends EventDispatcher
 	{
-
-		public static var testData:Array = [
-			[ [14, 16, 20, 17, 16, 15, 16, 18, 15] ]
-		];
-
-		private var _fps:Array;
+		private var _timer:Timer;
 		private var _componentManager:TestComponentManager;
 		private var _entitiesManager:TestEntitiesManager;
 		private var _entity:IEntity;
@@ -45,9 +39,11 @@ package org.gimmick.core
 		[Before]
 		public function setUp():void
 		{
+			_timer = new Timer(30);
+			_timer.addEventListener(TimerEvent.TIMER, this.timerHandler);
 			_componentManager = new TestComponentManager();
 			_entitiesManager = new TestEntitiesManager();
-			Gimmick.initialize(new GimmickConfig(null, _componentManager, _entitiesManager));
+			Gimmick.initialize(new GimmickConfig(null, _componentManager, _entitiesManager), true, 40);
 			_entity = Gimmick.createEntity();
 		}
 
@@ -55,37 +51,35 @@ package org.gimmick.core
 		public function tearDown():void
 		{
 			Gimmick.dispose();
+			_timer.removeEventListener(TimerEvent.TIMER, testDisposeEntity);
 		}
 
-		[Test(async, description="fast disposing", dataProvider="testData")]
-		public function testDisposeEntity(fps:Array):void
+		[Test(async, description="fast disposing")]
+		public function testDisposeEntity():void
 		{
-			_fps = fps;
 			Gimmick.disposeEntity(_entity);
 			Assert.assertTrue(_entitiesManager.disposed);
 			var callback:Function = function(event:Event, data:*):void
 			{
 				Assert.assertTrue("Disposing fail", _componentManager.disposed);
 			};
-			Async.handleEvent(this, this, Event.COMPLETE, callback);
-			this.timeoutHandler();
+			Async.handleEvent(this, this, Event.COMPLETE, callback, 1000);
+			_timer.start();
 
 		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
-		private function timeoutHandler():void
+		private function timerHandler(event:TimerEvent):void
 		{
-			if(_fps.length > 0)
+			if(_componentManager.disposed)
 			{
-				Gimmick.tick();
-				Assert.assertFalse("Disposed befor release",_componentManager.disposed);
-				setTimeout(this.timeoutHandler, _fps.shift());
-			}
-			else
-			{
+				_timer.stop();
 				this.dispatchEvent( new Event(Event.COMPLETE));
 			}
+			else
+				Gimmick.tick();
+
 		}
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================

@@ -32,9 +32,6 @@ package org.gimmick.managers
 		 * Prepare manager for GC.
 		 */
 		function dispose():void;
-
-		//TODO Tick in Base managers interface #20
-		//function tick(time:Number):void;
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS

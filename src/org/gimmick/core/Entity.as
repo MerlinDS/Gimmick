@@ -62,9 +62,17 @@ package org.gimmick.core
 
 		/**
 		 * Constructor
-		 * @param name Name of the component
 		 */
-		public function Entity(name:String)
+		public function Entity()
+		{
+
+		}
+
+		/**
+		 * Initialize entity
+		 * @param  name Name of the component
+		 */
+		internal function initialize(name:String):void
 		{
 			_id = getUniqueId();
 			if(name == null)name = "entity_" + _id;
@@ -127,11 +135,11 @@ package org.gimmick.core
 		 * Prepare entity instance for removing from memory
 		 * Only Gimmick Engine could execute this method!
 		 */
-		//TODO Entity disposing #9
 		internal final function dispose():void
 		{
 			_bits = 0x0;
 			_id = null;
+			_name = null;
 			_entitiesManager = null;
 			_componentsManager = null;
 			_componentTypeManager = null;
@@ -169,10 +177,7 @@ package org.gimmick.core
 		internal final function set entitiesManager(value:IEntitiesManager):void
 		{
 			if(value != null)//only dispose method can set _entitiesManager to null
-			{
 				_entitiesManager = value;
-				_entitiesManager.addEntity(this);
-			}
 		}
 
 //Implementation of public interface

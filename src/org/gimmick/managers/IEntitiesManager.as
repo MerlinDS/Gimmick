@@ -17,9 +17,11 @@ package org.gimmick.managers
 	import org.gimmick.core.ComponentType;
 	import org.gimmick.core.IEntity;
 
+	/**
+	 * Manager for entites collections.
+	 */
 	public interface IEntitiesManager extends IGimmickManager
 	{
-		//TODO add descriptions
 		//======================================================================================================================
 //{region											PUBLIC METHODS
 		/**
