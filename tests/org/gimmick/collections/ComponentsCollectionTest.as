@@ -92,6 +92,21 @@ package org.gimmick.collections
 		}
 
 		[Test]
+		public function testRemoveWithAdding():void
+		{
+			var firstID:String = getUniqueId();
+			var secondID:String = getUniqueId();
+			var firstComponent:Component = new Component();
+			var secondComponent:Component = new Component();
+			_collection.push(firstID, firstComponent);
+			_collection.push(secondID, secondComponent);
+			_collection.remove(firstID);
+			Assert.assertNotNull(_collection.has(firstID));
+			Assert.assertEquals(secondComponent, _collection.get(secondID));
+
+		}
+
+		[Test]
 		public function testClear():void
 		{
 			this.testPush();
