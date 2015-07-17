@@ -29,7 +29,8 @@ package org.gimmick.collections
 		 * Key = Id of entity
 		 * Value = Index in content list of entity
 		 */
-		private var _hashMap:Dictionary = new Dictionary(true);
+		private var _idMap:Dictionary = new Dictionary(true);
+		private var _indexMap:Dictionary = new Dictionary(true);
 
 		private var _splits:Vector.<int>;
 
@@ -56,7 +57,8 @@ package org.gimmick.collections
 			_length = new BindableLength();
 			_content = new <IEntity>[];
 			_splits = new <int>[];
-			_hashMap = new Dictionary(true);
+			_idMap = new Dictionary(true);
+			_indexMap = new Dictionary(true);
 			_cursor = 0;
 			this.increaseSize();
 		}
@@ -74,9 +76,9 @@ package org.gimmick.collections
 			}
 			c._allocationSize = _allocationSize;
 			c._disposingCallback = _disposingCallback;
-			c._splits = new <int>[];
+			c._splits = _splits;
 			c._content = _content;
-			c._hashMap = _hashMap;
+			c._idMap = _idMap;
 			c._length = _length;
 			c._isDepended = true;
 			return c;
@@ -90,11 +92,12 @@ package org.gimmick.collections
 		public final function push(entity:IEntity):void
 		{
 			//Add new entity only in case if it was not added previously
-			if(_hashMap[entity.id] == null)
+			if(_idMap[entity.id] == null)
 			{
 				if(_length.value == _content.length)
 					this.increaseSize();
-				_hashMap[entity.id] = _length.value;//set index of entity in content list
+				_idMap[entity.id] = _length.value;//set index of entity in content list
+				_indexMap[_length.value] = entity.id;
 				_content[_length.value++] = entity;//add to content list
 			}
 			//if node was already added do nothing
@@ -108,21 +111,27 @@ package org.gimmick.collections
 		public final function remove(entity:IEntity):void
 		{
 			//Remove entity only in case if it was added previously
-			if(_hashMap[entity.id] != null)
+			if(_idMap[entity.id] != null)
 			{
-				var index:int = _hashMap[entity.id];
+				var index:int = _idMap[entity.id];
 				_content[index] = null;//delete instance of content
+				_idMap[entity.id] = null;//remove from id map
+
 				if(index <= _cursor)//save index for future content defragmentation
 					_splits.push(index);
 				else
 				{
+					_indexMap[index] = null;//remove link between id and index;
 					//get content from end of list and push it to empty place
 					var lastIndex:int = --_length.value;
 					_content[index] = _content[lastIndex];
+					var id:String = _indexMap[lastIndex];
+					_idMap[id] = index;
+					_indexMap[index] = id;
+					//remove links
 					_content[lastIndex] = null;
+					_indexMap[lastIndex] = null;
 				}
-				//remove from has map
-				_hashMap[entity.id] = null;
 			}
 			//if node was not added do nothing
 		}
@@ -133,7 +142,7 @@ package org.gimmick.collections
 		[Inline]
 		public final function hasId(entityId:String):Boolean
 		{
-			return _hashMap[entityId] != null;
+			return _idMap[entityId] != null;
 		}
 
 		/**
@@ -142,7 +151,7 @@ package org.gimmick.collections
 		[Inline]
 		public final function hasEntity(entity:IEntity):Boolean
 		{
-			return _hashMap[entity.id] != null;
+			return _idMap[entity.id] != null;
 		}
 		/**
 		 * @inheritDoc
@@ -151,9 +160,9 @@ package org.gimmick.collections
 		public final function getById(entityId:String):IEntity
 		{
 			var entity:IEntity;
-			if(_hashMap[entityId] != null)
+			if(_idMap[entityId] != null)
 			{
-				var index:int = _hashMap[entityId];
+				var index:int = _idMap[entityId];
 				entity = _content[index];
 			}
 			return entity;
@@ -163,7 +172,7 @@ package org.gimmick.collections
 		 */
 		public function dispose():void
 		{
-			_hashMap = null;
+			_idMap = null;
 			_content = null;
 			_splits = null;
 			_length = null;
@@ -250,9 +259,19 @@ package org.gimmick.collections
 			if(_splits == null)return;//was disposed
 			while(_splits.length > 0)
 			{
+
+				var index:int = _splits.pop();
 				var lastIndex:int = --_length.value;
-				_content[_splits.pop()] = _content[lastIndex];
+				var id:String = _indexMap[index];
+				_indexMap[index] = null;//remove link between id and index;
+				_idMap[id] = null;//remove from id map
+				//get content from end of list and push it to empty place
+				_content[index] = _content[lastIndex];
+				_idMap[id] = index;
+				_indexMap[index] = id;
+				//remove links
 				_content[lastIndex] = null;
+				_indexMap[lastIndex] = null;
 			}
 		}
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================

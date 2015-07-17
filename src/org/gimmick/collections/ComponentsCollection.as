@@ -79,7 +79,7 @@ package org.gimmick.collections
 				id = _indexMap[lastIndex];
 				_idMap[id] = index;
 				_indexMap[index] = id;
-				//change indexMap for replaced item
+				//remove links
 				_content[lastIndex] = null;
 				_indexMap[lastIndex] = null;
 			}

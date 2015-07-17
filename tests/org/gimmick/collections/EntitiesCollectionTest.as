@@ -123,6 +123,22 @@ package org.gimmick.collections
 			Assert.assertFalse(_internalClone.hasEntity(_entity));
 			Assert.assertFalse(_externalClone.hasEntity(_entity));
 		}
+
+		[Test]
+		public function testRemoveWithAdding():void
+		{
+			var firstEntity:TestEntity = new TestEntity();
+			var secondEntity:TestEntity = new TestEntity();
+			var thirdEntity:TestEntity = new TestEntity();
+			_collection.push(firstEntity);
+			_collection.push(secondEntity);
+			_collection.push(thirdEntity);
+			_collection.begin();
+			_collection.next();
+			_collection.remove(secondEntity);
+			Assert.assertFalse(_collection.hasEntity(secondEntity));
+			Assert.assertEquals(thirdEntity, _collection.getById(thirdEntity.id));
+		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS

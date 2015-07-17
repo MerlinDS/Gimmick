@@ -101,7 +101,7 @@ package org.gimmick.collections
 			_collection.push(firstID, firstComponent);
 			_collection.push(secondID, secondComponent);
 			_collection.remove(firstID);
-			Assert.assertNotNull(_collection.has(firstID));
+			Assert.assertFalse(_collection.has(firstID));
 			Assert.assertEquals(secondComponent, _collection.get(secondID));
 
 		}
