@@ -25,7 +25,8 @@ package org.gimmick.collections
 	{
 		private var _allocationSize:int;
 		private var _content:Vector.<Component>;
-		private var _hashMap:Dictionary = new Dictionary(true);
+		private var _idMap:Dictionary = new Dictionary(true);
+		private var _indexMap:Dictionary = new Dictionary(true);
 		private var _length:int;
 		//======================================================================================================================
 //{region											PUBLIC METHODS
@@ -37,7 +38,8 @@ package org.gimmick.collections
 		{
 			_allocationSize = allocationSize;
 			_content = new <Component>[];
-			_hashMap = new Dictionary(true);
+			_idMap = new Dictionary(true);
+			_indexMap = new Dictionary(true);
 			this.increaseSize();
 		}
 
@@ -49,10 +51,11 @@ package org.gimmick.collections
 		[Inline]
 		public final function push(id:String, component:Component):void
 		{
-			if(_hashMap[id] != null)this.remove(id);
+			if(_idMap[id] != null)this.remove(id);
 			if(_length == _content.length)
 				this.increaseSize();
-			_hashMap[id] = _length;//set index of entity in content list
+			_idMap[id] = _length;//set index of entity in content list
+			_indexMap[_length] = id;//link key to index
 			_content[_length++] = component;//add to content list
 		}
 
@@ -63,16 +66,22 @@ package org.gimmick.collections
 		public final function remove(id:String):void
 		{
 			//Remove entity only in case if it was added previously
-			if(_hashMap[id] != null)
+			if(_idMap[id] != null)
 			{
-				var index:int = _hashMap[id];
+				var index:int = _idMap[id];
+				_indexMap[index] = null;//remove link between id and index;
 				_content[index] = null;//delete instance of content
+				_idMap[id] = null;//remove from id map
+
 				//get content from end of list and push it to empty place
 				var lastIndex:int = --_length;
 				_content[index] = _content[lastIndex];
+				id = _indexMap[lastIndex];
+				_idMap[id] = index;
+				_indexMap[index] = id;
+				//change indexMap for replaced item
 				_content[lastIndex] = null;
-				//remove from has map
-				_hashMap[id] = null;
+				_indexMap[lastIndex] = null;
 			}
 		}
 
@@ -85,8 +94,8 @@ package org.gimmick.collections
 		public final function get(id:String):Component
 		{
 			var component:Component;
-			if(_hashMap[id] != null)
-				component = _content[ _hashMap[id] ];
+			if(_idMap[id] != null)
+				component = _content[ _idMap[id] ];
 			return component;
 		}
 
@@ -98,7 +107,7 @@ package org.gimmick.collections
 		[Inline]
 		public final function has(id:String):Boolean
 		{
-			return _hashMap[id] != null;
+			return _idMap[id] != null;
 		}
 
 		/**
@@ -106,7 +115,8 @@ package org.gimmick.collections
 		 */
 		public function clear():void
 		{
-			_hashMap = new Dictionary(true);
+			_idMap = new Dictionary(true);
+			_indexMap = new Dictionary(true);
 			this.increaseSize(true);
 			_length = 0;
 		}
@@ -117,7 +127,8 @@ package org.gimmick.collections
 		public function dispose():void
 		{
 			this.clear();
-			_hashMap = null;
+			_indexMap = null;
+			_idMap = null;
 			_content = null;
 		}
 
