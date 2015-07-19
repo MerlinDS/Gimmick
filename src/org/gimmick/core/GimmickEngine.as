@@ -268,16 +268,15 @@ package org.gimmick.core
 		 */
 		public function tick():void
 		{
-			if(_onPause)
+			//do not update systems if Gimmick on pause
+			if(!_onPause)
 			{
-				//do not update systems if Gimmick on pause
-				return;
+				var now:Number = getTimer();
+				var passedTime:Number = now - _lastTimestamp;
+				_lastTimestamp = now;
+				//update systems
+				_systemsManager.tick(passedTime);
 			}
-			var now:Number = getTimer();
-			var passedTime:Number = now - _lastTimestamp;
-			_lastTimestamp = now;
-			//update systems
-			_systemsManager.tick(passedTime);
 			this.freeMemory(passedTime);
 		}
 //} endregion PUBLIC METHODS ===========================================================================================
