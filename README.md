@@ -5,7 +5,7 @@ Gimmick is the fast and simple CES framework for ActionScript3 (and js in future
 Main goals of "Gimmick" development:
 * Fast and ease CES framework
 * Smart and rapid filtration of entities by their components `getEntities(ComponentType1, ..., ComponentTypeN)`
-* Consistency and homogeneity of components in memory
+* Homogeneity of components in memory
 * Operations with parallel systems( [ActionScript Workers support](http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/system/Worker.html) )
 
 For more documentation see *[Wiki](https://github.com/MerlinDS/Gimmick/wiki)*
@@ -14,6 +14,7 @@ To see all tasks, create bug or leave proposal, please visit:
 [https://github.com/MerlinDS/Gimmick/issues](https://github.com/MerlinDS/Gimmick/issues)
 
 If you are interested feel free to ask questions:
+* [Gimmick-Examples](https://github.com/MerlinDS/Gimmick-Examples/tree/master/Simple-Example)
 * [Twitter - MerlinDS](https://twitter.com/MerlinDs)
 * Email - merlinkolv@gmail.com
 * [Blog](http://merlinds.com)
@@ -58,6 +59,12 @@ Update entity position by velocity with MovementSystem
             _entities = Gimmick.getEntities(VelocityComponent, PositionComponent);
         }
         
+        public function dispose():void
+        {
+            _entities.dispose();
+            _entities = null;
+        }
+        
         public function tick(time:Number):void
         {
             /*
@@ -79,16 +86,17 @@ Or with EntityProcessingSystem
 
     public class MovementSystem extends IEntityProcessingSystem 
     {
-        
-        public function initialize():void
-        {
-            this.setProcessingEntities(VelocityComponent, PositionComponent);
-        }
-        
-        public function processEntity(entity:IEntity):void
+           
+        public function process(entity:IEntity, entities:IEntities):void
         {
             entity.get(PositionComponent).x += entity.get(VelocityComponent).x * this.time;
             entity.get(PositionComponent).y += entity.get(VelocityComponent).y * this.time;
+        }
+        
+        public function get targetEntities():IEntities
+        {
+            //initialize entities collection for future iterations in process method
+            return Gimmick.getEntities(VelocityComponent, PositionComponent);
         }
     }
 
@@ -111,7 +119,7 @@ Usage (Main class of the application):
             //Initialize Gimmick
             Gimmick.initialize();//Can be initialized with external managers
             Gimmick.addSystem(new MovementSystem());
-            Gimmick.addToScope(MovementSystem);
+            Gimmick.activateSystem(MovementSystem);
             //Create new entity
             _entity = Gimmick.createEntity("Some entity");
             _entity.add(new VelocityComponent(2, 4));
@@ -129,6 +137,8 @@ Usage (Main class of the application):
         }
         
     }
+
+More Examples you can found in [Gimmick-Examples](https://github.com/MerlinDS/Gimmick-Examples/tree/master/Simple-Example)
 
 ##License
 
