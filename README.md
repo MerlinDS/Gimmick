@@ -14,7 +14,7 @@ To see all tasks, create bug or leave proposal, please visit:
 [https://github.com/MerlinDS/Gimmick/issues](https://github.com/MerlinDS/Gimmick/issues)
 
 If you are interested feel free to ask questions:
-* [Gimmick-Examples](https://github.com/MerlinDS/Gimmick-Examples/tree/master/Simple-Example)
+* [Gimmick-Examples](https://github.com/MerlinDS/Gimmick-Examples)
 * [Twitter - MerlinDS](https://twitter.com/MerlinDs)
 * Email - merlinkolv@gmail.com
 * [Blog](http://merlinds.com)
@@ -138,7 +138,7 @@ Usage (Main class of the application):
         
     }
 
-More Examples you can found in [Gimmick-Examples](https://github.com/MerlinDS/Gimmick-Examples/tree/master/Simple-Example)
+More Examples you can found in [Gimmick-Examples](https://github.com/MerlinDS/Gimmick-Examples)
 
 ##License
 
