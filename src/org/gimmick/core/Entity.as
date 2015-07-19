@@ -75,8 +75,8 @@ package org.gimmick.core
 		internal function initialize(name:String):void
 		{
 			_id = getUniqueId();
-			if(name == null)name = "entity_" + _id;
-			_name = name;
+			if(name == null)name = "entity";
+			_name = name + "_" + _id;
 			_bits = 0x0;
 		}
 

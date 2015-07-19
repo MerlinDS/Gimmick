@@ -30,8 +30,6 @@ package org.gimmick.collections
 		 * Value = Index in content list of entity
 		 */
 		private var _idMap:Dictionary = new Dictionary(true);
-		private var _indexMap:Dictionary = new Dictionary(true);
-
 		private var _splits:Vector.<int>;
 
 		private var _length:BindableLength;
@@ -58,7 +56,6 @@ package org.gimmick.collections
 			_content = new <IEntity>[];
 			_splits = new <int>[];
 			_idMap = new Dictionary(true);
-			_indexMap = new Dictionary(true);
 			_cursor = 0;
 			this.increaseSize();
 		}
@@ -97,7 +94,6 @@ package org.gimmick.collections
 				if(_length.value == _content.length)
 					this.increaseSize();
 				_idMap[entity.id] = _length.value;//set index of entity in content list
-				_indexMap[_length.value] = entity.id;
 				_content[_length.value++] = entity;//add to content list
 			}
 			//if node was already added do nothing
@@ -121,16 +117,16 @@ package org.gimmick.collections
 					_splits.push(index);
 				else
 				{
-					_indexMap[index] = null;//remove link between id and index;
 					//get content from end of list and push it to empty place
 					var lastIndex:int = --_length.value;
-					_content[index] = _content[lastIndex];
-					var id:String = _indexMap[lastIndex];
-					_idMap[id] = index;
-					_indexMap[index] = id;
+					entity = _content[lastIndex];
+					if(entity != null)
+					{
+						_content[index] = entity;
+						_idMap[entity.id] = index;
+					}
 					//remove links
 					_content[lastIndex] = null;
-					_indexMap[lastIndex] = null;
 				}
 			}
 			//if node was not added do nothing
@@ -262,16 +258,13 @@ package org.gimmick.collections
 
 				var index:int = _splits.pop();
 				var lastIndex:int = --_length.value;
-				var id:String = _indexMap[index];
-				_indexMap[index] = null;//remove link between id and index;
-				_idMap[id] = null;//remove from id map
-				//get content from end of list and push it to empty place
-				_content[index] = _content[lastIndex];
-				_idMap[id] = index;
-				_indexMap[index] = id;
-				//remove links
-				_content[lastIndex] = null;
-				_indexMap[lastIndex] = null;
+				var entity:IEntity = _content[lastIndex];
+				if(entity != null)
+				{
+					_content[index] = entity;
+					_idMap[entity.id] = index;
+					_content[lastIndex] = null;
+				}
 			}
 		}
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
