@@ -10,6 +10,7 @@ Main goals of "Gimmick" development:
 
 ##Links
 * [Gimmick-Examples](https://github.com/MerlinDS/Gimmick-Examples)
+* [Gimmick API](http://gimmick.merlinds.com/)
 * For more documentation see *[Wiki](https://github.com/MerlinDS/Gimmick/wiki)*
 * To see all [tasks, create bug or leave proposal, please visit:
 [https://github.com/MerlinDS/Gimmick/issues](https://github.com/MerlinDS/Gimmick/issues)
