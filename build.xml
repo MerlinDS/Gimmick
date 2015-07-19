@@ -37,6 +37,8 @@
     <!-- Init build phase -->
     <target name="init">
         <mkdir dir="${deploy.dir}" />
+        <tempfile property="temp.dir" destDir="${java.io.tmpdir}" prefix="${ant.project.name}-doc-xml-" />
+        <echo message="${temp.dir}"/>
     </target>
     <!-- Build SWC phase -->
     <target name="build-swc" description="compile gimmick.swc">
@@ -51,8 +53,41 @@
             <headless-server>true</headless-server>
         </compc>
     </target>
+    <target name="build-doc" unless="AIR-SDK" description="Call asdoc to generate dita xml files">
+        <asdoc output="${temp.dir}" lenient="true" failonerror="true" keep-xml="true" skip-xsl="true" fork="true">
+            <compiler.source-path path-element="${src.dir}" />
+            <doc-sources path-element="${src.dir}" />
+        </asdoc>
+    </target>
+    <target name="build-doc-air" if="AIR-SDK" description="Call asdoc to generate dita xml files">
+        <java classname="flex2.tools.ASDoc" fork="true" failonerror="true" dir="${FLEX_HOME}/frameworks" maxmemory="1024m">
+            <classpath>
+                <pathelement location="${FLEX_HOME}/lib/legacy/asdoc.jar"/>
+            </classpath>
+            <jvmarg value="-Dflex.compiler.theme="/>
+            <arg line="-doc-sources ${src.dir}" />
+            <arg line="--lenient=true"/>
+            <arg line="--keep-xml=true"/>
+            <arg line="--skip-xsl=true"/>
+            <arg line="--output ${temp.dir}"/>
+            <arg line="--strict=false"/>
+            <arg line="-compiler.fonts.local-fonts-snapshot="/>
+        </java>
+    </target>
+    <target name="update-swc" description="Update swc with asdoc xml">
+        <zip destfile="${deploy.dir}/${project.name}-${project.version}.swc" update="true">
+            <zipfileset dir="${temp.dir}/tempdita" prefix="docs">
+                <include name="*.*"/>
+                <exclude name="ASDoc_Config.xml" />
+                <exclude name="overviews.xml" />
+            </zipfileset>
+        </zip>
+    </target>
+    <target name="post-clean" description="delete temporary data">
+        <delete dir="${temp.dir}" failonerror="false" includeEmptyDirs="true" />
+    </target>
     <!-- Default build target -->
-    <target name="build" depends="init,build-swc" description="Builds the library (.swc file)"/>
+    <target name="build" depends="init,build-swc,build-doc,build-doc-air,update-swc,post-clean" description="Builds the library (.swc file)"/>
     <!-- Build HTML Documentation -->
     <target name="build-doc-air-html" if="AIR-SDK" description="Generate HTML documentation">
         <java classname="flex2.tools.ASDoc" fork="true" failonerror="true" dir="${FLEX_HOME}/frameworks" maxmemory="1024m">

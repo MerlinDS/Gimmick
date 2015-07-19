@@ -120,7 +120,7 @@ package org.gimmick.core
 		public function testName():void
 		{
 			Assert.assertNotNull(_entity.name);
-			Assert.assertEquals(_entityName, _entity.name);
+			Assert.assertEquals(_entityName, _entity.name.substr(0, _entityName.length));
 		}
 
 		//} endregion PUBLIC METHODS ===========================================================================================
