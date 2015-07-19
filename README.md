@@ -8,13 +8,13 @@ Main goals of "Gimmick" development:
 * Homogeneity of components in memory
 * Operations with parallel systems( [ActionScript Workers support](http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/system/Worker.html) )
 
-For more documentation see *[Wiki](https://github.com/MerlinDS/Gimmick/wiki)*
-
-To see all tasks, create bug or leave proposal, please visit:
+##Links
+* [Gimmick-Examples](https://github.com/MerlinDS/Gimmick-Examples)
+* For more documentation see *[Wiki](https://github.com/MerlinDS/Gimmick/wiki)*
+* To see all [tasks, create bug or leave proposal, please visit:
 [https://github.com/MerlinDS/Gimmick/issues](https://github.com/MerlinDS/Gimmick/issues)
 
 If you are interested feel free to ask questions:
-* [Gimmick-Examples](https://github.com/MerlinDS/Gimmick-Examples)
 * [Twitter - MerlinDS](https://twitter.com/MerlinDs)
 * Email - merlinkolv@gmail.com
 * [Blog](http://merlinds.com)
