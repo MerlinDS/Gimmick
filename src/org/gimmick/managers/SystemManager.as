@@ -82,6 +82,9 @@ package org.gimmick.managers
 				if(_groups[groupId] == null)
 					this.createGroup(groupId);
 				this.addToGroup(groupId, proxy, priority);
+				//update head in need
+				if(groupId == _activeGroupId)
+					_head = _groups[groupId].prev;
 			}
 
 			//system was added normaly
@@ -104,6 +107,8 @@ package org.gimmick.managers
 			if(proxy.isProcessingSystem)
 				proxy.collection.dispose();
 			var system:IIdleSystem = proxy.system;
+			if(proxy.active)
+				proxy.system.deactivate();
 			proxy.system.dispose();
 			proxy.dispose();
 			trace("[Gimmick] System ", systemType, " was removed");
@@ -287,8 +292,8 @@ package org.gimmick.managers
 			for each(var root:SystemNode in _groups)
 			{
 				//find node in linked list
-				node = root;
-				while(node != null && node.value.system != proxy)
+				node = root.prev;
+				while(node != null && node.value != proxy)
 					node = node.next;
 				if(node != null)
 				{

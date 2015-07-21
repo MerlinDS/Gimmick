@@ -120,13 +120,23 @@ package org.gimmick.managers
 			Assert.assertTrue(_processingSystem.activated);
 			Assert.assertEquals(1, TestIdleSystem.EXECUTION_ORDER.length);
 		}
-//		[Test]
+
+		[Test]
 		public function testAddExistingSystem():void
 		{
-			this.testActivateSystem();//system need to be initialized and activated
-			var newSystem:TestSystem = new TestSystem();
-			_systemManager.addSystem(newSystem, 1);
-			Assert.assertFalse(_tickSystem.activated);
+			this.testActivateGroup_0();//system need to be initialized and activated
+			var entities:EntitiesCollection = new EntitiesCollection(2);
+			entities.push(new TestEntity());
+			entities.push(new TestEntity());
+			var newSystem:TestProcessingSystem = new TestProcessingSystem(entities);
+			_systemManager.addSystem(newSystem, 1, _group_0);
+			Assert.assertFalse(_processingSystem.activated);
+			Assert.assertFalse(newSystem.activated);
+			Assert.assertTrue(_entities.isDisposed);//entities from previous system
+			_systemManager.tick(0);
+			Assert.assertTrue(newSystem.activated);
+			_systemManager.activateGroup(_group_1);//newSystem not in this group
+			Assert.assertFalse(newSystem.activated);
 		}
 
 //		[Test]
