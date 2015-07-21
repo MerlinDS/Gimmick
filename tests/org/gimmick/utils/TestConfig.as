@@ -66,6 +66,7 @@ class TestSystemManager implements ISystemManager
 	public function tick(time:Number):void{}
 	public function dispose():void{}
 	public function initialize(allocationSize:int = 1):void {}
+	public function activateGroup(groupId:String):void{}
 }
 
 class TestComponentManager implements IComponentsManager

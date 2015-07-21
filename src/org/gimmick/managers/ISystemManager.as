@@ -108,6 +108,13 @@ package org.gimmick.managers
 		 * @param time Time passed from previous tick
 		 */
 		function tick(time:Number):void;
+
+		/**
+		 * Activate group of systems.
+		 * Previous active group will be automatically deactivated
+		 * @param groupId Unique group id
+		 */
+		function activateGroup(groupId:String):void;
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
