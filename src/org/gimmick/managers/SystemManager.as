@@ -304,6 +304,7 @@ package org.gimmick.managers
 					if(next != null)next.prev = prev;
 					if(root.next == node)root.next = prev;
 					if(root.prev == node)root.prev = next;
+					if(_head == node)_head = root.prev;//update current head
 				}
 
 			}

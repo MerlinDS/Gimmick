@@ -121,8 +121,8 @@ package org.gimmick.managers
 			Assert.assertEquals(1, TestIdleSystem.EXECUTION_ORDER.length);
 		}
 
-		[Test]
-		public function testAddExistingSystem():void
+		[Test(description="Add existing system to the same group")]
+		public function testAddExistingSystem0():void
 		{
 			this.testActivateGroup_0();//system need to be initialized and activated
 			var entities:EntitiesCollection = new EntitiesCollection(2);
@@ -130,14 +130,57 @@ package org.gimmick.managers
 			entities.push(new TestEntity());
 			var newSystem:TestProcessingSystem = new TestProcessingSystem(entities);
 			_systemManager.addSystem(newSystem, 1, _group_0);
+			Assert.assertTrue(newSystem.initialized);
+			Assert.assertFalse(_processingSystem.initialized);
 			Assert.assertFalse(_processingSystem.activated);
 			Assert.assertFalse(newSystem.activated);
 			Assert.assertTrue(_entities.isDisposed);//entities from previous system
 			_systemManager.tick(0);
 			Assert.assertTrue(newSystem.activated);
 			_systemManager.activateGroup(_group_1);//newSystem not in this group
+			_systemManager.tick(0);
 			Assert.assertFalse(newSystem.activated);
 		}
+
+		[Test(description="Add existing system to same group but to the tail")]
+		public function testAddExistingSystem1():void
+		{
+			this.testActivateGroup_0();//system need to be initialized and activated
+			var entities:EntitiesCollection = new EntitiesCollection(2);
+			entities.push(new TestEntity());
+			entities.push(new TestEntity());
+			var newSystem:TestProcessingSystem = new TestProcessingSystem(entities);
+			_systemManager.addSystem(newSystem, 1, _group_1);
+			Assert.assertTrue(newSystem.initialized);
+			Assert.assertFalse(_processingSystem.initialized);
+			Assert.assertFalse(_processingSystem.activated);
+			Assert.assertFalse(newSystem.activated);
+			Assert.assertTrue(_entities.isDisposed);//entities from previous system
+			_systemManager.tick(0);
+			Assert.assertFalse(newSystem.activated);
+			_systemManager.activateGroup(_group_1);//newSystem in this group
+			_systemManager.tick(0);
+			Assert.assertTrue(newSystem.activated);
+		}
+
+		[Test(description="Add existing system to other group")]
+		public function testAddExistingSystem2():void
+		{
+			this.testActivateGroup_0();//system need to be initialized and activated
+			var newSystem:TestIdleSystem = new TestIdleSystem();
+			_systemManager.addSystem(newSystem, 1, _group_1);
+			Assert.assertTrue(newSystem.initialized);
+			Assert.assertFalse(_idleSystem.initialized);
+			Assert.assertFalse(_idleSystem.activated);
+			Assert.assertFalse(newSystem.activated);
+			_systemManager.tick(0);
+			Assert.assertFalse(newSystem.activated);
+			_systemManager.activateGroup(_group_1);//newSystem in this group
+			_systemManager.tick(0);
+			Assert.assertTrue(newSystem.activated);
+		}
+
+
 
 //		[Test]
 		public function testAddingSystemsWithPriority():void
