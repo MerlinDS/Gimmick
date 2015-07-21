@@ -50,9 +50,8 @@ package org.gimmick.utils
 import org.gimmick.collections.IEntities;
 import org.gimmick.core.Component;
 import org.gimmick.core.ComponentType;
-import org.gimmick.core.IIdleSystem;
 import org.gimmick.core.IEntity;
-import org.gimmick.core.IEntitySystem;
+import org.gimmick.core.IIdleSystem;
 import org.gimmick.managers.IComponentsManager;
 import org.gimmick.managers.IEntitiesManager;
 import org.gimmick.managers.ISystemManager;
@@ -60,7 +59,7 @@ import org.gimmick.managers.ISystemManager;
 class TestSystemManager implements ISystemManager
 {
 
-	public function addSystem(system:IIdleSystem, priority:int = 1):IIdleSystem{return null;}
+	public function addSystem(system:IIdleSystem, priority:int = 1, ...groups):IIdleSystem{return null;}
 	public function removeSystem(systemType:Class):IIdleSystem{return null;}
 	public function activateSystem(systemType:Class):void{}
 	public function deactivateSystem(systemType:Class):void{}

@@ -27,6 +27,17 @@ package org.gimmick.core
 	 * Do not instansiate this class. Use <code>org.gimmick.core.Gimmick</code> instead.
 	 *
 	 * @see org.gimmick.core.Gimmick
+	 * @example
+	 * <listing version="3.0">
+	 *     Gimmick.initialize();
+	 *     Gimmick.addSystem(new SomeSystem());
+	 *     this.addEventListener(Event.ENTER_FRAME, enterFrameHandler);
+	 *
+	 *     public function enterFrameHandler(event:Event):void
+	 *     {
+	 *     		Gimmick.tick();
+	 *     }
+	 * </listing>
 	 */
 	public class GimmickEngine
 	{
@@ -223,22 +234,25 @@ package org.gimmick.core
 
 		//delegates from systemsManager
 		/**
-		 * @copy org.gimmick.managers.SystemManager#addSystem()
+		 * @copy org.gimmick.managers.ISystemManager#addSystem()
+		 * @see org.gimmick.managers.ISystemManager#addSystem() More information about addSystem()
 		 */
-		public function addSystem(system:IIdleSystem, priority:int = 1):*
+		public function addSystem(system:IIdleSystem, priority:int = 1, ...group):*
 		{
 			return _systemsManager.addSystem(system, priority);
 		}
 
 		/**
-		 * @copy org.gimmick.managers.SystemManager#removeSystem()
+		 * @copy org.gimmick.managers.ISystemManager#removeSystem()
+		 * @see org.gimmick.managers.ISystemManager#removeSystem() More information about removeSystem()
 		 */
 		public function removeSystem(systemType:Class):IIdleSystem
 		{
 			return _systemsManager.removeSystem(systemType);
 		}
 		/**
-		 * @copy org.gimmick.managers.SystemManager#activateSystem()
+		 * @copy org.gimmick.managers.ISystemManager#activateSystem()
+		 * @see org.gimmick.managers.ISystemManager#activateSystem() More information about activateSystem()
 		 */
 		public function activateSystem(systemType:Class):void
 		{
@@ -246,7 +260,8 @@ package org.gimmick.core
 		}
 
 		/**
-		 * @copy org.gimmick.managers.SystemManager#deactivateSystem()
+		 * @copy org.gimmick.managers.ISystemManager#deactivateSystem()
+		 * @see org.gimmick.managers.ISystemManager#deactivateSystem() More information about deactivateSystem()
 		 */
 		public function deactivateSystem(system:Class):void
 		{

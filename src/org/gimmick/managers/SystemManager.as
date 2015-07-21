@@ -17,8 +17,6 @@ package org.gimmick.managers
 
 	import org.gimmick.collections.EntitiesCollection;
 	import org.gimmick.core.IIdleSystem;
-	import org.gimmick.core.IEntitySystem;
-	import org.gimmick.core.IProcessingSystem;
 	import org.gimmick.utils.getInstanceClass;
 
 	/**
@@ -56,7 +54,7 @@ package org.gimmick.managers
 		/**
 		 * @inheritDoc
 		 */
-		public function addSystem(system:IIdleSystem, priority:int = 1):IIdleSystem
+		public function addSystem(system:IIdleSystem, priority:int = 1, ...groups):IIdleSystem
 		{
 			var type:Class = getInstanceClass(system);
 			//remove old system from manager

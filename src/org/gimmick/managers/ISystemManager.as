@@ -14,7 +14,6 @@ package org.gimmick.managers
 {
 
 	import org.gimmick.core.IIdleSystem;
-	import org.gimmick.core.IEntitySystem;
 
 	/**
 	 * Interface of systems managements
@@ -25,20 +24,31 @@ package org.gimmick.managers
 //{region											PUBLIC METHODS
 		/**
 		 * Add instance of the system to Gimmick engine.
-		 * @param system Instance of the system, must implement <code>IEntitySystem</code> interface.
-		 * @param priority System priority
-		 * @return Instance of the system
+		 * System can belong to different groups of activity.
+		 * System's method <code>initialize()</code> will be executed automatically, after adding system to engine.
+		 *
+		 * @param system Instance of the system, must implement one of special interfaces:
+		 * <code>IIdleSystem</code>, <code>IEntitySystem</code> or <code>IProcessingSystem</code>
+		 * @param priority System priority in all groups.
+		 * @param groups <code>String</code> List of ids of groups.
+		 * System can belong to different groups of activity.
+		 *
+		 * @return Instance of the system. For code chaining.
 		 *
 		 * @example Adding system with code chaining:
 		 * <listing version="3.0">
+		 * const SOME_GROUP:String = "some_group";//group indicator
 		 * var someSystem:SomeSystem = Gimmick.addSystem( new SomeSystem() );
-		 * ...
+		 * var otherSystem:OtherSystem = Gimmick.addSystem( new OtherSystem(), 1, SOME_GROUP );
+		 * //...
 		 * </listing>
 		 *
+		 * @see org.gimmick.core.IIdleSystem#initialize() System's method initialize()
+		 * @see org.gimmick.core.IIdleSystem Implement IIdleSystem to create concrete class of idle system
 		 * @see org.gimmick.core.IEntitySystem Implement IEntitySystem to create concrete class of system
 		 * @see org.gimmick.core.IProcessingSystem Implement IProcessingSystem to create concrete class of processing system
 		 */
-		function addSystem(system:IIdleSystem, priority:int = 1):IIdleSystem;
+		function addSystem(system:IIdleSystem, priority:int = 1, ...groups):IIdleSystem;
 		/**
 		 * Remove system from Gimmick engine.
 		 * @param systemType Type of the system that was added to Gimmick previously
