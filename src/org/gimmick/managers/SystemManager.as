@@ -26,13 +26,18 @@ package org.gimmick.managers
 	{
 
 		/**
+		 * Map of activity gropus. Contains subtrees of systems.
+		 */
+		private var _groups:Dictionary;
+
+		/**
 		 * Head of linked list
 		 */
-		private var _head:SystemNode;
+		private var _head:SystemNodeOld;
 		/**
 		 * Tail of linked list
 		 */
-		private var _tail:SystemNode;
+		private var _tail:SystemNodeOld;
 		/**
 		 * All nodes, passive and active
 		 */
@@ -48,6 +53,7 @@ package org.gimmick.managers
 		 */
 		public function initialize(allocationSize:int = 1):void
 		{
+			_groups = new Dictionary(true);
 			_systemsTypes = new Dictionary(true);
 		}
 
@@ -57,11 +63,20 @@ package org.gimmick.managers
 		public function addSystem(system:IIdleSystem, priority:int = 1, ...groups):IIdleSystem
 		{
 			var type:Class = getInstanceClass(system);
+			var wrapper:SystemNodeOld = _systemsTypes[type];
+			if(wrapper == null)
+			{
+				/*
+					System was added at first time.
+					Need to create wrapper for it and save it to gloabl map
+				*/
+//				wrapper = new SystemNodeOld(system);
+			}
 			//remove old system from manager
 			if(_systemsTypes[type] != null)//Do not use hasOwnProperty, cause this method is very slow
 				this.removeSystem(type);
 			//save new systemType to map and to linked list
-			var node:SystemNode = new SystemNode(system, priority);
+			var node:SystemNodeOld = new SystemNodeOld(system, priority);
 			if(node.isProcessingSystem)
 			{
 				node.collection = node.processingSystem .targetEntities as EntitiesCollection;
@@ -79,7 +94,7 @@ package org.gimmick.managers
 		 */
 		public function removeSystem(systemType:Class):IIdleSystem
 		{
-			var node:SystemNode = _systemsTypes[systemType];
+			var node:SystemNodeOld = _systemsTypes[systemType];
 			if(node == null)
 				throw new ArgumentError('IEntitySystem was not added to Gimmick previously!');
 			if(node.active)
@@ -97,7 +112,7 @@ package org.gimmick.managers
 		 */
 		public function activateSystem(systemType:Class):void
 		{
-			var node:SystemNode = _systemsTypes[systemType];
+			var node:SystemNodeOld = _systemsTypes[systemType];
 			if(node == null)
 				throw new ArgumentError('IEntitySystem was not added to Gimmick previously!');
 			if(!node.active)
@@ -109,7 +124,7 @@ package org.gimmick.managers
 				}
 				else
 				{
-					var target:SystemNode;
+					var target:SystemNodeOld;
 					//check node priority
 					if(_tail.priority > node.priority)
 					{
@@ -149,14 +164,14 @@ package org.gimmick.managers
 		 */
 		public function deactivateSystem(systemType:Class):void
 		{
-			var node:SystemNode = _systemsTypes[systemType];
+			var node:SystemNodeOld = _systemsTypes[systemType];
 			if(node == null)
 				throw new ArgumentError('IEntitySystem was not added to Gimmick previously!');
 			if(node.active)
 			{
 				//delete node from linked list
-				var next:SystemNode = node.next;
-				var prev:SystemNode = node.prev;
+				var next:SystemNodeOld = node.next;
+				var prev:SystemNodeOld = node.prev;
 				if(prev != null)prev.next = next;
 				if(next != null)next.prev = prev;
 				if(_tail == node)_tail = prev;
@@ -173,7 +188,7 @@ package org.gimmick.managers
 		 */
 		public function tick(time:Number):void
 		{
-			for (var cursor:SystemNode = _head; cursor != null; cursor = cursor.next)
+			for (var cursor:SystemNodeOld = _head; cursor != null; cursor = cursor.next)
 			{
 				//update only active systems
 				if(cursor.isProcessingSystem)
@@ -189,7 +204,7 @@ package org.gimmick.managers
 		 */
 		public function dispose():void
 		{
-			var cursor:SystemNode;
+			var cursor:SystemNodeOld;
 			for (var type:Class in _systemsTypes)
 			{
 				cursor = _systemsTypes[type];

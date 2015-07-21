@@ -25,57 +25,75 @@
 package org.gimmick.managers
 {
 
+	import org.gimmick.collections.EntitiesCollection;
+	import org.gimmick.core.IEntitySystem;
+	import org.gimmick.core.IIdleSystem;
+	import org.gimmick.core.IProcessingSystem;
+
 	/**
-	 * Node for linked lists in SystemManager.
-	 * Contains SystemWraper as value
-	 *
-	 * @see org.gimmick.managers.SystemManager
-	 * @see org.gimmick.managers.SystemProxy
+	 * Proxy link to the system.
+	 * Providing extended access to instance of system.
 	 */
-	internal final  class SystemNode
+	internal final class SystemProxy
 	{
 
 		/**
-		 * Link to the next node in linked list
+		 * Not extended system interface
 		 */
-		public var next:SystemNode;
+		public var system:IIdleSystem;
 		/**
-		 * Link to the presious node in linked list
+		 * Flag that indicate an activity of system instance
 		 */
-		public var prev:SystemNode;
-		/**
-		 * Priority in linked list
-		 */
-		public var priority:int;
-		/**
-		 * SystemNodeOld that contains system instace
-		 */
-		public var value:SystemProxy;
-		//======================================================================================================================
+		public var active:Boolean;
+		//Extended interface of the IProcessingSystem
+		public var collection:EntitiesCollection;
+		public var processingSystem:IProcessingSystem;
+		public var isProcessingSystem:Boolean;
+		//Extended interface of the IEntitySystem
+		public var isEntitySystem:Boolean;
+		public var entitySystem:IEntitySystem;
+//======================================================================================================================
 //{region											PUBLIC METHODS
-		/**
-		 * Constructor
-		 * @param value SystemProxy that contains system instace
-		 * @param priority priority in linked list
-		 */
-		public function SystemNode(value:SystemProxy, priority:int = 1)
+		public function SystemProxy(system:IIdleSystem)
 		{
-			this.value = value;
-			this.priority = priority;
+			this.system = system;
+			this.initialize();
 		}
 
 		/**
-		 * Prepare node for GC
+		 * Prepare proxy for GC
 		 */
 		public function dispose():void
 		{
-			this.value = null;
-			this.priority = 0;
+			this.active = false;
+			this.isProcessingSystem = false;
+			this.isEntitySystem = false;
+			//delete links
+			this.system = null;
+			this.collection = null;
+			this.processingSystem = null;
+			this.entitySystem = null;
 		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
-
+		/**
+		 * Initailize proxy by it system.
+		 * Provide extended access to instance of system.
+		 */
+		private function initialize():void
+		{
+			if(this.system is IEntitySystem)
+			{
+				this.entitySystem = this.system as IEntitySystem;
+				this.isEntitySystem = true;
+			}
+			else if(this.system is IProcessingSystem)
+			{
+				this.processingSystem = this.system as IProcessingSystem;
+				this.isProcessingSystem = true;
+			}
+		}
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS
