@@ -51,6 +51,10 @@ package org.gimmick.managers
 		function addSystem(system:IIdleSystem, priority:int = 1, ...groups):IIdleSystem;
 		/**
 		 * Remove system from Gimmick engine.
+		 * Also remove from all groups of activity.
+		 * Use this method just in case when you need dispose system from application.
+		 * In other cases use <code>deactivateSystem()</code> method.
+		 *
 		 * @param systemType Type of the system that was added to Gimmick previously
 		 * @return Instance of removed system
 		 *
