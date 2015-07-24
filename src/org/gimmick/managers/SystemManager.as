@@ -118,11 +118,17 @@ package org.gimmick.managers
 		/**
 		 * @inheritDoc
 		 */
-		public function activateSystem(systemType:Class):void
+		public function activateSystem(systemType:Class, priotiry:int = 1):void
 		{
-			var node:SystemProxy = _systemsTypes[systemType];
-			if(node == null)
+			var proxy:SystemProxy = _systemsTypes[systemType];
+			if(proxy == null)
 				throw new ArgumentError('IEntitySystem was not added to Gimmick previously!');
+			if(!proxy.active)
+			{
+				this.addToGroup(_activeGroupId, proxy, priotiry);
+				_head = _groups[_activeGroupId].prev;
+				trace("[Gimmick] system", systemType, "was activate as a part of", _activeGroupId);
+			}
 		}
 
 		/**
@@ -130,9 +136,15 @@ package org.gimmick.managers
 		 */
 		public function deactivateSystem(systemType:Class):void
 		{
-			var node:SystemProxy = _systemsTypes[systemType];
-			if(node == null)
+			var proxy:SystemProxy = _systemsTypes[systemType];
+			if(proxy == null)
 				throw new ArgumentError('System was not added to Gimmick previously!');
+			if(proxy.active)
+			{
+				this.removeFromGroup(_activeGroupId, proxy);
+				proxy.system.deactivate();
+				trace("[Gimmick] system", systemType, "was deactivate and remove from", _activeGroupId);
+			}
 		}
 
 		/**
@@ -286,30 +298,33 @@ package org.gimmick.managers
 		 */
 		private function removeFromGroups(proxy:SystemProxy):void
 		{
+			for(var groupId:String in _groups)
+				this.removeFromGroup(groupId, proxy);
+		}
+
+		[Inline]
+		private final function removeFromGroup(groupId:String, proxy:SystemProxy):void
+		{
 			var node:SystemNode;
 			var next:SystemNode;
 			var prev:SystemNode;
-			for each(var root:SystemNode in _groups)
+			var root:SystemNode = _groups[groupId];
+			//find node in linked list
+			node = root.prev;
+			while(node != null && node.value != proxy)
+				node = node.next;
+			if(node != null)
 			{
-				//find node in linked list
-				node = root.prev;
-				while(node != null && node.value != proxy)
-					node = node.next;
-				if(node != null)
-				{
-					//delete node from linked list
-					next = node.next;
-					prev = node.prev;
-					if(prev != null)prev.next = next;
-					if(next != null)next.prev = prev;
-					if(root.next == node)root.next = prev;
-					if(root.prev == node)root.prev = next;
-					if(_head == node)_head = root.prev;//update current head
-				}
-
+				//delete node from linked list
+				next = node.next;
+				prev = node.prev;
+				if(prev != null)prev.next = next;
+				if(next != null)next.prev = prev;
+				if(root.next == node)root.next = prev;
+				if(root.prev == node)root.prev = next;
+				if(_head == node)_head = root.prev;//update current head
 			}
 		}
-
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS

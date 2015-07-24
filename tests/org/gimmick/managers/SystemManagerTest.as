@@ -182,9 +182,10 @@ package org.gimmick.managers
 
 
 
-//		[Test]
+		[Test]
 		public function testAddingSystemsWithPriority():void
 		{
+			TestIdleSystem.EXECUTION_ORDER.length = 0;
 			var systems:Array = [
 				new ThirdSystem(), 3,
 				new FirstSystem(), 1,
@@ -193,10 +194,9 @@ package org.gimmick.managers
 			];
 			for(var i:int = 0; i < systems.length / 2; i++)
 			{
-				_systemManager.addSystem(systems[i * 2], systems[i * 2 + 1]);
-				_systemManager.activateSystem(getInstanceClass(systems[i * 2]));
+				_systemManager.addSystem(systems[i * 2], systems[i * 2 + 1], _group_0);
 			}
-			var l:* = TestIdleSystem.EXECUTION_ORDER;
+			_systemManager.activateGroup(_group_0);
 			_systemManager.tick(0);
 			Assert.assertEquals(systems[2], TestIdleSystem.EXECUTION_ORDER[ 0 ]);
 			Assert.assertEquals(systems[6], TestIdleSystem.EXECUTION_ORDER[ 1 ]);
@@ -205,53 +205,57 @@ package org.gimmick.managers
 
 		}
 
-//		[Test]
+		[Test]
 		public function testRemoveSystem():void
 		{
-			this.testActivateSystem();
-			_systemManager.removeSystem(TestSystem);
-			Assert.assertFalse(_tickSystem.activated);
-			Assert.assertFalse(_tickSystem.initialized);
+			this.testActivateGroup_0();
 			_systemManager.removeSystem(TestProcessingSystem);
 			Assert.assertFalse(_processingSystem.activated);
 			Assert.assertFalse(_processingSystem.initialized);
 		}
 
-//		[Test]
+		[Test]
 		public function testActivateSystem():void
 		{
 			this.testAddSystem();
-			Assert.assertFalse(_tickSystem.activated);
-			_systemManager.activateSystem(TestSystem);
-			Assert.assertTrue(_tickSystem.activated);
 			Assert.assertFalse(_processingSystem.activated);
-			_systemManager.activateSystem(TestProcessingSystem);
+			Assert.assertFalse(_tickSystem.activated);
+			_systemManager.activateGroup(_group_0);
+			_systemManager.activateSystem(TestSystem);
+			_systemManager.tick(0);
+			Assert.assertTrue(_tickSystem.activated);
 			Assert.assertTrue(_processingSystem.activated);
 		}
 
-//		[Test]
+		[Test]
 		public function testDeactivateSystem():void
 		{
 			this.testActivateSystem();
+			TestIdleSystem.EXECUTION_ORDER.length = 0;
 			_systemManager.deactivateSystem(TestSystem);
 			Assert.assertFalse(_tickSystem.activated);
 			_systemManager.deactivateSystem(TestProcessingSystem);
 			Assert.assertFalse(_processingSystem.activated);
+			_systemManager.tick(0);
+			Assert.assertEquals(0, TestIdleSystem.EXECUTION_ORDER.length);
 		}
 
-//		[Test]
+		[Test]
 		public function testTick():void
 		{
-			this.testActivateSystem();
+			_systemManager.addSystem(_tickSystem, 1, _group_0);
+			_systemManager.activateGroup(_group_0);
+			_tickSystem.ticksCount = 0;
 			Assert.assertEquals(0, _tickSystem.ticksCount);
 			_systemManager.tick(0);
 			Assert.assertEquals(1, _tickSystem.ticksCount);
 		}
 
-//		[Test]
+		[Test]
 		public function testProcess():void
 		{
-			this.testActivateSystem();
+			this.testActivateGroup_0();
+			_processingSystem.ticksCount = 0;
 			Assert.assertEquals(0, _processingSystem.ticksCount);
 			_systemManager.tick(0);
 			Assert.assertEquals(2, _processingSystem.ticksCount);
@@ -259,25 +263,25 @@ package org.gimmick.managers
 
 		//error tests
 
-//		[Test(expects="ArgumentError")]
+		[Test(expects="ArgumentError")]
 		public function testRemoveError():void
 		{
 			_systemManager.removeSystem(TestSystem);
 		}
 
-//		[Test(expects="ArgumentError")]
+		[Test(expects="ArgumentError")]
 		public function testActivateError():void
 		{
 			_systemManager.activateSystem(TestSystem);
 		}
 
-//		[Test(expects="ArgumentError")]
+		[Test(expects="ArgumentError")]
 		public function testDeactivateError():void
 		{
 			_systemManager.deactivateSystem(TestSystem);
 		}
 
-//		[Test(expects="ArgumentError")]
+		[Test(expects="ArgumentError")]
 		public function testAddProcessingError():void
 		{
 			var badSystem:TestProcessingSystem = new TestProcessingSystem(null);

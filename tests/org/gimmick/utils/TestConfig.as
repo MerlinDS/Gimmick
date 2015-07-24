@@ -61,7 +61,7 @@ class TestSystemManager implements ISystemManager
 
 	public function addSystem(system:IIdleSystem, priority:int = 1, ...groups):IIdleSystem{return null;}
 	public function removeSystem(systemType:Class):IIdleSystem{return null;}
-	public function activateSystem(systemType:Class):void{}
+	public function activateSystem(systemType:Class, priotiry:int = 1):void {}
 	public function deactivateSystem(systemType:Class):void{}
 	public function tick(time:Number):void{}
 	public function dispose():void{}

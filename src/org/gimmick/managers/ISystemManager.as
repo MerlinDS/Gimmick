@@ -68,13 +68,15 @@ package org.gimmick.managers
 		 * </listing>
 		 */
 		function removeSystem(systemType:Class):IIdleSystem;
+
 		/**
-		 * Activate and add system to Gimmick scope. <br />
-		 * After adding system to scope <code>IEntitySystem.tick()</code> or
+		 * Activate and add system to active group. <br />
+		 * After adding system to active group <code>IEntitySystem.tick()</code> or
 		 * <code>IProcessingSystem#process()</code> method will be executed
 		 * for each tick (enter frame, or else loop).
 		 *
 		 * @param systemType Type of the system that was added to Gimmick previously
+		 * @param priotiry Priority in active group
 		 *
 		 * @throws ArgumentError System was not added to Gimmick previously
 		 *
@@ -83,10 +85,10 @@ package org.gimmick.managers
 		 * @see org.gimmick.core.GimmickEngine#addSystem() Adding system instance to Gimmick engine
 		 * @see org.gimmick.core.Gimmick#tick() Main looping method of Gimmick framework
 		 */
-		function activateSystem(systemType:Class):void;
+		function activateSystem(systemType:Class, priotiry:int = 1):void;
 		/**
-		 * Deactivate and remove system from scope, but not from Gimmick.
-		 * After removing system from scope method <code>IEntitySystem.tick()</code>
+		 * Deactivate and remove system from active group, but not from Gimmick.
+		 * After removing system from active group, method <code>IEntitySystem.tick()</code>
 		 * or <code>IProcessingSystem#process()</code> will not be executed any more.
 		 * <br />
 		 * For totally removing system from Gimmick use <code>removeSystem()</code> method instead.
