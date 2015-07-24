@@ -201,22 +201,17 @@ package org.gimmick.managers
 		 */
 		public function dispose():void
 		{
-			/*var cursor:SystemNodeOld;
-			for (var type:Class in _systemsTypes)
+			for each(var group:SystemNode in _groups)
 			{
-				cursor = _systemsTypes[type];
-				if(cursor != null)//system can be already removed manually
-				{
-					if (cursor.active)cursor.system.deactivate();
-					cursor.system.dispose();
+				_head = group.next;
+				for (var cursor:SystemNode = _head; cursor != null; cursor = cursor.next)
 					cursor.dispose();
-				}
-				delete _systemsTypes[type];
 			}
+
+			_activeGroupId = null;
 			_systemsTypes = null;
-			cursor = null;
-			_tail = null;
-			_head = null;*/
+			_groups = null;
+			_head = null;
 		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================

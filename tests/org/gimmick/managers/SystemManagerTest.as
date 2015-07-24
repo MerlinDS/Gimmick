@@ -60,13 +60,12 @@ package org.gimmick.managers
 		[After]
 		public function tearDown():void
 		{
-			/*while(TestIdleSystem.EXECUTION_ORDER.length > 0)
-				TestIdleSystem.EXECUTION_ORDER.pop();
+			TestIdleSystem.EXECUTION_ORDER.length = 0;
 			_systemManager.dispose();
 			_entities.dispose();
 			_entities = null;
 			_processingSystem = null;
-			_systemManager = null;*/
+			_systemManager = null;
 		}
 
 		//normal tests
