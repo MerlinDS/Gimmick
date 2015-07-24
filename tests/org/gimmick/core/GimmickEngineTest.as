@@ -57,6 +57,7 @@ package org.gimmick.core
 			Gimmick.initialize(new GimmickConfig(60, this.initCallback));
 			//timer
 			Gimmick.tick();
+			Gimmick.tick();
 			//
 			var allEntities:IEntities = Gimmick.getEntities();
 			for(i = 0; i < _entities.length; i++)
@@ -86,13 +87,13 @@ package org.gimmick.core
 			/*
 			  Create application with starting system
 			 */
-			var starter:StartingSystem = Gimmick.addSystem(new StartingSystem(_entities));
+			var starter:StartingSystem = Gimmick.addSystem(new StartingSystem(_entities), 1, "init");
 			//get date for tests
 			_displaySystems = starter.displaySystem;
 			var scene:DisplayObjectContainer = starter.scene;
 			//crete application
-			Gimmick.activateSystem(StartingSystem);
-			Assert.assertTrue(starter.disposed);
+			Gimmick.activateGroup("init");
+//			Assert.assertTrue(starter.disposed);
 		}
 
 		[Test]
@@ -112,11 +113,12 @@ package org.gimmick.core
 		{
 			this.creationTest();
 			Gimmick.deactivateSystem(DisplaySystem);
+			_displaySystems.ticksCount = 0;
 			Gimmick.tick();
-			Assert.assertEquals(1, _displaySystems.ticksCount);
+			Assert.assertEquals(0, _displaySystems.ticksCount);
 			Gimmick.activateSystem(DisplaySystem);
 			Gimmick.tick();
-			Assert.assertEquals(2, _displaySystems.ticksCount);
+			Assert.assertEquals(1, _displaySystems.ticksCount);
 		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
@@ -161,8 +163,8 @@ class StartingSystem implements IIdleSystem
 	public function initialize():void
 	{
 		_scene = new Sprite();
-		Gimmick.addSystem(new MovementSystem());
-		_displaySystem = Gimmick.addSystem(new DisplaySystem(_scene), 2);
+		Gimmick.addSystem(new MovementSystem(),1, "action");
+		_displaySystem = Gimmick.addSystem(new DisplaySystem(_scene), 2, "action");
 	}
 
 	public function dispose():void
@@ -175,8 +177,7 @@ class StartingSystem implements IIdleSystem
 
 	public function activate():void
 	{
-		Gimmick.activateSystem(MovementSystem);
-		Gimmick.activateSystem(DisplaySystem);
+		Gimmick.activateGroup("action");
 		this.createEntities();
 		/*
 		 This system create application and remove itself from engine

@@ -28,8 +28,8 @@ package org.gimmick.managers
 	public class SystemManagerTest
 	{
 
-		private var _group_0:String = "group_0";
-		private var _group_1:String = "group_1";
+		private const _group_0:String = "group_0";
+		private const _group_1:String = "group_1";
 
 		private var _entities:EntitiesCollection;
 
@@ -74,9 +74,9 @@ package org.gimmick.managers
 		{
 			_systemManager.addSystem(_tickSystem, 1);
 			Assert.assertTrue(_tickSystem.initialized);
-			_systemManager.addSystem(_processingSystem, 2, _group_0, _group_1);
+			_systemManager.addSystem(_processingSystem, 2, [_group_0, _group_1]);
 			Assert.assertTrue(_processingSystem.initialized);
-			_systemManager.addSystem(_idleSystem, 3, _group_0);
+			_systemManager.addSystem(_idleSystem, 3, [_group_0]);
 			Assert.assertTrue(_idleSystem.initialized);
 		}
 
@@ -128,7 +128,7 @@ package org.gimmick.managers
 			entities.push(new TestEntity());
 			entities.push(new TestEntity());
 			var newSystem:TestProcessingSystem = new TestProcessingSystem(entities);
-			_systemManager.addSystem(newSystem, 1, _group_0);
+			_systemManager.addSystem(newSystem, 1, [_group_0]);
 			Assert.assertTrue(newSystem.initialized);
 			Assert.assertFalse(_processingSystem.initialized);
 			Assert.assertFalse(_processingSystem.activated);
@@ -149,7 +149,7 @@ package org.gimmick.managers
 			entities.push(new TestEntity());
 			entities.push(new TestEntity());
 			var newSystem:TestProcessingSystem = new TestProcessingSystem(entities);
-			_systemManager.addSystem(newSystem, 1, _group_1);
+			_systemManager.addSystem(newSystem, 1, [_group_1]);
 			Assert.assertTrue(newSystem.initialized);
 			Assert.assertFalse(_processingSystem.initialized);
 			Assert.assertFalse(_processingSystem.activated);
@@ -167,7 +167,7 @@ package org.gimmick.managers
 		{
 			this.testActivateGroup_0();//system need to be initialized and activated
 			var newSystem:TestIdleSystem = new TestIdleSystem();
-			_systemManager.addSystem(newSystem, 1, _group_1);
+			_systemManager.addSystem(newSystem, 1, [_group_1]);
 			Assert.assertTrue(newSystem.initialized);
 			Assert.assertFalse(_idleSystem.initialized);
 			Assert.assertFalse(_idleSystem.activated);
@@ -193,7 +193,7 @@ package org.gimmick.managers
 			];
 			for(var i:int = 0; i < systems.length / 2; i++)
 			{
-				_systemManager.addSystem(systems[i * 2], systems[i * 2 + 1], _group_0);
+				_systemManager.addSystem(systems[i * 2], systems[i * 2 + 1], [_group_0]);
 			}
 			_systemManager.activateGroup(_group_0);
 			_systemManager.tick(0);
@@ -242,7 +242,7 @@ package org.gimmick.managers
 		[Test]
 		public function testTick():void
 		{
-			_systemManager.addSystem(_tickSystem, 1, _group_0);
+			_systemManager.addSystem(_tickSystem, 1, [_group_0]);
 			_systemManager.activateGroup(_group_0);
 			_tickSystem.ticksCount = 0;
 			Assert.assertEquals(0, _tickSystem.ticksCount);

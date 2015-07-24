@@ -48,7 +48,7 @@ package org.gimmick.managers
 		 * @see org.gimmick.core.IEntitySystem Implement IEntitySystem to create concrete class of system
 		 * @see org.gimmick.core.IProcessingSystem Implement IProcessingSystem to create concrete class of processing system
 		 */
-		function addSystem(system:IIdleSystem, priority:int = 1, ...groups):IIdleSystem;
+		function addSystem(system:IIdleSystem, priority:int = 1, groups:Array = null):IIdleSystem;
 		/**
 		 * Remove system from Gimmick engine.
 		 * Also remove from all groups of activity.

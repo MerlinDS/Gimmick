@@ -58,7 +58,7 @@ package org.gimmick.managers
 		/**
 		 * @inheritDoc
 		 */
-		public function addSystem(system:IIdleSystem, priority:int = 1, ...groups):IIdleSystem
+		public function addSystem(system:IIdleSystem, priority:int = 1, groups:Array = null):IIdleSystem
 		{
 			var newSystem:Boolean;
 			var systemType:Class = getInstanceClass(system);
@@ -74,7 +74,7 @@ package org.gimmick.managers
 					throw new ArgumentError('TargetCollection for processing was not added to system!');
 			}
 			//add system to groups if it was linked
-			while(groups.length)
+			while(groups != null && groups.length)
 			{
 				//no meter in what order system will be added to gropus
 				var groupId:String = groups.pop();
@@ -143,6 +143,7 @@ package org.gimmick.managers
 			{
 				this.removeFromGroup(_activeGroupId, proxy);
 				proxy.system.deactivate();
+				proxy.active = false;
 				trace("[Gimmick] system", systemType, "was deactivate and remove from", _activeGroupId);
 			}
 		}

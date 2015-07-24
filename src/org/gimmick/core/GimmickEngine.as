@@ -237,9 +237,9 @@ package org.gimmick.core
 		 * @copy org.gimmick.managers.ISystemManager#addSystem()
 		 * @see org.gimmick.managers.ISystemManager#addSystem() More information about addSystem()
 		 */
-		public function addSystem(system:IIdleSystem, priority:int = 1, ...group):*
+		public function addSystem(system:IIdleSystem, priority:int = 1, ...groups):*
 		{
-			return _systemsManager.addSystem(system, priority);
+			return _systemsManager.addSystem(system, priority, groups);
 		}
 
 		/**
@@ -249,6 +249,15 @@ package org.gimmick.core
 		public function removeSystem(systemType:Class):IIdleSystem
 		{
 			return _systemsManager.removeSystem(systemType);
+		}
+
+		/**
+		 * @copy org.gimmick.managers.ISystemManager#activateGroup()
+		 * @see org.gimmick.managers.ISystemManager#activateGroup() More information about group activatations.
+		 */
+		public function activateGroup(groupId:String):void
+		{
+			_systemsManager.activateGroup(groupId);
 		}
 		/**
 		 * @copy org.gimmick.managers.ISystemManager#activateSystem()
