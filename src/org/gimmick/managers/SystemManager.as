@@ -35,6 +35,8 @@ package org.gimmick.managers
 		 */
 		private var _groups:Dictionary;
 		private var _activeGroupId:String;
+		private var _activateNextGroup:Boolean;
+		private var _nextGroup:String;
 		//current subtree
 		/**
 		 * Head of linked list
@@ -161,19 +163,10 @@ package org.gimmick.managers
 			var root:SystemNode = _groups[groupId];
 			if(root == null)
 				throw new ArgumentError('Group was not created previously!');
-			if(_head != null)
-			{
-				//deactivate previous group
-				for (var cursor:SystemNode = _head; cursor != null; cursor = cursor.next)
-				{
-					cursor.value.system.deactivate();
-					cursor.value.active = false;
-				}
-			}
-			//change subtree
-			_head = root.prev;
-			_activeGroupId = groupId;
-			trace("[Gimmick] Group", _activeGroupId ,"activeted!");
+
+			_nextGroup = groupId;
+			_activateNextGroup = true;
+			trace("[Gimmick] group",_nextGroup,"will be activated on next frame");
 		}
 
 		/**
@@ -181,6 +174,7 @@ package org.gimmick.managers
 		 */
 		public function tick(time:Number):void
 		{
+			if(_activateNextGroup)this.activateNextGroup();
 			for (var cursor:SystemNode = _head; cursor != null; cursor = cursor.next)
 			{
 				//activate systems
@@ -236,6 +230,25 @@ package org.gimmick.managers
 				_groups[groupId] = root;
 			}
 			//nothing to do in other cases
+		}
+
+		private function activateNextGroup():void
+		{
+			var root:SystemNode = _groups[_nextGroup];
+			if(_head != null)
+			{
+				//deactivate previous group
+				for (var cursor:SystemNode = _head; cursor != null; cursor = cursor.next)
+				{
+					cursor.value.system.deactivate();
+					cursor.value.active = false;
+				}
+			}
+			//change subtree
+			_head = root.prev;
+			_activeGroupId = _nextGroup;
+			_activateNextGroup = false;
+			trace("[Gimmick] Group", _activeGroupId ,"activeted!");
 		}
 
 		/**

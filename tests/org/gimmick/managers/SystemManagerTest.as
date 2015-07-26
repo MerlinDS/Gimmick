@@ -109,13 +109,8 @@ package org.gimmick.managers
 			TestIdleSystem.EXECUTION_ORDER.length = 0;
 			this.testActivateGroup_0();
 			_systemManager.activateGroup(_group_1);
-			/*
-			 * Now only _processingSystem will be active
-			 * But event till tick it will be deactivated to
-			 */
-			Assert.assertFalse(_processingSystem.activated);
-			Assert.assertFalse(_idleSystem.activated);
 			_systemManager.tick(0);
+			Assert.assertFalse(_idleSystem.activated);
 			Assert.assertTrue(_processingSystem.activated);
 			Assert.assertEquals(1, TestIdleSystem.EXECUTION_ORDER.length);
 		}
@@ -220,6 +215,7 @@ package org.gimmick.managers
 			Assert.assertFalse(_processingSystem.activated);
 			Assert.assertFalse(_tickSystem.activated);
 			_systemManager.activateGroup(_group_0);
+			_systemManager.tick(0);
 			_systemManager.activateSystem(TestSystem);
 			_systemManager.tick(0);
 			Assert.assertTrue(_tickSystem.activated);
