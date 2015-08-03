@@ -86,7 +86,7 @@ package org.gimmick.managers
 				bits = entity.bits;
 				_baseCollections[0x0].remove(entity);
 			}else
-				bits = entity.bits | componentType.bit;
+				bits = componentType.bit;
 			this.updateCollections(entity, bits, false);
 		}
 

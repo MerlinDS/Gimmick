@@ -114,7 +114,10 @@ package org.gimmick.collections
 				_idMap[entity.id] = null;//remove from id map
 
 				if(index <= _cursor)//save index for future content defragmentation
+				{
 					_splits.push(index);
+					trace("normal");
+				}
 				else
 				{
 					//get content from end of list and push it to empty place
@@ -129,6 +132,7 @@ package org.gimmick.collections
 					_content[lastIndex] = null;
 				}
 			}
+			trace("not ok");
 			//if node was not added do nothing
 		}
 

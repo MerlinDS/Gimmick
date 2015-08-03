@@ -31,7 +31,7 @@ package org.gimmick.managers
 		 */
 		private var _systemsTypes:Dictionary;
 		/**
-		 * Map of activity gropus. Contains subtrees of systems.
+		 * Map of activity groups. Contains subtrees of systems.
 		 */
 		private var _groups:Dictionary;
 		private var _activeGroupId:String;
@@ -62,7 +62,6 @@ package org.gimmick.managers
 		 */
 		public function addSystem(system:IIdleSystem, priority:int = 1, groups:Array = null):IIdleSystem
 		{
-			var newSystem:Boolean;
 			var systemType:Class = getInstanceClass(system);
 			var proxy:SystemProxy = _systemsTypes[systemType];
 			if(proxy != null)//Do not use hasOwnProperty, cause this method is very slow
@@ -89,7 +88,7 @@ package org.gimmick.managers
 					_head = _groups[groupId].prev;
 			}
 
-			//system was added normaly
+			//system was added normally
 			_systemsTypes[systemType] = proxy;
 			proxy.system.initialize();
 			trace("[Gimmick] System ", systemType, " was added");
@@ -103,7 +102,7 @@ package org.gimmick.managers
 		{
 			var proxy:SystemProxy = _systemsTypes[systemType];
 			if(proxy == null)
-				throw new ArgumentError('IEntitySystem was not added to Gimmick previously!');
+				throw new ArgumentError("[Gimmick] system " + systemType + ' was not added to Gimmick previously!');
 			this.removeFromGroups(proxy);
 			_systemsTypes[systemType] = null;
 			if(proxy.isProcessingSystem)
@@ -124,7 +123,7 @@ package org.gimmick.managers
 		{
 			var proxy:SystemProxy = _systemsTypes[systemType];
 			if(proxy == null)
-				throw new ArgumentError('IEntitySystem was not added to Gimmick previously!');
+				throw new ArgumentError("[Gimmick] system" + systemType + 'was not added to Gimmick previously!');
 			if(!proxy.active)
 			{
 				this.addToGroup(_activeGroupId, proxy, priotiry);
@@ -144,9 +143,9 @@ package org.gimmick.managers
 			if(proxy.active)
 			{
 				this.removeFromGroup(_activeGroupId, proxy);
-				proxy.system.deactivate();
-				proxy.active = false;
 				trace("[Gimmick] system", systemType, "was deactivate and remove from", _activeGroupId);
+				proxy.active = false;
+				proxy.system.deactivate();
 			}
 		}
 
@@ -182,6 +181,7 @@ package org.gimmick.managers
 				{
 					cursor.value.system.activate();
 					cursor.value.active = true;
+					trace("[Gimmick] system", cursor.value.system, "was activate");
 				}
 				//update all except idle systems
 				if(cursor.value.isProcessingSystem)
@@ -240,15 +240,16 @@ package org.gimmick.managers
 				//deactivate previous group
 				for (var cursor:SystemNode = _head; cursor != null; cursor = cursor.next)
 				{
-					cursor.value.system.deactivate();
 					cursor.value.active = false;
+					trace("[Gimmick] system", cursor.value.system, "was deactivate and remove from", _activeGroupId);
+					cursor.value.system.deactivate();
 				}
 			}
 			//change subtree
 			_head = root.prev;
 			_activeGroupId = _nextGroup;
 			_activateNextGroup = false;
-			trace("[Gimmick] Group", _activeGroupId ,"activeted!");
+			trace("[Gimmick] Group", _activeGroupId ,"active");
 		}
 
 		/**
