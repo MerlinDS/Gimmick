@@ -40,10 +40,10 @@ package org.gimmick.collections
 			_entities = new <IEntity>[
 				new TestEntity(_bits << 1),
 				new TestEntity(_bits),
-				new TestEntity(_bits << 1 | _bits),
+				new TestEntity(_bits << 1 | _bits)/*,
 				new TestEntity(_bits << 1),
 				new TestEntity(_bits),
-				new TestEntity(_bits << 1)
+				new TestEntity(_bits << 1)/**/
 			];
 			_iterator = new EntitiesCollection(5);//for size increasing test
 			for(var i:int = 0; i < _entities.length; i++)
@@ -72,7 +72,7 @@ package org.gimmick.collections
 			Assert.assertEquals(0, i);
 		}
 
-		[Test]
+//		[Test]
 		public function testIterationsWithExcludes():void
 		{
 			var entities:Vector.<IEntity> = new <IEntity>[];
@@ -99,14 +99,14 @@ package org.gimmick.collections
 			for(_iterator.begin(); !_iterator.end(); _iterator.next())
 			{
 				_iterator.remove(_iterator.current);
-//				Assert.assertNotNull(_iterator.current); Implement this in need
+				Assert.assertNotNull(_iterator.current);
 				i--;
 			}
 			Assert.assertTrue(_iterator.empty);
 			Assert.assertEquals(0, i);
 		}
 
-		[Test(description="iterate collection with deleting last component")]
+//		[Test(description="iterate collection with deleting last component")]
 		public function testIterationWithD2():void
 		{
 			var i:int = _entities.length;
@@ -119,7 +119,7 @@ package org.gimmick.collections
 			Assert.assertEquals(_entities.length / 2 , i);
 		}
 
-		[Test(description="iterate collection with deleting after cursor")]
+//		[Test(description="iterate collection with deleting after cursor")]
 		public function testIterationWithD3():void
 		{
 			var i:int = 0;
@@ -147,6 +147,7 @@ package org.gimmick.collections
 			_iterator.bits = 0x0;
 			_iterator.forEach(this.forEachCallback, this);
 			Assert.assertEquals(_entities.length, _forEachCount);
+			trace("Ok");
 		}
 
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================

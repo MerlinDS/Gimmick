@@ -22,18 +22,25 @@ package org.gimmick.collections
 	 */
 	public class EntitiesCollection implements IEntities
 	{
-		private var _allocationSize:int;
-		private var _content:Vector.<IEntity>;
+		//linked list
+		/** Cicled linked list where head == tail */
+		private var _list:EntityNode;//need link for depnded collection
+		/** cusrsor of iterator **/
+		private var _cursor:EntityNode;
+		/** end of iterator **/
+		private var _fast:EntityNode;
 		/**
-		 * Hash map of collection indexes.
-		 * Key = Id of entity
-		 * Value = Index in content list of entity
-		 */
-		private var _idMap:Dictionary = new Dictionary(true);
-		private var _splits:Vector.<int>;
-
-		private var _length:BindableLength;
-		private var _cursor:int;
+		 * Entity loced by iterator.
+		 * When node with enity was removed from list, cursor will poits to next node.
+		 * But link to current entity will be abale, till execution of next() method
+		 **/
+		private var _current:IEntity;
+		/** Map of entities where key is Id of entity, values is node in linked list*/
+		private var _map:Dictionary;
+		//other
+		/** allocated memory size for entitiyes**/
+		[Deprecated]
+		private var _allocationSize:int;
 		private var _bits:uint;
 		/**
 		 * Flag for indication that this instance depended to other one
@@ -51,20 +58,16 @@ package org.gimmick.collections
 		{
 			_allocationSize = allocationSize;
 			_disposingCallback = disposingCallback;
-
-			_length = new BindableLength();
-			_content = new <IEntity>[];
-			_splits = new <int>[];
-			_idMap = new Dictionary(true);
-			_cursor = 0;
-			this.increaseSize();
+			_map = new Dictionary(true);
+			//do not need to allocate this
+			_list = new EntityNode();
+			_list.next = _list;
 		}
 		/**
 		 * @inheritDoc
 		 */
 		public function dependedClone(clone:IEntities = null):IEntities
 		{
-			this.defragContent();
 			var c:EntitiesCollection = clone as EntitiesCollection;
 			if(c == null)
 			{
@@ -73,11 +76,10 @@ package org.gimmick.collections
 			}
 			c._allocationSize = _allocationSize;
 			c._disposingCallback = _disposingCallback;
-			c._splits = _splits;
-			c._content = _content;
-			c._idMap = _idMap;
-			c._length = _length;
 			c._isDepended = true;
+			c._list = _list;
+			c._bits = _bits;
+			c._map = _map;
 			return c;
 		}
 
@@ -88,15 +90,29 @@ package org.gimmick.collections
 		[Inline]
 		public final function push(entity:IEntity):void
 		{
-			//Add new entity only in case if it was not added previously
-			if(_idMap[entity.id] == null)
+			if(_map[entity.id] != null)
+			//nothing to do in entity was already added
+				return;
+			//add new node to linked list
+			var node:EntityNode = EntityNode.allocateNode(entity);
+			if(_list.next == _list)//linked list is empty
 			{
-				if(_length.value == _content.length)
-					this.increaseSize();
-				_idMap[entity.id] = _length.value;//set index of entity in content list
-				_content[_length.value++] = entity;//add to content list
+				//set as head and tail to itself
+				_list.next = node;
+				node.next = node;
+				node.prev = node;
 			}
-			//if node was already added do nothing
+			else
+			{
+				//insert node to list, no matter in what place
+				var head:EntityNode = _list.next;
+				node.next = head.next;
+				head.next = node;
+				node.prev = head;
+				node.next.prev = node;
+			}
+			//add to map
+			_map[entity.id] = node;
 		}
 
 		/**
@@ -106,34 +122,31 @@ package org.gimmick.collections
 		[Inline]
 		public final function remove(entity:IEntity):void
 		{
-			//Remove entity only in case if it was added previously
-			if(_idMap[entity.id] != null)
+			var node:EntityNode = _map[entity.id];
+			if(node == null)
+			//nothing to do in entity was already removed
+				return;
+			var next:EntityNode = node.next;
+			var prev:EntityNode = node.prev;
+			if(node == next && node == prev)
 			{
-				var index:int = _idMap[entity.id];
-				_content[index] = null;//delete instance of content
-				_idMap[entity.id] = null;//remove from id map
-
-				if(index <= _cursor)//save index for future content defragmentation
-				{
-					_splits.push(index);
-					trace("normal");
-				}
-				else
-				{
-					//get content from end of list and push it to empty place
-					var lastIndex:int = --_length.value;
-					entity = _content[lastIndex];
-					if(entity != null)
-					{
-						_content[index] = entity;
-						_idMap[entity.id] = index;
-					}
-					//remove links
-					_content[lastIndex] = null;
-				}
+				//it was a last node
+				_list.next = _list;
+				_cursor = _list;
+				_fast = _list;
 			}
-			trace("not ok");
-			//if node was not added do nothing
+			else
+			{
+				next.prev = prev;
+				prev.next = next;
+				//update holder
+				if(_list.next == node)_list.next = prev;
+				//update cursor position
+				if(_cursor == node)_cursor = prev;
+			}
+			//delete entity from collection
+			_map[entity.id] = null;
+			EntityNode.freeNode(node);
 		}
 
 		/**
@@ -142,7 +155,7 @@ package org.gimmick.collections
 		[Inline]
 		public final function hasId(entityId:String):Boolean
 		{
-			return _idMap[entityId] != null;
+			return _map[entityId] != null;
 		}
 
 		/**
@@ -151,7 +164,7 @@ package org.gimmick.collections
 		[Inline]
 		public final function hasEntity(entity:IEntity):Boolean
 		{
-			return _idMap[entity.id] != null;
+			return _map[entity.id] != null;
 		}
 		/**
 		 * @inheritDoc
@@ -160,11 +173,9 @@ package org.gimmick.collections
 		public final function getById(entityId:String):IEntity
 		{
 			var entity:IEntity;
-			if(_idMap[entityId] != null)
-			{
-				var index:int = _idMap[entityId];
-				entity = _content[index];
-			}
+			var node:EntityNode = _map[entityId];
+			if(node != null)
+				entity = node.entity;
 			return entity;
 		}
 		/**
@@ -172,11 +183,20 @@ package org.gimmick.collections
 		 */
 		public function dispose():void
 		{
-			_idMap = null;
-			_content = null;
-			_splits = null;
-			_length = null;
-			_cursor = 0;
+			//free nodes
+			var node:EntityNode;
+			_cursor = _list.prev;
+			/*while(_cursor != null)
+			{
+				node = _cursor;
+				_cursor = _cursor.next;
+				EntityNode.freeNode(node);
+			}*/
+			_current = null;
+			_cursor = null;
+			_list = null;
+			_map = null;
+			_bits = 0x0;
 			//execute callback
 			if(_disposingCallback is Function)
 				_disposingCallback.call(null, this);
@@ -189,21 +209,23 @@ package org.gimmick.collections
 		[Inline]
 		public final function begin():IEntities
 		{
-			this.defragContent();
-			_cursor = 0;
-			if(_bits > 0x0)
-				while(_cursor < _length.value && (_content[_cursor].bits & _bits) != _bits)
-					_cursor++;
+			_cursor = _fast = _list.next;
+			_fast = _fast.next;
+			_current = _cursor.entity;//if list is empty will return null
+			_end = false;
 			return this;
 		}
 
+		private var _end:Boolean;
 		/**
 		 * @inheritDoc
 		 */
 		[Inline]
 		public final function end():Boolean
 		{
-			return _cursor >= _length.value;
+			var end:Boolean = _end;
+			_end = _cursor == _fast;//this was last node
+			return end/* || _current == _list*/;
 		}
 
 		/**
@@ -212,13 +234,9 @@ package org.gimmick.collections
 		[Inline]
 		public final function next():void
 		{
-			if(_bits > 0x0)
-			{
-				do _cursor++;
-				while(_cursor < _length.value && (_content[_cursor].bits & _bits) != _bits);
-			}else
-				_cursor++;
-
+			_fast = _fast.next.next;
+			_cursor = _cursor.next;
+			_current = _cursor.entity;
 		}
 
 		/**
@@ -227,50 +245,21 @@ package org.gimmick.collections
 //		[Inline] //- could not be inline
 		public final function forEach(callback:Function, thisObject:Object = null):void
 		{
-			this.defragContent();
-			for(_cursor = 0; _cursor < _length.value; _cursor++)
+			var slow:EntityNode, fast:EntityNode;
+			slow = fast = _list.next;
+			while(true)
 			{
-				var entity:IEntity = _content[_cursor];
-				if(_bits > 0x0 && (entity.bits & _bits) != _bits)continue;
-				callback.call(thisObject, entity, this);
+				callback.call(thisObject, slow.entity, this);
+				//detect end of cycle
+				fast = fast.next.next;
+				if(slow == fast.prev)break;
+				slow = slow.next;
 			}
 		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
-		/**
-		 * Increase size of collection
-		 * @param fromClean If this flag equals true, clear content and increase collection as new.
-		 */
-		private function increaseSize(fromClean:Boolean = false):void
-		{
-			_content.fixed = false;
-			if(fromClean)
-				_content.length = 0;
-			_content.length = _content.length + _allocationSize;
-			_content.fixed = true;
-		}
 
-		/**
-		 * Defragmentation of the collection
-		 */
-		private final function defragContent():void
-		{
-			if(_splits == null)return;//was disposed
-			while(_splits.length > 0)
-			{
-
-				var index:int = _splits.pop();
-				var lastIndex:int = --_length.value;
-				var entity:IEntity = _content[lastIndex];
-				if(entity != null)
-				{
-					_content[index] = entity;
-					_idMap[entity.id] = index;
-					_content[lastIndex] = null;
-				}
-			}
-		}
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS
@@ -289,7 +278,7 @@ package org.gimmick.collections
 		[Inline]
 		public final function get current():IEntity
 		{
-			return _content[_cursor];
+			return _current;
 		}
 
 		/**
@@ -298,9 +287,7 @@ package org.gimmick.collections
 		[Inline]
 		public final function get empty():Boolean
 		{
-			if(_splits == null)return true;//collection was disposed
-			this.defragContent();
-			return _length.value == 0;
+			return _list.next == _list;
 		}
 
 		/**
@@ -309,15 +296,9 @@ package org.gimmick.collections
 		[Inline]
 		public final function get isDisposed():Boolean
 		{
-			return _splits == null;
+			return _list == null;
 		}
 
 //} endregion GETTERS/SETTERS ==========================================================================================
 	}
-}
-/**
- * @private
- */
-class BindableLength{
-	public var value:int;
 }

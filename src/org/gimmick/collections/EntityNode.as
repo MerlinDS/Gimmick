@@ -69,10 +69,7 @@ package org.gimmick.collections
 		{
 			var node:EntityNode;
 			if(_free.length == 0)
-			{
 				node = new EntityNode();
-				_free[_free.length] = node;
-			}
 			else
 			{
 				node = _free[_free.length - 1];
