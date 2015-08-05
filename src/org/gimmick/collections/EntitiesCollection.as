@@ -28,7 +28,7 @@ package org.gimmick.collections
 		/** cusrsor of iterator **/
 		private var _cursor:EntityNode;
 		/** end of iterator **/
-		private var _fast:EntityNode;
+		private var _finish:EntityNode;
 		/**
 		 * Entity loced by iterator.
 		 * When node with enity was removed from list, cursor will poits to next node.
@@ -104,7 +104,7 @@ package org.gimmick.collections
 			}
 			else
 			{
-				//insert node to list, no matter in what place
+				//insert node to list
 				var head:EntityNode = _list.next;
 				node.next = head.next;
 				head.next = node;
@@ -133,7 +133,6 @@ package org.gimmick.collections
 				//it was a last node
 				_list.next = _list;
 				_cursor = _list;
-				_fast = _list;
 			}
 			else
 			{
@@ -143,6 +142,7 @@ package org.gimmick.collections
 				if(_list.next == node)_list.next = prev;
 				//update cursor position
 				if(_cursor == node)_cursor = prev;
+				//update fase and slow cursors
 			}
 			//delete entity from collection
 			_map[entity.id] = null;
@@ -209,8 +209,8 @@ package org.gimmick.collections
 		[Inline]
 		public final function begin():IEntities
 		{
-			_cursor = _fast = _list.next;
-			_fast = _fast.next;
+			_cursor = _finish = _list.next;
+			_finish = _finish.next;
 			_current = _cursor.entity;//if list is empty will return null
 			_end = false;
 			return this;
@@ -224,7 +224,7 @@ package org.gimmick.collections
 		public final function end():Boolean
 		{
 			var end:Boolean = _end;
-			_end = _cursor == _fast;//this was last node
+			_end = _cursor == _finish;//this was last node
 			return end/* || _current == _list*/;
 		}
 
@@ -234,7 +234,7 @@ package org.gimmick.collections
 		[Inline]
 		public final function next():void
 		{
-			_fast = _fast.next.next;
+			_finish = _finish.next.next;
 			_cursor = _cursor.next;
 			_current = _cursor.entity;
 		}
@@ -242,19 +242,32 @@ package org.gimmick.collections
 		/**
 		 * @inheritDoc
 		 */
-//		[Inline] //- could not be inline
+		[Inline]
 		public final function forEach(callback:Function, thisObject:Object = null):void
 		{
-			var slow:EntityNode, fast:EntityNode;
-			slow = fast = _list.next;
-			while(true)
-			{
-				callback.call(thisObject, slow.entity, this);
-				//detect end of cycle
-				fast = fast.next.next;
-				if(slow == fast.prev)break;
-				slow = slow.next;
-			}
+			var next:EntityNode = null;
+			var cursor:EntityNode = _list.next;
+			do{
+				if(cursor == null)
+				{
+					/*
+					 * Item under cursor was deleted in previous iteration.
+					 * Try to point cursor to next item in list,
+					 * that was previously saved.
+					 */
+					if(next == null || !next.allocated)break;
+					cursor = next;
+				}
+				/*
+				 * Save link to next node.
+				 * Item upder cursor can be removed on this iteration.
+				 */
+				next = cursor.next;
+				//execute user's method
+				callback.call(thisObject, cursor.entity, this);
+				//point cursor to next item in list
+				cursor = cursor.next;
+			}while(cursor != _list.next);
 		}
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================

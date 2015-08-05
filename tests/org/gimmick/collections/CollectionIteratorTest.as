@@ -40,7 +40,7 @@ package org.gimmick.collections
 			_entities = new <IEntity>[
 				new TestEntity(_bits << 1),
 				new TestEntity(_bits),
-				new TestEntity(_bits << 1 | _bits)/*,
+				new TestEntity(_bits << 1 | _bits),
 				new TestEntity(_bits << 1),
 				new TestEntity(_bits),
 				new TestEntity(_bits << 1)/**/
@@ -59,7 +59,7 @@ package org.gimmick.collections
 			_entities = null;
 		}
 
-		[Test]
+//		[Test]
 		public function testIterations():void
 		{
 			var i:int = _entities.length;
@@ -92,7 +92,7 @@ package org.gimmick.collections
 			Assert.assertEquals(entities.length, i);
 		}
 
-		[Test(description="iterate collection with under cursor deleting")]
+//		[Test(description="iterate collection with under cursor deleting")]
 		public function testIterationWithD1():void
 		{
 			var i:int = _entities.length;
@@ -147,9 +147,17 @@ package org.gimmick.collections
 			_iterator.bits = 0x0;
 			_iterator.forEach(this.forEachCallback, this);
 			Assert.assertEquals(_entities.length, _forEachCount);
-			trace("Ok");
 		}
 
+		[Test]
+		public function testForEachWithRemoving():void
+		{
+			_forEachCount = 0;
+			_iterator.bits = 0x0;
+			_iterator.forEach(this.forEachCallbackWithRemoving, this);
+			trace("Ok");
+			Assert.assertEquals(_entities.length, _forEachCount);
+		}
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS
@@ -160,6 +168,11 @@ package org.gimmick.collections
 			_forEachCount++;
 		}
 
+		private function forEachCallbackWithRemoving(entity:IEntity, entities:IEntities):void
+		{
+			_iterator.remove(entity);
+			_forEachCount++;
+		}
 //} endregion GETTERS/SETTERS ==========================================================================================
 
 	}

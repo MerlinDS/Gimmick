@@ -93,6 +93,7 @@ package org.gimmick.collections
 				node.prev = null;
 				node.entity = null;
 				_free[_free.length] = node;
+				node._allocated = false;
 			}
 		}
 //} endregion PUBLIC METHODS ===========================================================================================
@@ -102,7 +103,12 @@ package org.gimmick.collections
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS
+		[Inline]
+		public final function get allocated():Boolean
+		{
+			return _allocated;
+		}
 
-//} endregion GETTERS/SETTERS ==========================================================================================        
+//} endregion GETTERS/SETTERS ==========================================================================================
 	}
 }
