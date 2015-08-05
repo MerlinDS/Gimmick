@@ -110,6 +110,22 @@ package org.gimmick.collections
 			Assert.assertEquals(0, i);
 		}
 
+		[Test(description="iterate depended clone collection with under cursor deleting")]
+		public function testIterationWithD4():void
+		{
+			var i:int = _entities.length;
+			var clone:EntitiesCollection = _iterator.dependedClone() as EntitiesCollection;
+			for(clone.begin(); !clone.end(); clone.next())
+			{
+				clone.remove(clone.current);
+				_iterator.remove(clone.current);
+				Assert.assertNotNull(clone.current);
+				i--;
+			}
+			Assert.assertTrue(clone.empty);
+			Assert.assertEquals(0, i);
+		}
+
 //		[Test(description="iterate collection with deleting last component")]
 		public function testIterationWithD2():void
 		{

@@ -24,7 +24,7 @@ package org.gimmick.collections
 	{
 		//linked list
 		/** Cicled linked list where head == tail */
-		private var _list:EntityNode;//need link for depnded collection
+		private var _list:EntityNode;//need link for depended collection
 		/** cusrsor of iterator **/
 		private var _cursor:EntityNode;
 		/** end of iterator **/
@@ -32,14 +32,14 @@ package org.gimmick.collections
 		private var _end:Boolean;
 		/**
 		 * Entity loced by iterator.
-		 * When node with enity was removed from list, cursor will poits to next node.
-		 * But link to current entity will be abale, till execution of next() method
+		 * When node with entity was removed from list, cursor will points to next node.
+		 * But link to current entity will be available, till execution of next() method
 		 **/
 		private var _current:IEntity;
 		/** Map of entities where key is Id of entity, values is node in linked list*/
 		private var _map:Dictionary;
 		//other
-		/** allocated memory size for entitiyes**/
+		/** allocated memory size for entities**/
 		[Deprecated]
 		private var _allocationSize:int;
 		private var _bits:uint;
@@ -91,8 +91,9 @@ package org.gimmick.collections
 		[Inline]
 		public final function push(entity:IEntity):void
 		{
-			if(_map[entity.id] != null)
+			if(_map[entity.id] != null || _isDepended)
 			//nothing to do in entity was already added
+			// or collection is depended clone
 				return;
 			//add new node to linked list
 			var node:EntityNode = EntityNode.allocateNode(entity);
@@ -132,23 +133,30 @@ package org.gimmick.collections
 			if(node == next && node == prev)
 			{
 				//it was a last node
-				_list.next = _list;
+				if(!_isDepended)
+					_list.next = _list;
 				_cursor = _list;
 				_finish = _list;
 			}
 			else
 			{
-				next.prev = prev;
-				prev.next = next;
-				//update holder
-				if(_list.next == node)_list.next = prev;
+				if(!_isDepended)
+				{
+					next.prev = prev;
+					prev.next = next;
+					//update holder
+					if(_list.next == node)_list.next = prev;
+				}
 				//update cursor position
 				if(_cursor == node)_cursor = prev;
 				if(_finish == node)_finish = prev;
 			}
-			//delete entity from collection
-			_map[entity.id] = null;
-			EntityNode.freeNode(node);
+			if(!_isDepended)
+			{
+				//delete entity from collection
+				_map[entity.id] = null;
+				EntityNode.freeNode(node);
+			}
 		}
 
 		/**
@@ -187,14 +195,17 @@ package org.gimmick.collections
 		{
 			if(_list == null)
 				return; //already disposed
-			//free nodes
-			var node:EntityNode;
-			_cursor = _list.next;
-			while(_cursor != null && _cursor.allocated)
+			if(!_isDepended)
 			{
-				node = _cursor;
-				_cursor = _cursor.next;
-				EntityNode.freeNode(node);
+				//free nodes
+				var node:EntityNode;
+				_cursor = _list.next;
+				while(_cursor != null && _cursor.allocated)
+				{
+					node = _cursor;
+					_cursor = _cursor.next;
+					EntityNode.freeNode(node);
+				}
 			}
 			//delete links
 			_list.next = null;
@@ -218,14 +229,17 @@ package org.gimmick.collections
 			_cursor = _finish = _list.next;//set start to first item
 			_finish = _finish.prev;//set finish to last item
 			_current = _cursor.entity;//if list is empty will return null
+			_end = false;
 			//find first item for bits
 			while(_bits > 0x0 && _current != null
 				&& (_current.bits & _bits) != _bits){
 				_cursor = _cursor.next;
 				_current = _cursor.entity;
+				if(_cursor == _finish){
+					_end = true;
+					break;
+				}
 			}
-
-			_end = false;
 			return this;
 		}
 		/**
@@ -236,7 +250,7 @@ package org.gimmick.collections
 		{
 			var end:Boolean = _end;
 			_end = _cursor == _finish;//this was last node
-			return end/* || _current == _list*/;
+			return end || _current == _list;
 		}
 
 		/**
@@ -261,6 +275,7 @@ package org.gimmick.collections
 		{
 			var next:EntityNode = null;
 			var cursor:EntityNode = _list.next;
+			if(cursor == _list)return;//list is empty
 			do{
 				if(cursor == null)
 				{

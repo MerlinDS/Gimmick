@@ -32,8 +32,7 @@ package org.gimmick.managers
 		 * value - base collection linked to this mask
 		 */
 		private var _baseCollections:Dictionary;
-		private var _dependedCollections:Vector.<EntitiesCollection>;
-		private var _dependedLength:int;
+		private var _dependedCollections:Dictionary;
 
 		private var _initialized:Boolean;
 		private var _allocationSize:int;
@@ -54,7 +53,7 @@ package org.gimmick.managers
 		{
 			_allocationSize = allocationSize;
 			_baseCollections = new Dictionary(true);
-			_dependedCollections = new <EntitiesCollection>[];
+			_dependedCollections = new Dictionary(true);
 			//initialize base collection without any filtration, that contains all entities
 			this.getEntities([]);
 		}
@@ -101,13 +100,20 @@ package org.gimmick.managers
 			var collection:EntitiesCollection;
 			if(!_initialized)
 			{
-				if (_baseCollections[bits] == null)
+				if(_baseCollections[bits] == null)
+				{
+					_dependedCollections[bits] = new <EntitiesCollection>[];
 					_baseCollections[bits] = new EntitiesCollection(_allocationSize,
 																this.collectionDisposing);
+				}
 			}
+
+			var cloneBits:uint = bits;
+			if(_baseCollections[bits] == null)bits = 0x0;
 			collection = _baseCollections[bits];
 			collection = collection.dependedClone() as EntitiesCollection;
-			_dependedCollections[_dependedLength++] = collection;
+			_dependedCollections[bits].push(collection);
+			collection.bits = cloneBits;
 			return collection;
 		}
 
@@ -128,8 +134,11 @@ package org.gimmick.managers
 			_initialized = false;
 			for each(var collection:EntitiesCollection in _baseCollections)
 				collection.dispose();
-			while(_dependedLength > 0)
-				_dependedCollections[--_dependedLength].dispose();
+			for each(var collections:Vector.<EntitiesCollection> in _dependedCollections)
+			{
+				while(collections.length > 0)
+					collections.pop().dispose();
+			}
 			_dependedCollections = null;
 			_baseCollections = null;
 		}
@@ -140,6 +149,9 @@ package org.gimmick.managers
 		[Inline]
 		private final function updateCollections(entity:IEntity, bits:uint, push:Boolean):void
 		{
+			var i:int, n:int;
+			var collections:Vector.<EntitiesCollection>;
+			//update base collections
 			for (var collectionBits:uint in _baseCollections)
 			{
 				//base collection updates by caller
@@ -147,14 +159,17 @@ package org.gimmick.managers
 				//entities bits contains all of collection bits
 				if ((bits & collectionBits) == collectionBits)
 				{
-					/*
-				  	 * If entities [removes from]/[added to] base collection,
-				  	 * depended clones are also will updated
-				  	*/
-					if(push)
-						_baseCollections[collectionBits].push(entity);
-					else
-						_baseCollections[collectionBits].remove(entity);
+					//update depended collections
+					collections = _dependedCollections[collectionBits];
+					n = collections.length;
+					for(i = 0; i < n; i++)
+					{
+						if(push)collections[i].push(entity);
+						else collections[i].remove(entity);
+					}
+					//update base collection
+					if(push)_baseCollections[collectionBits].push(entity);
+					else _baseCollections[collectionBits].remove(entity);
 				}
 			}
 		}
@@ -176,9 +191,11 @@ package org.gimmick.managers
 		private function collectionDisposing(collection:EntitiesCollection):void
 		{
 			if(!_initialized)return;
-			var index:int = _dependedCollections.indexOf(collection);
-			_dependedCollections.splice(index, 1);
-			_dependedLength--;
+			for each(var collections:Vector.<EntitiesCollection> in _dependedCollections)
+			{
+				var index:int = collections.indexOf(collection);
+				if(index >= 0)collections.splice(index, 1);
+			}
 		}
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
