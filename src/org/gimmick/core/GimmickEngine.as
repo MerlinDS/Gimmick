@@ -14,6 +14,7 @@ package org.gimmick.core
 
 	import flash.errors.IllegalOperationError;
 	import flash.utils.getTimer;
+	import flash.utils.setTimeout;
 
 	import org.gimmick.collections.IEntities;
 	import org.gimmick.managers.GimmickConfig;
@@ -102,7 +103,7 @@ package org.gimmick.core
 			_systemsManager.initialize();
 			//
 			_fpsOptimalWidth = 3;
-			_fpsMedian = 1000 / config.optimalFPS;
+			_fpsMedian = 1000 / config.optimalFPS + 4;
 			//
 			_disposedEntities = new <Entity>[];
 			_freeEntities = new <Entity>[];
@@ -112,9 +113,14 @@ package org.gimmick.core
 			//execute initial callback
 			if(config.initCallback is Function)
 			{
-				config.initCallback.call(this);
-				config.dispose();
+				//execute initial callback on next frame
+				setTimeout(function():void{
+					config.initCallback();
+					config.dispose();
+				}, 0);
 			}
+			else
+				config.dispose();
 			//resume gimmick
 			if(autoStart)
 				this.resume(true);
@@ -188,7 +194,8 @@ package org.gimmick.core
 			{
 				entity = _freeEntities[--_freeLength];
 				_freeEntities.length = _freeLength;
-			}else
+			}
+			else
 				entity = new Entity();
 			entity.componentTypeManager = _componentTypeManagers;
 			entity.componentsManager = _componentsManager;
@@ -329,7 +336,14 @@ package org.gimmick.core
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS
-
+		/**
+		 * @copy org.gimmick.managers.ISystemManager#activeGroupId
+		 * @see org.gimmick.managers.ISystemManager#activeGroupId More information about activeGroupId
+		 */
+		public function get activeGroupId():String
+		{
+			return _systemsManager.activeGroupId;
+		}
 //} endregion GETTERS/SETTERS ==========================================================================================
 	}
 }

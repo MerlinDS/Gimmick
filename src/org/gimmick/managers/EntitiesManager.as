@@ -157,7 +157,10 @@ package org.gimmick.managers
 				//base collection updates by caller
 				if(collectionBits == 0x0)continue;
 				//entities bits contains all of collection bits
-				if ((bits & collectionBits) == collectionBits)
+				var condition:Boolean = push ?
+						(bits & collectionBits) == collectionBits :
+						Boolean(bits & collectionBits);
+				if (condition)
 				{
 					//update depended collections
 					collections = _dependedCollections[collectionBits];

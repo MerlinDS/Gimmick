@@ -124,6 +124,10 @@ package org.gimmick.managers
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS
+		/**
+		 * Id of activated group
+		 */
+		function get activeGroupId():String;
 
 //} endregion GETTERS/SETTERS ==========================================================================================
 	}

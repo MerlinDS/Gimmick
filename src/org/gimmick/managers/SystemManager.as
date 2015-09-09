@@ -185,7 +185,10 @@ package org.gimmick.managers
 				}
 				//update all except idle systems
 				if(cursor.value.isProcessingSystem)
-					cursor.value.collection.forEach(cursor.value.processingSystem.process);
+				{
+					if(!cursor.value.collection.empty)
+						cursor.value.collection.forEach(cursor.value.processingSystem.process);
+				}
 				else if( cursor.value.isEntitySystem)
 					cursor.value.entitySystem.tick(time);
 			}
@@ -286,6 +289,8 @@ package org.gimmick.managers
 					node.next = target.next;
 					node.prev = target;
 					target.next = node;
+					if(node.next != null)
+						node.next.prev = node;
 					if(target == root.next)//set node as tail
 						root.next = node;
 				}
@@ -304,7 +309,7 @@ package org.gimmick.managers
 
 		/**
 		 * Remove system from all groups
-		 * @param proxy Sytem proxy for removing
+		 * @param proxy System proxy for removing
 		 */
 		private function removeFromGroups(proxy:SystemProxy):void
 		{
@@ -338,6 +343,11 @@ package org.gimmick.managers
 //} endregion PRIVATE\PROTECTED METHODS ================================================================================
 //======================================================================================================================
 //{region											GETTERS/SETTERS
+
+		public function get activeGroupId():String
+		{
+			return _activeGroupId;
+		}
 
 //} endregion GETTERS/SETTERS ==========================================================================================
 	}

@@ -67,6 +67,7 @@ class TestSystemManager implements ISystemManager
 	public function dispose():void{}
 	public function initialize(allocationSize:int = 1):void {}
 	public function activateGroup(groupId:String):void{}
+	public function get activeGroupId():String{return "";}
 }
 
 class TestComponentManager implements IComponentsManager

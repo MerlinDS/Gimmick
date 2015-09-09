@@ -230,15 +230,24 @@ package org.gimmick.collections
 			_finish = _finish.prev;//set finish to last item
 			_current = _cursor.entity;//if list is empty will return null
 			_end = false;
-			//find first item for bits
-			while(_bits > 0x0 && _current != null
-				&& (_current.bits & _bits) != _bits){
-				_cursor = _cursor.next;
-				_current = _cursor.entity;
-				if(_cursor == _finish){
-					_end = true;
-					break;
+			if(_cursor == _list)
+			{
+				//list is empty
+				_end = true;
+			}
+			else
+			{
+				//find first item for bits
+				while(_bits > 0x0 && _current != null
+					&& (_current.bits & _bits) != _bits){
+					_cursor = _cursor.next;
+					_current = _cursor.entity;
+					if(_cursor == _finish){
+						_end = true;
+						break;
+					}
 				}
+
 			}
 			return this;
 		}
