@@ -57,13 +57,27 @@ package org.gimmick.core
 		[Test(async)]
 		public function creationTest():void
 		{
+			Async.handleEvent(this, this, Event.INIT, this.initHandler);
+			Gimmick.initialize(new GimmickConfig(60, function():void{
+				dispatchEvent(new Event(Event.INIT));
+			}));
+		}
+
+		private function initHandler(...args):void
+		{
 			var i:int;
-			//Async.handleEvent(this, this, Event.INIT, this.initHandler);
-			Gimmick.initialize(new GimmickConfig(60, this.initHandler));
-			//timer
+			/*
+			  Create application with starting system
+			 */
+			var starter:StartingSystem = Gimmick.addSystem(new StartingSystem(_entities), 1, "init");
+			//get date for tests
+			_displaySystems = starter.displaySystem;
+			var scene:DisplayObjectContainer = starter.scene;
+			//crete application
+			Gimmick.activateGroup("init");
+			//for to next two frame
 			Gimmick.tick();
 			Gimmick.tick();
-			//
 			var allEntities:IEntities = Gimmick.getEntities();
 			for(i = 0; i < _entities.length; i++)
 			{
@@ -86,45 +100,7 @@ package org.gimmick.core
 			Assert.assertTrue(allEntities.isDisposed);
 			Assert.assertEquals(1, _displaySystems.ticksCount);
 		}
-
-		private function initHandler():void
-		{
-			/*
-			  Create application with starting system
-			 */
-			var starter:StartingSystem = Gimmick.addSystem(new StartingSystem(_entities), 1, "init");
-			//get date for tests
-			_displaySystems = starter.displaySystem;
-			var scene:DisplayObjectContainer = starter.scene;
-			//crete application
-			Gimmick.activateGroup("init");
-//			Assert.assertTrue(starter.disposed);
-		}
-
-		[Test]
-		public function pauseResumeTest():void
-		{
-			this.creationTest();
-			Gimmick.pause();
-			Gimmick.tick();
-			Assert.assertEquals(1, _displaySystems.ticksCount);
-			Gimmick.resume();
-			Gimmick.tick();
-			Assert.assertEquals(2, _displaySystems.ticksCount);
-		}
-
-		[Test]
-		public function systemActivateDeactivate():void
-		{
-			this.creationTest();
-			Gimmick.deactivateSystem(DisplaySystem);
-			_displaySystems.ticksCount = 0;
-			Gimmick.tick();
-			Assert.assertEquals(0, _displaySystems.ticksCount);
-			Gimmick.activateSystem(DisplaySystem);
-			Gimmick.tick();
-			Assert.assertEquals(1, _displaySystems.ticksCount);
-		}
+		//TODO: Add tests for systems switching!!!
 //} endregion PUBLIC METHODS ===========================================================================================
 //======================================================================================================================
 //{region										PRIVATE\PROTECTED METHODS
