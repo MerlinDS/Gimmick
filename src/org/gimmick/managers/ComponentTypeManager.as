@@ -27,6 +27,7 @@ package org.gimmick.managers
 		private var _nextBit:uint;
 		private var _nextIndex:int;
 		private var _componentTypes:Dictionary;
+		private var _componentTypesByBits:Dictionary;
 //======================================================================================================================
 //{region											PUBLIC METHODS
 		public function ComponentTypeManager()
@@ -40,6 +41,7 @@ package org.gimmick.managers
 		{
 			_nextBit = 0x1;
 			_componentTypes = new Dictionary(true);
+			_componentTypesByBits = new Dictionary(true);
 		}
 
 		/**
@@ -55,6 +57,7 @@ package org.gimmick.managers
 			{
 				componentType = new ComponentType(_nextBit, _nextIndex);
 				_componentTypes[component] = componentType;
+				_componentTypesByBits[componentType.bit] = componentType;
 				_nextBit = _nextBit << 1;
 				_nextIndex++;
 			}
@@ -66,9 +69,9 @@ package org.gimmick.managers
 		 */
 		public final function getTypeByBit(bit:uint):ComponentType
 		{
-			for each(var componentType:ComponentType in _componentTypes)
-				if(componentType.bit == bit)return componentType;
-			return null;
+			/*for each(var componentType:ComponentType in _componentTypes)
+				if(componentType.bit == bit)return componentType;*/
+			return _componentTypesByBits[bit];
 		}
 
 		public final function dispose():void

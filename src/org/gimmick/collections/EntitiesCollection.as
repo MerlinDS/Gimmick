@@ -154,7 +154,7 @@ package org.gimmick.collections
 			if(!_isDepended)
 			{
 				//delete entity from collection
-				_map[entity.id] = null;
+				delete _map[entity.id];
 				EntityNode.freeNode(node);
 			}
 		}
@@ -279,7 +279,7 @@ package org.gimmick.collections
 		/**
 		 * @inheritDoc
 		 */
-		[Inline]
+//		[Inline]
 		public final function forEach(callback:Function, thisObject:Object = null):void
 		{
 			var next:EntityNode = null;

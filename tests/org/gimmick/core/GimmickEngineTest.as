@@ -16,15 +16,19 @@ package org.gimmick.core
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.Sprite;
+	import flash.events.Event;
+	import flash.events.EventDispatcher;
 	import flash.geom.Point;
 
 	import flexunit.framework.Assert;
+
+	import org.flexunit.async.Async;
 
 	import org.gimmick.collections.IEntities;
 
 	import org.gimmick.managers.GimmickConfig;
 
-	public class GimmickEngineTest
+	public class GimmickEngineTest extends EventDispatcher
 	{
 
 		private var _entities:Array;
@@ -50,11 +54,12 @@ package org.gimmick.core
 			Gimmick.dispose();
 		}
 
-		[Test]
+		[Test(async)]
 		public function creationTest():void
 		{
 			var i:int;
-			Gimmick.initialize(new GimmickConfig(60, this.initCallback));
+			//Async.handleEvent(this, this, Event.INIT, this.initHandler);
+			Gimmick.initialize(new GimmickConfig(60, this.initHandler));
 			//timer
 			Gimmick.tick();
 			Gimmick.tick();
@@ -82,7 +87,7 @@ package org.gimmick.core
 			Assert.assertEquals(1, _displaySystems.ticksCount);
 		}
 
-		private function initCallback():void
+		private function initHandler():void
 		{
 			/*
 			  Create application with starting system

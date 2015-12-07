@@ -73,7 +73,8 @@ package org.gimmick.managers
 		/**
 		 * @inheritDoc
 		 */
-		public function getComponent(entity:IEntity, componentType:ComponentType):*
+		[Inline]
+		public final function getComponent(entity:IEntity, componentType:ComponentType):*
 		{
 			if(_components.length <= componentType.index)return null;
 			return _components[componentType.index].get(entity.id);
@@ -89,7 +90,7 @@ package org.gimmick.managers
 			for(var i:int = 0; i < n; i++)
 			{
 				var collection:ComponentsCollection = _components[i];
-				if(collection.has(entity.id))
+				if(collection != null && collection.has(entity.id))
 					array.push(collection.get(entity.id));
 			}
 			return array;

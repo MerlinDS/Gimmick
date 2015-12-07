@@ -80,8 +80,8 @@ package org.gimmick.collections
 				_idMap[id] = index;
 				_indexMap[index] = id;
 				//remove links
-				_content[lastIndex] = null;
-				_indexMap[lastIndex] = null;
+				delete _content[lastIndex];
+				delete _indexMap[lastIndex];
 			}
 		}
 
