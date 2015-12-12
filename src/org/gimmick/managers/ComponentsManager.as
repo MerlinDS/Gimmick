@@ -117,7 +117,7 @@ package org.gimmick.managers
 			while(_components.length > 0)
 			{
 				var collection:ComponentsCollection = _components[_components.length - 1];
-				collection.dispose();
+				if(collection != null)collection.dispose();//cound be already disposed
 				_components.length--;
 			}
 			_components = null;

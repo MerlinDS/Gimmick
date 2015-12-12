@@ -47,11 +47,6 @@ package org.gimmick.core
 		private var _entitiesManager:IEntitiesManager;
 		private var _componentsManager:IComponentsManager;
 		private var _componentTypeManagers:IComponentTypeManager;
-		//FPS calculation
-		/** Optimal time of frame working. */
-		private var _fpsMedian:int;
-		private var _fpsWidth:int;
-		private var _fpsOptimalWidth:int;
 		//entities pooling
 		/** pool for disposed entities **/
 		private var _freeEntities:Vector.<Entity>;
@@ -61,6 +56,11 @@ package org.gimmick.core
 		private var _freeLength:int;//
 		/** length of _disposedEntities list **/
 		private var _disposedLength:int;
+		//FPS calculation
+		/** Optimal time of frame working. */
+		private var _fpsMedian:int;
+		private var _fpsWidth:int;
+		private var _fpsOptimalWidth:int;
 		//
 		private var _lastTimestamp:Number;
 		private var _initialized:Boolean;
@@ -161,6 +161,8 @@ package org.gimmick.core
 			_componentsManager.dispose();
 			_componentTypeManagers.dispose();
 
+			_freeLength = 0;
+			_disposedLength = 0;
 			_freeEntities.length = 0;
 			_disposedEntities.length = 0;
 
@@ -171,6 +173,7 @@ package org.gimmick.core
 			_freeEntities = null;
 			_disposedEntities = null;
 			_initialized = false;
+			_onPause = false;
 		}
 		//delegates from entitiesManager
 		/**
